@@ -16,7 +16,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.triage-chip,.crumb { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -40,35 +40,31 @@
   .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
   .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
   .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
-  .idea-card .build { font-size:.95rem; margin:0 0 .9rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
   .idea-card .build strong { color:var(--accent); }
-  .copy-btn { margin-top:auto; align-self:flex-start; border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
   .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-slots { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.85rem; margin:1rem 0; }
-  .slot { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1rem; }
-  .slot .eyebrow { font-size:.7rem; letter-spacing:.055em; text-transform:uppercase; color:var(--muted); font-weight:800; }
-  .slot div.value { font-size:1.05rem; margin-top:.25rem; min-height:3.2em; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:.9rem 0; font-size:1.05rem; }
+  .deal-out { display:none; }
+  .deal-out.open { display:block; }
+  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
+  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
+  .deal-read p { margin:.35rem 0; }
+  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
   .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
-  .deal-btn.secondary { background:#fff; color:var(--accent); border:1px solid var(--accent); }
-  .lens-list { max-width:70ch; padding-left:1.2rem; }
-  .lens-list li { margin:.55rem 0; }
-  .triage-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.85rem; }
-  .triage-chip { text-align:left; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.1rem; cursor:pointer; font-size:.95rem; }
-  .triage-chip strong { display:block; font-size:1.02rem; margin-bottom:.25rem; color:var(--accent); }
-  .triage-chip .reveal { display:none; margin-top:.4rem; color:var(--muted); }
-  .triage-chip.open { border-color:var(--accent); background:var(--accent-soft); }
-  .triage-chip.open .reveal { display:block; }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
   @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:620px) {
     main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
-    .card-grid,.deal-slots,.triage-grid { grid-template-columns:1fr; }
+    .card-grid { grid-template-columns:1fr; }
     .section-head { display:block; } section { margin-top:2.4rem; }
   }
 </style>
@@ -92,7 +88,7 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Chips mark the research ladder — <strong>wonder</strong> (notice and ask) → <strong>watch</strong> (build it and see) → <strong>compare</strong> (two versions side by side). Start anywhere.</p>
+      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
@@ -100,49 +96,22 @@
 
   <section id="dealer" aria-labelledby="dealer-title">
     <div class="dealer">
-      <div class="kicker">One light machine</div>
+      <div class="kicker">Keep dealing until one grabs you</div>
       <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:60ch">Three wheels: a lane, a piece of this week's idea, and an interaction genre borrowed from the Anthology. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. That's what shuffling is for.</p>
-      <div class="deal-slots">
-        <div class="slot"><span class="eyebrow">A territory</span><div class="value" id="slotLane">—</div></div>
-        <div class="slot"><span class="eyebrow">This week's idea</span><div class="value" id="slotIdea">—</div></div>
-        <div class="slot"><span class="eyebrow">A reader action</span><div class="value" id="slotGenre">—</div></div>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <button class="deal-btn" id="dealBtn">Deal an idea</button>
+      <div class="deal-out" id="dealOut">
+        <div class="deal-sentence" id="dealSentence"></div>
+        <div class="deal-read">
+          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
+          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
+        </div>
+        <div class="btn-row">
+          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
+        </div>
+        <pre class="prompt-pre" id="dealPromptPre"></pre>
       </div>
-      <div class="deal-sentence" id="dealSentence">Press <strong>Deal</strong> and the table is yours.</div>
-      <button class="deal-btn" id="dealBtn">Deal</button>
-      <button class="deal-btn secondary" id="dealCopyBtn" disabled>Copy this deal as a prompt</button>
-      <pre class="prompt-pre" id="dealPromptPre"></pre>
-    </div>
-  </section>
-
-  <section id="your-app" aria-labelledby="your-app-title">
-    <div class="section-head">
-      <div>
-        <div class="kicker">The lens that's always in your pocket</div>
-        <h2 id="your-app-title">Point it at your app</h2>
-      </div>
-      <p>You already own a little world. This week's idea is a question about it.</p>
-    </div>
-    <ol class="lens-list">
-      <li>Which of your app's behaviors did you write on purpose, which did the AI decide, and which surprised you both?</li>
-      <li>Pick one <em>accidental</em> behavior. Is it a keeper — make it intentional and say so on the page — or a bug — describe it precisely and change it?</li>
-      <li>Your prompts are the training you control. What did your last prompt reward — length? politeness? lists? What would you reward instead?</li>
-    </ol>
-  </section>
-
-  <section id="triage" aria-labelledby="triage-title">
-    <div class="section-head">
-      <div>
-        <div class="kicker">Before you build</div>
-        <h2 id="triage-title">Check your question</h2>
-      </div>
-      <p>Got a question from a card or a deal? Tap the verdict that fits it best. (These four categories get their full treatment in Session 5's <em>The Next Move</em>.)</p>
-    </div>
-    <div class="triage-grid" id="triageGrid">
-      <button class="triage-chip"><strong>Watchable now</strong>You could build this week's smallest version and literally watch what happens.<span class="reveal">Green light. Name the one thing the visitor does, and go.</span></button>
-      <button class="triage-chip"><strong>Buildable smaller</strong>The idea is good but the version in your head is a semester long.<span class="reveal">Shrink it until it's watchable: one creature instead of an ecosystem, one intersection instead of a city, eight bars instead of a song.</span></button>
-      <button class="triage-chip"><strong>Just an opinion (as stated)</strong>Right now it's a take — there's nothing on a page to disagree with.<span class="reveal">Add something visible: a comparison, a counter, a before/after. Opinions become questions when a reader can check them.</span></button>
-      <button class="triage-chip"><strong>Needs a yardstick first</strong>The question hangs on a word like "better," "catchy," or "fair" with no test behind it.<span class="reveal">Define the check before you build — even a rough one. (That's Session 6's whole story.)</span></button>
     </div>
   </section>
 
@@ -161,10 +130,15 @@
 </main>
 
 <script>
-/* ============================ EDIT HERE: CARDS ============================
-   Each card: lane (must match LANES key), spark (title), body, build, ladder
-   (wonder|watch|compare|week), and optional promptHint appended to the copy
-   prompt. Add, remove, reorder freely — the grid renders from this array. */
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about where rules come from — designed vs. learned vs. emergent"
+};
+
+/* ============================ EDIT HERE: CARDS ===========================
+   Each card: lane (must match LANES key), spark (title), body, build
+   (starter version), bigger (more ambitious version), ladder
+   (wonder|watch|compare|week), optional promptHint appended to prompts. */
 const LANES = {
   living:   "Living things",
   games:    "Games & play",
@@ -179,81 +153,126 @@ const CARDS = [
   { lane:"living", ladder:"watch",
     spark:"Nobody is in charge of the murmuration",
     body:"A thousand starlings, no choreographer. Three little local rules — keep apart, line up, stay close — and the sky gets a dance nobody designed.",
-    build:"Mini-boids: dots on a canvas with three sliders (separation, alignment, cohesion). Let the reader break the flock and rebuild it." },
+    build:"Mini-boids: dots on a canvas with three sliders (separation, alignment, cohesion). Let the reader break the flock and rebuild it.",
+    bigger:"Add an obstacle and a predator dot. The sliders are the written rules; the page's honest question is what emerged that no slider states — the flock's shape, its splitting and reforming. Label which is which." },
   { lane:"living", ladder:"compare",
     spark:"Clicker-training is reward shaping",
     body:"You never explain 'sit' to a dog. You reward moments, and behavior drifts toward what got rewarded. What does your pet's reward model tune toward — and what did it learn that you never meant to teach?",
-    build:"A pixel pet with three behaviors and one reward button. The more you reward one, the more often it happens. Compare two training runs." },
+    build:"A pixel pet with three behaviors and one reward button. The more you reward one, the more often it happens. Compare two training runs.",
+    bigger:"Two pets trained side by side with different reward habits, plus a visible training log. The reveal: what each pet 'learned' that the trainer never intended — the accidental lesson is the exhibit." },
   { lane:"games", ladder:"watch",
     spark:"The move nobody designed",
     body:"Designers write the rules; players discover the meta. Rocket League's flip reset, chess's hyper-aggressive gambits, your group's Uno stacking — who authored the strategy everyone uses?",
-    build:"A tiny game with one findable exploit. After the reader finds it, the page asks: who wrote that move — the designer, the player, or the rules themselves?" },
+    build:"A tiny game with one findable exploit. After the reader finds it, the page asks: who wrote that move — the designer, the player, or the rules themselves?",
+    bigger:"Plant two exploits of different kinds — a rules gap and a timing trick. After the reader finds both, the page sorts them together: which was designed, which was discovered, which emerged?" },
   { lane:"games", ladder:"compare",
     spark:"A bot that learns your habits",
     body:"Play rock-paper-scissors against a bot that counts your last ten throws and picks the counter. It has no strategy you wrote — only your own patterns, reflected back.",
     build:"RPS versus a frequency-counting bot, with its 'memory' visible. Be honest on the page: it's counting, not a neural network — and that's the interesting part.",
+    bigger:"Two bots on one page — pure-random versus habit-counter — with a scoreboard and a 'what the bot believes about you' panel. Then the twist the reader feels in their fingers: try to beat the counter by being random, and discover how hard random is (hello, Session 2).",
     promptHint:"The bot should count my recent throws and pick the counter to my most frequent one. Show its counts honestly on screen." },
   { lane:"music", ladder:"compare",
     spark:"Rulebook versus vibes",
     body:"'Stay in the key of C' is a rule you can write in a sentence. 'Make it sound like a lullaby' is something learned from a thousand examples. Your ear runs both — which one is in charge?",
-    build:"A melody maker with two modes: rulebook mode (only scale notes allowed) and trained mode (notes weighted toward a few example melodies). Same keyboard, different ghost." },
+    build:"A melody maker with two modes: rulebook mode (only scale notes allowed) and trained mode (notes weighted toward a few example melodies). Same keyboard, different ghost.",
+    bigger:"Add a third mode that blends both, and a listener game: the page plays a short melody and the reader guesses which mode made it, with a score across five rounds. Can they hear the difference between a rule and a vibe?" },
   { lane:"music", ladder:"wonder",
     spark:"You know reggaeton in one bar. Who taught you?",
     body:"Nobody handed you the rule, but you recognize the genre instantly. Somewhere in your head is a learned pattern you can't state. Can you make a page that shows it exists?",
-    build:"Two drum patterns, one toggle. Ask the reader to name the genre, then try to write the rule they used. The gap between hearing and stating is the exhibit." },
+    build:"Two drum patterns, one toggle. Ask the reader to name the genre, then try to write the rule they used. The gap between hearing and stating is the exhibit.",
+    bigger:"Four patterns across two genres. The reader writes their rule after two examples — then the page tests their rule on two new patterns and shows where it breaks. A learned ear, caught outperforming its own rulebook." },
   { lane:"stories", ladder:"watch",
     spark:"The grammar nobody taught you",
     body:"Why 'big red ball' and never 'red big ball'? You obey an adjective-order rule you were never taught and can't recite. You learned it the way models learn: from examples.",
-    build:"An order-the-adjectives quiz: readers arrange three-word noun phrases, then the page reveals they already agree with each other — and with a rule none of them can state." },
+    build:"An order-the-adjectives quiz: readers arrange three-word noun phrases, then the page reveals they already agree with each other — and with a rule none of them can state.",
+    bigger:"Add a second hidden rule (why 'tick-tock' and 'flip-flop,' never 'tock-tick'): two invisible rules the reader discovers they obey, plus a 'try to break it' box where violations sound instantly wrong." },
   { lane:"stories", ladder:"wonder",
     spark:"Slang court: who ratified 'mid'?",
     body:"A dictionary is a written rulebook that arrives after the fact. Usage is the training data. When a word's meaning drifts, who signed off?",
-    build:"A timeline slider for one word's drifting meaning, with example sentences per era (your examples — say on the page that they're authored)." },
+    build:"A timeline slider for one word's drifting meaning, with example sentences per era (your examples — say on the page that they're authored).",
+    bigger:"Two words on parallel timelines — one drifting fast, one stable for a century — plus a sorting game: which quotes are the rulebook (dictionary) and which are the training data (usage)? Who was really in charge?" },
   { lane:"art", ladder:"wonder",
     spark:"Style you can spot but can't state",
     body:"You know your friend's handwriting in half a word and your favorite artist in one panel. What did your eye learn — and could a reader's eye learn it from six examples?",
-    build:"'Guess whose line': six drawings by two people (or two AIs), reader sorts them, page reveals. Ask readers what rule they used — then whether they could write it down." },
+    build:"'Guess whose line': six drawings by two people (or two AIs), reader sorts them, page reveals. Ask readers what rule they used — then whether they could write it down.",
+    bigger:"Rounds with a score, and after each reveal a 'name the tell' step: the reader states their rule, then sees the next round test it. Watch a stated rule lose to a trained eye — on your own page." },
   { lane:"everyday", ladder:"watch",
     spark:"Desire paths: the shortcut nobody designed",
     body:"The city drew the sidewalk; a thousand feet drew the diagonal through the grass. The path is a rule that emerged — written by walking, not by anyone.",
-    build:"A grid of 'lawn' where simple agents cross between corners; each crossing wears the grass a little. Watch the shortcut appear. Let the reader move the entrances." },
+    build:"A grid of 'lawn' where simple agents cross between corners; each crossing wears the grass a little. Watch the shortcut appear. Let the reader move the entrances.",
+    bigger:"Let the reader first draw the 'designed' sidewalk, then place buildings and fences and release the walkers. The page ends on the comparison: the path you planned beside the path that emerged — and where they disagree." },
   { lane:"everyday", ladder:"wonder",
     spark:"House rules",
     body:"Your family's Uno rules aren't in the box. Who wrote them? When did they change? A house rule is a rule that was trained — by arguments, by little kids, by what made the game fun.",
-    build:"'Official versus our house': a compare page for one game's rulebook rule and your house version, with a line for where each came from." },
+    build:"'Official versus our house': a compare page for one game's rulebook rule and your house version, with a line for where each came from.",
+    bigger:"Three games' official-versus-house rules with a family tree for each rule (who introduced it, what problem it solved), ending with 'propose a new house rule and predict whether it survives' — a rule-evolution field guide." },
   { lane:"yours", ladder:"week",
     spark:"The behavior audit",
     body:"List three behaviors of your app: one you specified, one the AI decided, one that surprised you both. That last column is where this week lives.",
-    build:"Make one accidental behavior intentional this week — keep it and say so on the page, or describe it precisely and change it." },
+    build:"Make one accidental behavior intentional this week — keep it and say so on the page, or describe it precisely and change it.",
+    bigger:"Add an 'authorship panel' to your app: a visible section that honestly labels its main behaviors as designed-by-me, decided-by-AI, or emerged — the audit itself becomes part of the page a reader can inspect." },
   { lane:"yours", ladder:"compare",
     spark:"Prompt archaeology",
     body:"The same request, three phrasings — what did each phrasing 'train' the AI toward? Longer answers? Safer ones? More lists? Your prompt is the reward signal you control.",
-    build:"Ask the AI for the same feature three ways; keep notes on what each phrasing rewarded. Add the best one-line prompt to your app's authorship note." }
+    build:"Ask the AI for the same feature three ways; keep notes on what each phrasing rewarded. Add the best one-line prompt to your app's authorship note.",
+    bigger:"Turn the notes into a mini methods section on your app's page: three prompts, what each produced, which you kept and why — a visible record of you steering the training signal you control." }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER =========================== */
-const DEAL_LANES = ["living things","games & play","music & sound","stories & words","art & pictures","everyday life"];
-const DEAL_IDEAS = [
-  "a rule someone wrote down",
-  "a habit trained by rewards",
-  "a pattern nobody designed",
-  "a style learned from examples",
-  "a rule you obey but can't state"
+/* ============================ EDIT HERE: DEALER ===========================
+   DEAL_LANES: each lane offers concrete "things on stage."
+   DEAL_ASPECTS: pieces of this week's idea — phrase + plain-English explain.
+   DEAL_GENRES: reader actions — action, what it produces, and a bigger extra. */
+const DEAL_LANES = {
+  living:   { name:"living things",   objects:["a flock of birds","a pixel pet","an ant trail","a garden","a wagging tail"] },
+  games:    { name:"games & play",    objects:["a tiny board game","a speedrun trick","a house rule","an AI opponent","a playground game"] },
+  music:    { name:"music & sound",   objects:["a drum pattern","an eight-note melody","a genre's 'feel'","a clapping game","a playlist shuffle"] },
+  stories:  { name:"stories & words", objects:["adjective order","a brand-new slang word","a story formula","a group chat's inside joke","a nickname's spread"] },
+  art:      { name:"art & pictures",  objects:["an artist's style","a doodle habit","a meme format","a color rule","a comic layout"] },
+  everyday: { name:"everyday life",   objects:["a desire path","a lunchroom seating pattern","a family tradition","a morning routine","a line that forms on its own"] }
+};
+
+const DEAL_ASPECTS = [
+  { phrase:"a rule someone wrote down",
+    explain:"Somewhere there's a sentence a person wrote — a rulebook line, a recipe step, B3/S23. Written rules are visible, arguable, and changeable — you can point at them." },
+  { phrase:"a habit trained by rewards",
+    explain:"Nobody wrote the behavior; it drifted toward whatever got rewarded — treats, likes, laughs, wins. To understand it, ask what the rewards were, not what the rule says." },
+  { phrase:"a pattern nobody designed",
+    explain:"No author at all: the pattern emerged from many small actions. Desire paths, metas, flocks. Sometimes the research move is just showing the pattern exists." },
+  { phrase:"a style learned from examples",
+    explain:"You recognize it instantly but can't state the rule — because you learned it from a thousand examples, the way models learn from training data." },
+  { phrase:"a rule you obey but can't state",
+    explain:"It governs you invisibly: adjective order, personal space, what makes a beat feel 'off.' The fun is making an invisible rule visible on a page." }
 ];
+
 const DEAL_GENRES = [
-  "predict first, then reveal",
-  "compare two versions side by side",
-  "change one thing and rerun",
-  "train it with a reward button",
-  "toggle the names on and off",
-  "hunt for the exploit"
+  { action:"predict what happens, then run it and see",
+    produce:"a page where the reader commits to a prediction, then the system runs and the page scores the guess against what actually happened.",
+    biggerExtra:"three rounds with different setups and a running score, so the reader's model of the rule visibly improves" },
+  { action:"compare the written-rule version with the learned version",
+    produce:"a split-screen page: one side follows a rule you can read, the other follows a habit or style — and the reader tells them apart (or can't).",
+    biggerExtra:"a guessing game across five rounds: which side made this one?" },
+  { action:"change one rule and watch the world rerun",
+    produce:"a page where a single rule edit visibly reshapes everything downstream — the reader feels how much hangs on one line.",
+    biggerExtra:"a strip of snapshots from this visit's reruns (nothing saved) so the reader can compare their edits side by side" },
+  { action:"shape behavior with a reward button",
+    produce:"a page whose ending depends on what the reader rewarded along the way — nobody wrote the final behavior; their clicks did.",
+    biggerExtra:"two training runs compared, with an honest log of what got rewarded in each" },
+  { action:"sort specimens into designed / trained / emerged",
+    produce:"a sorting page where a few specimens genuinely resist the bins — and those stubborn ones turn out to be the interesting ones.",
+    biggerExtra:"a fourth 'contested' bin, with the reader's reasoning displayed beside yours after each sort" },
+  { action:"hunt for the move the rules allow but nobody intended",
+    produce:"a tiny system with a hidden exploit, and a page that asks, once the reader finds it: who authored that move?",
+    biggerExtra:"a second exploit you did NOT plant — leave room for readers to find one you don't know about, and say so on the page" }
 ];
 /* ========================= END EDIT HERE: DEALER ========================== */
 
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
 const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
 
-function cardPrompt(c){
+function starterPrompt(c){
   return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
     "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
     "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
@@ -261,16 +280,24 @@ function cardPrompt(c){
     "Before you write any code, ask me two questions that would make this idea more mine.";
 }
 
-function copyText(txt, btn, pre){
+function biggerPrompt(c){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
+    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
+    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
+    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+}
+
+function copyText(txt, btn, pre, label){
   pre.textContent = txt;
   pre.classList.add("open");
-  const done = ok => { btn.textContent = ok ? "Copied ✓ (and shown below)" : "Copy blocked — select the text below"; };
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
   } else { done(false); }
 }
 
-/* --- render lane chips --- */
+/* --- lane chips --- */
 const chipbar = document.getElementById("laneChips");
 const laneKeys = ["all", ...Object.keys(LANES)];
 let activeLane = "all";
@@ -288,7 +315,7 @@ laneKeys.forEach(k=>{
   chipbar.appendChild(b);
 });
 
-/* --- render cards --- */
+/* --- cards --- */
 const grid = document.getElementById("cardGrid");
 function renderCards(){
   grid.innerHTML = "";
@@ -301,12 +328,19 @@ function renderCards(){
     const h = document.createElement("h3"); h.textContent = c.spark;
     const p = document.createElement("p"); p.textContent = c.body;
     const build = document.createElement("p"); build.className = "build";
-    build.innerHTML = "<strong>Smallest build:</strong> " + c.build;
-    const btn = document.createElement("button");
-    btn.className = "copy-btn"; btn.textContent = "Copy a starting prompt";
+    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
+    const bigger = document.createElement("p"); bigger.className = "build bigger";
+    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
     const pre = document.createElement("pre"); pre.className = "prompt-pre";
-    btn.addEventListener("click", ()=>copyText(cardPrompt(c), btn, pre));
-    el.append(eyebrow, h, p, build, btn, pre);
+    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
+    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, bigger, row, pre);
     grid.appendChild(el);
   });
 }
@@ -316,35 +350,44 @@ renderCards();
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 let deal = null;
 const dealBtn = document.getElementById("dealBtn");
-const dealCopyBtn = document.getElementById("dealCopyBtn");
 const dealPre = document.getElementById("dealPromptPre");
-dealBtn.addEventListener("click", ()=>{
-  deal = { lane:pick(DEAL_LANES), idea:pick(DEAL_IDEAS), genre:pick(DEAL_GENRES) };
-  document.getElementById("slotLane").textContent = deal.lane;
-  document.getElementById("slotIdea").textContent = deal.idea;
-  document.getElementById("slotGenre").textContent = deal.genre;
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.lane + "</strong>, built around <strong>" + deal.idea +
-    "</strong>, where the reader can <strong>" + deal.genre + "</strong>.";
-  dealCopyBtn.disabled = false;
-  dealCopyBtn.textContent = "Copy this deal as a prompt";
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal again";
-});
-dealCopyBtn.addEventListener("click", ()=>{
-  if(!deal) return;
-  const txt = "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this combination — help me turn it into something real:\n" +
-    "• territory: " + deal.lane + "\n" +
-    "• this week's idea: " + deal.idea + " (this week is about designed vs. learned vs. emergent rules)\n" +
-    "• reader action: " + deal.genre + "\n\n" +
-    "First suggest three small, concrete page ideas that fit this deal. Wait for me to pick or remix one. Then build the smallest working version with one clear thing for the reader to do and a short “what to notice” note.";
-  copyText(txt, dealCopyBtn, dealPre);
-});
 
-/* --- triage reveal --- */
-document.querySelectorAll(".triage-chip").forEach(t=>{
-  t.addEventListener("click", ()=>t.classList.toggle("open"));
+function dealStarter(d){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+}
+function dealBigger(d){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
+    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+}
+
+dealBtn.addEventListener("click", ()=>{
+  const laneKey = pick(Object.keys(DEAL_LANES));
+  const lane = DEAL_LANES[laneKey];
+  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
+  document.getElementById("dealSentence").innerHTML =
+    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
+    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
+  document.getElementById("dealMeans").textContent = deal.aspect.explain;
+  document.getElementById("dealProduce").textContent = deal.genre.produce;
+  document.getElementById("dealOut").classList.add("open");
+  dealPre.classList.remove("open");
+  dealBtn.textContent = "Deal another";
+});
+document.getElementById("dealStarterBtn").addEventListener("click", function(){
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+});
+document.getElementById("dealBiggerBtn").addEventListener("click", function(){
+  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
 });
 </script>
 </body>

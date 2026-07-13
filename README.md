@@ -20,7 +20,9 @@ session-03/ … session-10/  one page per session, built one week ahead of class
 
 ## Page anatomy
 
-Header (traveling question) → the bridge from the Instructor Study page → lane chips + 10–15 idea cards (spark question, smallest build, ladder chip, copy-ready AI prompt) → the Dealer (lane × idea-aspect × interaction genre) → "Point it at your app" → the four-verdict question check → honesty note.
+Header (traveling question) → the bridge from the Instructor Study page → lane chips + 10–15 idea cards → the Dealer → honesty note. The page is a generator, not a worksheet: nothing asks the student to answer or fill anything in.
+
+Every card carries **two copy-ready prompts**: a *starter build* (the smallest version) and a *bigger build* (same idea, more ambitious — still one static page), each described in plain English on the card. The Dealer shuffles a territory object × an aspect of the week's idea × a reader action, then explains what the combination means and what it might produce, with the same two prompt tiers. Bigger-build prompts instruct the AI to work in stages — smallest core first, then one feature at a time — so ambitious builds stay finishable.
 
 ## Authoring a new session page
 

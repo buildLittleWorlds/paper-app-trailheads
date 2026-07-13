@@ -16,7 +16,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.triage-chip,.crumb { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -40,35 +40,31 @@
   .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
   .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
   .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
-  .idea-card .build { font-size:.95rem; margin:0 0 .9rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
   .idea-card .build strong { color:var(--accent); }
-  .copy-btn { margin-top:auto; align-self:flex-start; border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
   .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-slots { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.85rem; margin:1rem 0; }
-  .slot { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1rem; }
-  .slot .eyebrow { font-size:.7rem; letter-spacing:.055em; text-transform:uppercase; color:var(--muted); font-weight:800; }
-  .slot div.value { font-size:1.05rem; margin-top:.25rem; min-height:3.2em; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:.9rem 0; font-size:1.05rem; }
+  .deal-out { display:none; }
+  .deal-out.open { display:block; }
+  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
+  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
+  .deal-read p { margin:.35rem 0; }
+  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
   .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
-  .deal-btn.secondary { background:#fff; color:var(--accent); border:1px solid var(--accent); }
-  .lens-list { max-width:70ch; padding-left:1.2rem; }
-  .lens-list li { margin:.55rem 0; }
-  .triage-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.85rem; }
-  .triage-chip { text-align:left; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.1rem; cursor:pointer; font-size:.95rem; }
-  .triage-chip strong { display:block; font-size:1.02rem; margin-bottom:.25rem; color:var(--accent); }
-  .triage-chip .reveal { display:none; margin-top:.4rem; color:var(--muted); }
-  .triage-chip.open { border-color:var(--accent); background:var(--accent-soft); }
-  .triage-chip.open .reveal { display:block; }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
   @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:620px) {
     main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
-    .card-grid,.deal-slots,.triage-grid { grid-template-columns:1fr; }
+    .card-grid { grid-template-columns:1fr; }
     .section-head { display:block; } section { margin-top:2.4rem; }
   }
 </style>
@@ -92,7 +88,7 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Chips mark the research ladder — <strong>wonder</strong> (notice and ask) → <strong>watch</strong> (build it and see) → <strong>compare</strong> (two versions side by side). Start anywhere.</p>
+      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
@@ -100,49 +96,22 @@
 
   <section id="dealer" aria-labelledby="dealer-title">
     <div class="dealer">
-      <div class="kicker">One light machine</div>
+      <div class="kicker">Keep dealing until one grabs you</div>
       <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:60ch">Three wheels: a lane, a piece of this week's idea, and an interaction genre borrowed from the Anthology. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. That's what shuffling is for.</p>
-      <div class="deal-slots">
-        <div class="slot"><span class="eyebrow">A territory</span><div class="value" id="slotLane">—</div></div>
-        <div class="slot"><span class="eyebrow">This week's idea</span><div class="value" id="slotIdea">—</div></div>
-        <div class="slot"><span class="eyebrow">A reader action</span><div class="value" id="slotGenre">—</div></div>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <button class="deal-btn" id="dealBtn">Deal an idea</button>
+      <div class="deal-out" id="dealOut">
+        <div class="deal-sentence" id="dealSentence"></div>
+        <div class="deal-read">
+          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
+          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
+        </div>
+        <div class="btn-row">
+          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
+        </div>
+        <pre class="prompt-pre" id="dealPromptPre"></pre>
       </div>
-      <div class="deal-sentence" id="dealSentence">Press <strong>Deal</strong> and the table is yours.</div>
-      <button class="deal-btn" id="dealBtn">Deal</button>
-      <button class="deal-btn secondary" id="dealCopyBtn" disabled>Copy this deal as a prompt</button>
-      <pre class="prompt-pre" id="dealPromptPre"></pre>
-    </div>
-  </section>
-
-  <section id="your-app" aria-labelledby="your-app-title">
-    <div class="section-head">
-      <div>
-        <div class="kicker">The lens that's always in your pocket</div>
-        <h2 id="your-app-title">Point it at your app</h2>
-      </div>
-      <p>You already own a little world. This week's idea is a question about it.</p>
-    </div>
-    <ol class="lens-list">
-      <li>What does your app need to know before it responds — and where does that come from: the visitor's input, the current state, or something they did a moment ago?</li>
-      <li>Same input, two contexts: is there a spot where the same click should mean different things depending on what came first? That's your two "banks."</li>
-      <li>What's one more thing your app could "see" — one extra piece of context — that would make its response smarter or more surprising?</li>
-    </ol>
-  </section>
-
-  <section id="triage" aria-labelledby="triage-title">
-    <div class="section-head">
-      <div>
-        <div class="kicker">Before you build</div>
-        <h2 id="triage-title">Check your question</h2>
-      </div>
-      <p>Got a question from a card or a deal? Tap the verdict that fits it best. (These four categories get their full treatment in Session 5's <em>The Next Move</em>.)</p>
-    </div>
-    <div class="triage-grid" id="triageGrid">
-      <button class="triage-chip"><strong>Watchable now</strong>You could build this week's smallest version and literally watch what happens.<span class="reveal">Green light. Name the one thing the visitor does, and go.</span></button>
-      <button class="triage-chip"><strong>Buildable smaller</strong>The idea is good but the version in your head is a semester long.<span class="reveal">Shrink it until it's watchable: one creature instead of an ecosystem, one intersection instead of a city, eight bars instead of a song.</span></button>
-      <button class="triage-chip"><strong>Just an opinion (as stated)</strong>Right now it's a take — there's nothing on a page to disagree with.<span class="reveal">Add something visible: a comparison, a counter, a before/after. Opinions become questions when a reader can check them.</span></button>
-      <button class="triage-chip"><strong>Needs a yardstick first</strong>The question hangs on a word like "better," "catchy," or "fair" with no test behind it.<span class="reveal">Define the check before you build — even a rough one. (That's Session 6's whole story.)</span></button>
     </div>
   </section>
 
@@ -161,10 +130,15 @@
 </main>
 
 <script>
-/* ============================ EDIT HERE: CARDS ============================
-   Each card: lane (must match LANES key), spark (title), body, build, ladder
-   (wonder|watch|compare|week), and optional promptHint appended to the copy
-   prompt. Add, remove, reorder freely — the grid renders from this array. */
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about attention and context — what a thing needs to know before its meaning settles"
+};
+
+/* ============================ EDIT HERE: CARDS ===========================
+   Each card: lane (must match LANES key), spark (title), body, build
+   (starter version), bigger (more ambitious version), ladder
+   (wonder|watch|compare|week), optional promptHint appended to prompts. */
 const LANES = {
   living:   "Living things",
   games:    "Games & play",
@@ -179,85 +153,131 @@ const CARDS = [
   { lane:"music", ladder:"compare",
     spark:"Is the same note the same in three surroundings?",
     body:"One note, played alone, then inside a warm chord, then as the last note of a phrase that finally lands. Same pitch every time — but does it feel the same? Its meaning is settled by what surrounds it.",
-    build:"One note with three play buttons: alone, inside a chord, resolving a phrase (WebAudio). The reader rates how it feels each time." },
+    build:"One note with three play buttons: alone, inside a chord, resolving a phrase (WebAudio). The reader rates how it feels each time.",
+    bigger:"Add a fourth context the reader builds themselves: they pick the surrounding chord from three options and hear how their own choice changes the same note — then a reveal names what they discovered (resolution, tension, home)." },
   { lane:"music", ladder:"compare",
     spark:"What should a model attend to before the next note?",
     body:"If something listened to your melody and had to guess the next note, what would it need to look back at — the beat you're on, the key you're in, the hook it heard four bars ago? That choice of what-to-look-at is attention, in your ears.",
     build:"A short loop where the reader mutes some earlier 'context' notes, then re-guesses what the next note should be. Which notes changed the guess?",
+    bigger:"Three melodies of increasing length, three rounds each, with a running 'clue meter': which muted notes actually changed the reader's guesses across rounds — near notes, or far ones?",
     promptHint:"Use the WebAudio API for a few simple tones; no audio files." },
   { lane:"living", ladder:"compare",
     spark:"The same bark, play or warning",
     body:"A dog's bark, a cat's tail-flick, a bird's call — the signal is identical; the surroundings decide whether it means 'let's play' or 'back off.' Animals read context to settle meaning, same as words do.",
-    build:"A two-scene page: the same sound or pose, and the reader guesses the meaning before the surroundings are revealed. Then flip the scene." },
+    build:"A two-scene page: the same sound or pose, and the reader guesses the meaning before the surroundings are revealed. Then flip the scene.",
+    bigger:"Four signals (bark, tail, ears, freeze) across two scenes each; after guessing, the reader assembles a 'context checklist' of which cues they actually used — and the page compares it to the cues shown." },
   { lane:"living", ladder:"wonder",
     spark:"A flower means one thing to a bee, another to you",
     body:"The 'context' can be who is looking. A flower that reads plain to us blazes with ultraviolet runway stripes to a bee. Same flower, different reader, different meaning.",
-    build:"Toggle a flower between human vision and a bee's false-color UV view. Ask what each 'reader' pays attention to." },
+    build:"Toggle a flower between human vision and a bee's false-color UV view. Ask what each 'reader' pays attention to.",
+    bigger:"Three flowers, three viewers (human, bee, butterfly), plus a 'design your own flower' mode: the reader paints petals and sees both views side by side — which of their choices matter to which viewer?" },
   { lane:"games", ladder:"compare",
     spark:"Fog of war: does the best move change when you see more?",
     body:"Show a position through a keyhole — three squares — and the obvious move looks great. Pull back to the whole board and it's a blunder. What counts as the right move depends on how much context is visible.",
-    build:"A tiny position shown three squares at a time, then whole-board. The reader picks a move twice and compares." },
+    build:"A tiny position shown three squares at a time, then whole-board. The reader picks a move twice and compares.",
+    bigger:"Three positions, three zoom levels each (keyhole → half board → full board), with the reader's pick recorded at every stage and a final tally: how much context did each position need before the good move appeared?" },
   { lane:"games", ladder:"watch",
     spark:"The same card is a bomb or a brick",
     body:"A card that's dead weight in one hand wins the game in another. The card never changes; the hand around it decides everything. Context is your hand.",
-    build:"Show one card, then the same card beside two different hands. The reader rates it good-or-useless in each context." },
+    build:"Show one card, then the same card beside two different hands. The reader rates it good-or-useless in each context.",
+    bigger:"Let the reader build the hand: drag cards in and out and watch a simple 'how good is the star card here?' meter respond — then try to build the hand that makes it worthless." },
   { lane:"stories", ladder:"watch",
     spark:"Who is 'she'? How far back does a pronoun reach?",
     body:"A pronoun is a word with no meaning of its own — it borrows one from something you read earlier. Sometimes one sentence back, sometimes a whole page. How far can attention reach before the thread snaps?",
-    build:"A story revealed one sentence at a time; at each reveal the reader re-votes who 'she' is, and watches the answer settle (or flip)." },
+    build:"A story revealed one sentence at a time; at each reveal the reader re-votes who 'she' is, and watches the answer settle (or flip).",
+    bigger:"Two stories side by side — one where 'she' settles early and stays, one that flips at the last line — plus a distance meter: how many sentences back did the answer live at each step?" },
   { lane:"stories", ladder:"compare",
     spark:"'Nice job.' — praise or knife?",
     body:"The exact same three words land as warmth or as sarcasm depending only on what came just before. Tone lives in the surroundings, not the sentence.",
-    build:"One line of dialogue placed after two different setups. The reader reads the tone each time, then sees how little the words mattered." },
+    build:"One line of dialogue placed after two different setups. The reader reads the tone each time, then sees how little the words mattered.",
+    bigger:"Five setups for the same line, with a tone dial the reader sets each time; at the end, the page lines up all five readings of the identical sentence — a portrait of context doing all the work." },
   { lane:"everyday", ladder:"compare",
     spark:"'k.' — the same two letters in five conversations",
     body:"A one-word reply is a meaning-vacuum that fills with whatever surrounds it: fine after a joke, ominous after a plan, cold after an apology. Same text, five temperatures.",
-    build:"A chat mockup with a context slider. The reader rates the reply's warmth as the conversation before it changes." },
+    build:"A chat mockup with a context slider. The reader rates the reply's warmth as the conversation before it changes.",
+    bigger:"Let the reader compose the conversation from message chips (joke, plan, apology, question) and watch a warmth gauge on the same 'k.' respond to their arrangement — context they built with their own hands." },
   { lane:"everyday", ladder:"wonder",
     spark:"A red light means stop — unless you're the pedestrian",
     body:"The same signal tells a driver, a walker, and a cyclist three different things at the same instant. The role you're in is the context that settles what the light is saying to you.",
-    build:"One traffic signal, three role buttons (driver / walker / cyclist). The reader picks what it tells each — and finds they disagree." },
+    build:"One traffic signal, three role buttons (driver / walker / cyclist). The reader picks what it tells each — and finds they disagree.",
+    bigger:"Add a fourth role and a time dimension (the light changes mid-crossing): the reader steps through a five-second scene as each role and the page shows how the same lights meant four different things." },
   { lane:"art", ladder:"compare",
     spark:"The same gray, warm or cold",
     body:"Put one gray next to a warm background and it looks cool; next to a cool background it looks warm. Your eye never judges a color alone — always against its neighbors. Attention, but for color.",
-    build:"One gray swatch shown on two backgrounds. The reader guesses whether the two grays are the same (they are), then the page proves it." },
+    build:"One gray swatch shown on two backgrounds. The reader guesses whether the two grays are the same (they are), then the page proves it.",
+    bigger:"A three-illusion gallery of context effects on color and size, each with a guess step and a 'prove it' overlay that slides the two targets together — plus a build-your-own panel where the reader picks the backgrounds." },
   { lane:"art", ladder:"wonder",
     spark:"A single comic panel vs. the panel before it",
     body:"A drawn face means nothing until you know what it just saw. Show the panel alone and it's blank; show the panel before it and the same face is joy, or dread. Comics run on context.",
-    build:"Show one panel alone, then with the previous panel. The reader re-reads the same face once it has surroundings." },
+    build:"Show one panel alone, then with the previous panel. The reader re-reads the same face once it has surroundings.",
+    bigger:"One reaction panel and four possible previous panels: the reader deals different panel-1s in front of the same panel-2 and writes (or picks) what the face means each time — a comics version of the two 'banks.'" },
   { lane:"yours", ladder:"week",
     spark:"What does your app need to know before it responds?",
     body:"Every app answers using some context — the visitor's click, the current state, what happened a moment ago. Name yours. Then name one more thing it could 'see' that would make it smarter.",
-    build:"Add one context-sensitive behavior to your current app: the same action, but its result now depends on what came before." },
+    build:"Add one context-sensitive behavior to your current app: the same action, but its result now depends on what came before.",
+    bigger:"Add a visible 'context panel' to your app: a small corner of the page that shows the reader exactly what the app is using to decide (current state, last action) — and one new input that visibly changes what happens next." },
   { lane:"yours", ladder:"compare",
     spark:"Same input, two contexts",
     body:"Is there a spot in your app where the same click should mean different things depending on what the visitor did first? That's your two 'banks' — one word, two minds.",
-    build:"Pick one action and make it context-dependent; show the reader both meanings so the difference is visible on the page." }
+    build:"Pick one action and make it context-dependent; show the reader both meanings so the difference is visible on the page.",
+    bigger:"Give your app a short memory — the visitor's last three actions — and make one response depend on that history; then explain on the page, honestly, what the app remembers and for how long (this visit only)." }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER =========================== */
-const DEAL_LANES = ["living things","games & play","music & sound","stories & words","art & pictures","everyday life"];
-const DEAL_IDEAS = [
-  "the words (or notes, or moves) nearby",
-  "what changes the meaning when you swap it",
-  "how far back it has to look",
-  "the same thing in two different settings",
-  "what to pay attention to first"
+/* ============================ EDIT HERE: DEALER ===========================
+   DEAL_LANES: each lane offers concrete "things on stage."
+   DEAL_ASPECTS: pieces of this week's idea — phrase + plain-English explain.
+   DEAL_GENRES: reader actions — action, what it produces, and a bigger extra. */
+const DEAL_LANES = {
+  living:   { name:"living things",   objects:["a bird call","a dog's bark","a wagging tail","one flower","a warning color","an animal's freeze"] },
+  games:    { name:"games & play",    objects:["one chess move","a card in a hand","a power-up","one play from a match","a single die roll"] },
+  music:    { name:"music & sound",   objects:["one note","a drum hit","a three-note hook","a pause in a song","one chord"] },
+  stories:  { name:"stories & words", objects:["a pronoun","one line of dialogue","an emoji","a nickname","the word 'fine'"] },
+  art:      { name:"art & pictures",  objects:["one color","a single comic panel","a smile in a portrait","one brushstroke","a photo crop"] },
+  everyday: { name:"everyday life",   objects:["a one-word text","a thumbs-up","a siren","the phrase 'we need to talk'","a wave hello"] }
+};
+
+const DEAL_ASPECTS = [
+  { phrase:"the neighbors that settle its meaning",
+    explain:"Alone, the thing is ambiguous. Its meaning gets settled by whatever sits next to it — change the neighbors and you change the reading." },
+  { phrase:"how far back context reaches",
+    explain:"Some meanings settle from the thing right before; others depend on something from way earlier. The question is how far back a reader — or a model — has to look." },
+  { phrase:"the same thing in two settings",
+    explain:"Nothing shows context's power like an exact copy landing differently in two places. Same thing, two worlds — the difference is pure context." },
+  { phrase:"the one swap that flips everything",
+    explain:"Most changes barely matter; one swap flips the whole reading (the instructor page's reply → knife). Finding the smallest change with the biggest effect is a real research move." },
+  { phrase:"what deserves attention first",
+    explain:"When everything is visible, the skill is choosing what matters. A spotlight is a choice — and the wrong spotlight reads the whole scene wrong." }
 ];
+
 const DEAL_GENRES = [
-  "predict first, then reveal",
-  "compare two versions side by side",
-  "reveal it one piece at a time",
-  "change the context and re-read",
-  "guess the meaning before the surroundings show",
-  "spotlight the clue that settles it"
+  { action:"lock in a guess before the surroundings appear",
+    produce:"a page where the reader commits to a reading, then the context appears and the page shows whether their reading survived.",
+    biggerExtra:"three rounds with a running score, so the reader can watch their own guessing improve" },
+  { action:"flip between two versions of the same thing",
+    produce:"a split-screen page where the only difference between left and right is the surroundings — and the meaning refuses to stay the same.",
+    biggerExtra:"a third panel the reader assembles themselves from parts" },
+  { action:"uncover the scene one piece at a time",
+    produce:"a page where the meaning visibly sharpens — or flips — with each reveal, and the reader can feel exactly when it settled.",
+    biggerExtra:"a little meter that marks the moment the reader's mind changed, shown at the end" },
+  { action:"swap the surroundings and read it again",
+    produce:"a page where one click re-dresses the scene and the same centerpiece lands completely differently.",
+    biggerExtra:"letting the reader build the context from parts instead of choosing presets" },
+  { action:"turn the clues off one at a time",
+    produce:"a page that shows which clue was doing the real work — hide the right one and the meaning collapses.",
+    biggerExtra:"a clue ranking the reader assembles first, then tests by muting in their chosen order" },
+  { action:"point the spotlight at the clue they think settles it",
+    produce:"a page where the reader plays the spotlight, then compares their pick against the page's answer.",
+    biggerExtra:"two spotlights — the reader's and a friend's — compared on the same scene" }
 ];
 /* ========================= END EDIT HERE: DEALER ========================== */
 
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
 const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
 
-function cardPrompt(c){
+function starterPrompt(c){
   return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
     "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
     "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
@@ -265,16 +285,24 @@ function cardPrompt(c){
     "Before you write any code, ask me two questions that would make this idea more mine.";
 }
 
-function copyText(txt, btn, pre){
+function biggerPrompt(c){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
+    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
+    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
+    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+}
+
+function copyText(txt, btn, pre, label){
   pre.textContent = txt;
   pre.classList.add("open");
-  const done = ok => { btn.textContent = ok ? "Copied ✓ (and shown below)" : "Copy blocked — select the text below"; };
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
   } else { done(false); }
 }
 
-/* --- render lane chips --- */
+/* --- lane chips --- */
 const chipbar = document.getElementById("laneChips");
 const laneKeys = ["all", ...Object.keys(LANES)];
 let activeLane = "all";
@@ -292,7 +320,7 @@ laneKeys.forEach(k=>{
   chipbar.appendChild(b);
 });
 
-/* --- render cards --- */
+/* --- cards --- */
 const grid = document.getElementById("cardGrid");
 function renderCards(){
   grid.innerHTML = "";
@@ -305,12 +333,19 @@ function renderCards(){
     const h = document.createElement("h3"); h.textContent = c.spark;
     const p = document.createElement("p"); p.textContent = c.body;
     const build = document.createElement("p"); build.className = "build";
-    build.innerHTML = "<strong>Smallest build:</strong> " + c.build;
-    const btn = document.createElement("button");
-    btn.className = "copy-btn"; btn.textContent = "Copy a starting prompt";
+    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
+    const bigger = document.createElement("p"); bigger.className = "build bigger";
+    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
     const pre = document.createElement("pre"); pre.className = "prompt-pre";
-    btn.addEventListener("click", ()=>copyText(cardPrompt(c), btn, pre));
-    el.append(eyebrow, h, p, build, btn, pre);
+    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
+    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, bigger, row, pre);
     grid.appendChild(el);
   });
 }
@@ -320,35 +355,44 @@ renderCards();
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 let deal = null;
 const dealBtn = document.getElementById("dealBtn");
-const dealCopyBtn = document.getElementById("dealCopyBtn");
 const dealPre = document.getElementById("dealPromptPre");
-dealBtn.addEventListener("click", ()=>{
-  deal = { lane:pick(DEAL_LANES), idea:pick(DEAL_IDEAS), genre:pick(DEAL_GENRES) };
-  document.getElementById("slotLane").textContent = deal.lane;
-  document.getElementById("slotIdea").textContent = deal.idea;
-  document.getElementById("slotGenre").textContent = deal.genre;
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.lane + "</strong>, built around <strong>" + deal.idea +
-    "</strong>, where the reader can <strong>" + deal.genre + "</strong>.";
-  dealCopyBtn.disabled = false;
-  dealCopyBtn.textContent = "Copy this deal as a prompt";
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal again";
-});
-dealCopyBtn.addEventListener("click", ()=>{
-  if(!deal) return;
-  const txt = "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this combination — help me turn it into something real:\n" +
-    "• territory: " + deal.lane + "\n" +
-    "• this week's idea: " + deal.idea + " (this week is about attention and context — what a thing needs to know before its meaning settles)\n" +
-    "• reader action: " + deal.genre + "\n\n" +
-    "First suggest three small, concrete page ideas that fit this deal. Wait for me to pick or remix one. Then build the smallest working version with one clear thing for the reader to do and a short “what to notice” note.";
-  copyText(txt, dealCopyBtn, dealPre);
-});
 
-/* --- triage reveal --- */
-document.querySelectorAll(".triage-chip").forEach(t=>{
-  t.addEventListener("click", ()=>t.classList.toggle("open"));
+function dealStarter(d){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+}
+function dealBigger(d){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
+    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+}
+
+dealBtn.addEventListener("click", ()=>{
+  const laneKey = pick(Object.keys(DEAL_LANES));
+  const lane = DEAL_LANES[laneKey];
+  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
+  document.getElementById("dealSentence").innerHTML =
+    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
+    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
+  document.getElementById("dealMeans").textContent = deal.aspect.explain;
+  document.getElementById("dealProduce").textContent = deal.genre.produce;
+  document.getElementById("dealOut").classList.add("open");
+  dealPre.classList.remove("open");
+  dealBtn.textContent = "Deal another";
+});
+document.getElementById("dealStarterBtn").addEventListener("click", function(){
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+});
+document.getElementById("dealBiggerBtn").addEventListener("click", function(){
+  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
 });
 </script>
 </body>
