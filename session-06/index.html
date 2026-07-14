@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailheads · Session 6 — Three Tests of “It Works”</title>
+<style>
+  :root {
+    --ink:#22222a; --muted:#6b6b76; --paper:#fdfcf9; --card:#ffffff;
+    --line:#e3e0d8; --accent:#c96b32; --accent-soft:#faeee6;
+    --green:#2f6f5e; --green-soft:#e7f1ee; --blue:#315f91; --blue-soft:#eef3f8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; line-height:1.65; font-size:1.05rem; }
+  main { width:min(72rem,calc(100% - 2rem)); margin:0 auto; padding:2.5rem 0 5rem; }
+  h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
+  h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
+  a { color:inherit; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
+  .crumb a { color:var(--accent); font-weight:700; }
+  .byline { max-width:58ch; color:var(--muted); font-size:1.2rem; margin-bottom:1.6rem; }
+  .bridge { max-width:70ch; background:var(--green-soft); border-left:4px solid var(--green); padding:1rem 1.15rem; margin:1.4rem 0 1rem; }
+  .bridge .eyebrow { color:var(--green); font-size:.75rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
+  .bridge p { margin:.45rem 0; }
+  .bridge a { color:var(--green); font-weight:700; }
+  .note { font-size:.86rem; color:var(--muted); }
+  section { margin-top:3rem; scroll-margin-top:1rem; }
+  .section-head { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1rem; }
+  .section-head p { max-width:56ch; margin:0; color:var(--muted); }
+  .chipbar { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .chip { padding:.42rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:.85rem; font-weight:750; cursor:pointer; }
+  .chip[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
+  .chip.yours-chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
+  .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+  .idea-card { display:flex; flex-direction:column; padding:1.1rem 1.15rem; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+  .idea-card.yours { border:1.5px dashed var(--accent); background:var(--accent-soft); }
+  .idea-card .eyebrow { display:flex; align-items:center; gap:.5rem; color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; }
+  .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
+  .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
+  .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
+  .idea-card .build strong { color:var(--accent); }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
+  .prompt-pre.open { display:block; }
+  .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
+  .deal-out { display:none; }
+  .deal-out.open { display:block; }
+  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
+  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
+  .deal-read p { margin:.35rem 0; }
+  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
+  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
+  footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
+  footer a { color:var(--accent); font-weight:700; }
+  @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:620px) {
+    main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
+    .card-grid { grid-template-columns:1fr; }
+    .section-head { display:block; } section { margin-top:2.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="../">← Trailheads</a> · Session 6</div>
+  <div class="kicker">Session 6 · Evaluation and robustness</div>
+  <h1>Three tests of “it works”</h1>
+  <div class="byline">The traveling question: <strong>pick something you love — what are three different tests of “it works,” and which one is hardest to pass?</strong></div>
+
+  <div class="bridge">
+    <span class="eyebrow">The bridge from class</span>
+    <p>In this week's <a href="https://buildlittleworlds.github.io/instructor-study/session-06/">Instructor Study page</a>, a real glider gun passes two tests — reach the target once, keep working — and then a reader with a damage brush runs the third, and it fails: nothing ever trained the gun to survive a reader. Beside it, one slider grades the same skill two ways and gets two different stories — a sudden cliff or a smooth slope. The yardstick can manufacture the jump.</p>
+    <p>That's the split this page sends into your territory: <strong>success depends on which behavior you test.</strong> Everything you love has three tests waiting.</p>
+  </div>
+
+  <section id="trails" aria-labelledby="trails-title">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Pick a lane, or wander</div>
+        <h2 id="trails-title">Trailheads</h2>
+      </div>
+      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+    </div>
+    <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section id="dealer" aria-labelledby="dealer-title">
+    <div class="dealer">
+      <div class="kicker">Keep dealing until one grabs you</div>
+      <h2 id="dealer-title">The Dealer</h2>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <button class="deal-btn" id="dealBtn">Deal an idea</button>
+      <div class="deal-out" id="dealOut">
+        <div class="deal-sentence" id="dealSentence"></div>
+        <div class="deal-read">
+          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
+          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
+        </div>
+        <div class="btn-row">
+          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
+        </div>
+        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="honesty">
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A catchiness test is not a model benchmark; a level's fun meter is not a loss function. The idea travels; the mechanism doesn't.
+    </div>
+  </section>
+
+  <footer>
+    Trailheads · Session 6 · nothing to turn in ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/session-06/">this week's Instructor Study page</a> ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/anthology/">the Anthology</a> ·
+    <a href="../">all trailheads</a>
+  </footer>
+</main>
+
+<script>
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about evaluation — different definitions of success test different behaviors, and the yardstick can manufacture the result"
+};
+
+/* ============================ EDIT HERE: CARDS =========================== */
+const LANES = {
+  living:   "Living things",
+  games:    "Games & play",
+  music:    "Music & sound",
+  stories:  "Stories & words",
+  art:      "Art & pictures",
+  everyday: "Everyday life",
+  yours:    "Your app"
+};
+
+const CARDS = [
+  { lane:"games", ladder:"compare",
+    spark:"Fun, fair, deep — pick two?",
+    body:"A level can be a blast and totally unfair. Another is perfectly balanced and boring. 'Good level' is three different claims wearing one word.",
+    build:"Three tiny authored levels and three meters — fun, fair, deep. The reader rates, and the winner changes with the meter.",
+    bigger:"Make the levels actually playable as one-screen mini-challenges; after playing each, the reader rates all three on all three meters and the page shows how each yardstick crowns a different level." },
+  { lane:"games", ladder:"compare",
+    spark:"The GOAT machine",
+    body:"Rings? Points? Era-adjusted stats? Every 'greatest of all time' argument is secretly an argument about the yardstick. Build the machine that makes that visible.",
+    build:"Three athletes (or players, or speedrunners) × four stats; the reader picks the criterion and watches the crown move.",
+    bigger:"Add a build-your-own-formula mixer — the reader weights the stats and the page crowns their GOAT — ending on the honest line: every crown is a formula wearing a trophy." },
+  { lane:"music", ladder:"compare",
+    spark:"What's your catchiness test?",
+    body:"Catchy meaning you remember it tomorrow? Can't stop humming it? Everyone dances? Three tests, three different winners — 'catchy' is a yardstick choice.",
+    build:"Three short hooks ranked under two different yardsticks — memorable versus danceable — and the order flips between them.",
+    bigger:"Add one real (tiny, honest) test: play a hook once at the top of the page, hide it behind two minutes of reading, then ask the reader to pick it out of three — one actual data point of 'remembered it later,' labeled as exactly that." },
+  { lane:"music", ladder:"wonder",
+    spark:"The song that survives the campfire",
+    body:"Some songs work sung badly around a fire with half the words missing. Others fall apart outside the studio. Which kind is stronger — and what does 'works' even mean for a song?",
+    build:"One melody rendered two ways — clean, and degraded (missing notes, rough timing, WebAudio). The reader answers: which version still 'works'?",
+    bigger:"A degradation slider (note-drop percentage, timing wobble) across three melodies: the reader finds each one's breaking point — a robustness curve for tunes, measured by ear." },
+  { lane:"living", ladder:"compare",
+    spark:"Fittest for which environment?",
+    body:"The 'fittest' creature in the pond is lunch in the desert. Fitness isn't a property of the creature — it's a relationship between the creature and the test.",
+    build:"A creature card with three stats, scored pass/fail against two environments; the reader flips the environment and watches success invert.",
+    bigger:"Let the reader design the creature — spend ten points across stats — then run it against three environments. No build passes all three; that impossibility is the exhibit." },
+  { lane:"living", ladder:"watch",
+    spark:"Grow once, survive a season, regrow after the storm",
+    body:"The instructor's glider gun faces three tests; so does a garden. Reaching the goal once, persisting, and recovering from damage are three different kinds of success — and you can garden for each.",
+    build:"A toy garden with three buttons: grow it, run a season, storm it. Three different meanings of 'the garden works.'",
+    bigger:"Add a training choice before the run — deep roots or fast blooms — and watch which tests each strategy passes. Success was chosen before the test ran; that's the week's secret." },
+  { lane:"stories", ladder:"compare",
+    spark:"Two endings, two rubrics",
+    body:"One ending you never saw coming; one you should have seen coming all along. Both 'good' — under different rubrics. Surprise and inevitability pull in opposite directions.",
+    build:"One mini-story with two endings; the reader rates both on 'didn't see it coming' and 'should have seen it coming' — and the ratings disagree.",
+    bigger:"Add a third rubric the reader picks themselves (moved me / made me laugh / want to reread) and re-rate: three rubrics, three different winning endings. Criteria are instruments." },
+  { lane:"stories", ladder:"wonder",
+    spark:"What does 'good at reading' even mean?",
+    body:"Fastest? Best memory? Notices the planted detail? Rank your class three ways and you get three different podiums. The yardstick decides who's 'good.'",
+    build:"Three tiny reading challenges — speed, recall, noticing — and the reader discovers they rank differently on each.",
+    bigger:"Add a grader's-choice reveal: the same performance scored by three graders with different priorities, landing the yardstick-makes-the-jump lesson — the instrument can manufacture the ranking." },
+  { lane:"art", ladder:"compare",
+    spark:"Is it good, or is it finished?",
+    body:"'Done' under the says-what-I-meant test and 'done' under the polished test are different moments — and artists confuse them constantly.",
+    build:"The same sketch at three stages; the reader marks where it's 'done' under two tests — says-what-I-meant versus polished — and the marks land in different places.",
+    bigger:"Add a third test — 'would a stranger stop scrolling?' — and a compare panel of all three cut points. Closing line: pick your test before you draw, or the scroll picks it for you." },
+  { lane:"everyday", ladder:"watch",
+    spark:"Three tests of a paper airplane",
+    body:"Flies once. Flies every time. Survives a crash and flies again. That's reach, persist, recover — the glider gun's three tests, on your desk.",
+    build:"A build-log page: one paper plane put through the three tests, with honest results (yours — dated, described, no exaggerating).",
+    bigger:"A reusable test bench: the reader picks anything on their desk (plane, block tower, phone stand), runs reach/persist/recover, and the page assembles the three-verdict report — locally, nothing stored." },
+  { lane:"everyday", ladder:"wonder",
+    spark:"Clean by whose test?",
+    body:"The room passes Mom's doorway glance, fails the friend-hangout test, and fails hard on can-you-find-your-charger. 'Clean' is three inspectors with three checklists.",
+    build:"One room, three inspectors, three verdicts: a compare card that makes 'clean' three different claims.",
+    bigger:"An inspector-builder: the reader picks what each inspector checks (floor visible? desk usable? smells fine?) and watches the same room pass and fail. Write the test, decide the verdict." },
+  { lane:"yours", ladder:"week",
+    spark:"One success check, run for real",
+    body:"Not 'my app is good' — that's a claim. One concrete check, run today, result on the page — that's evidence. The gap between those two is this week.",
+    build:"Pick ONE check for your app — loads on a phone? survives a stranger with no narration? recovers from a weird input? — run it today, and put the result on the page, pass or fail.",
+    bigger:"Give your app a small test-bench section: three named checks with today's honest results and a date. Re-run and update after each build — your page starts showing not just what it does, but how you know." },
+  { lane:"yours", ladder:"compare",
+    spark:"Which yardstick flatters your app?",
+    body:"'Impressive in a demo' and 'usable by a stranger with no narration' are different tests — and most of us have been building for the first one without noticing.",
+    build:"Score your app honestly under both yardsticks. Which one have you been building for?",
+    bigger:"Hand your app to someone at home, say nothing, and watch for one minute. Write down which test their behavior actually ran — then make one fix aimed at the yardstick you actually care about." }
+];
+/* ========================== END EDIT HERE: CARDS ========================== */
+
+/* ============================ EDIT HERE: DEALER =========================== */
+const DEAL_LANES = {
+  living:   { name:"living things",   objects:["a creature","a garden","a bird's nest","a houseplant","an ant colony"] },
+  games:    { name:"games & play",    objects:["a level","a strategy","a boss fight","a party game","a speedrun route"] },
+  music:    { name:"music & sound",   objects:["a hook","a playlist","a cover version","a talent-show act","a beat"] },
+  stories:  { name:"stories & words", objects:["an ending","a plot twist","a book recommendation","a joke","an opening line"] },
+  art:      { name:"art & pictures",  objects:["a sketch","a poster","a color palette","a comic page","a photo edit"] },
+  everyday: { name:"everyday life",   objects:["a paper airplane","a clean room","a study method","a morning routine","a group project"] }
+};
+
+const DEAL_ASPECTS = [
+  { phrase:"three different tests of 'it works'",
+    explain:"Reach the goal once, keep working, recover from damage — the instructor's glider gun passes two and fails one. Every made thing has its own version of the three." },
+  { phrase:"the yardstick that changes the winner",
+    explain:"Change the measure and the ranking reshuffles. The result isn't just in the thing; it's partly in the instrument you point at it." },
+  { phrase:"the test it was never trained for",
+    explain:"Things pass the tests they were shaped by and fail the ones they never met — the gun never met a reader with a damage brush. What test has your subject never met?" },
+  { phrase:"pass/fail versus partial credit",
+    explain:"All-or-nothing grading shows a sudden cliff; partial credit shows a smooth slope — same skill, two stories. The jump can live in the grader, not the thing." },
+  { phrase:"success you can check versus success you can only claim",
+    explain:"'It's good' is a claim; 'it loads in two seconds and a stranger used it without help' is a check. The move is turning one claim into one check." }
+];
+
+const DEAL_GENRES = [
+  { action:"put it through three different tests of success",
+    produce:"a bench page where the same thing passes some tests and fails others — and the reader feels 'it works' split into three separate claims.",
+    biggerExtra:"a fourth test the reader designs themselves, plus a verdict strip comparing all four" },
+  { action:"change the measuring stick and watch the winner change",
+    produce:"a ranking page where the crown moves every time the criterion does — the yardstick IS the argument.",
+    biggerExtra:"a build-your-own-formula mixer with weights, ending with the reader's formula named honestly as an opinion" },
+  { action:"degrade it until it stops working",
+    produce:"a page with a stress slider — the reader finds exactly where 'works' becomes 'broken,' and discovers the edge is a place, not a switch.",
+    biggerExtra:"three subjects on the same slider, so robustness becomes a comparison instead of a compliment" },
+  { action:"grade the same performance two different ways",
+    produce:"a page where one performance earns two different scores — the cliff and the slope — and the reader sees the grader inside the grade.",
+    biggerExtra:"a reroll button that generates fresh performances, so the two graders disagree anew every time" },
+  { action:"damage it a little, then test it again",
+    produce:"a page with a damage brush and a retest button — the reader learns whether recovery was ever part of the design.",
+    biggerExtra:"a choice of what to strengthen before the damage, so the reader feels 'trained for it' versus 'never met it'" },
+  { action:"watch three judges score the same thing",
+    produce:"a judging page where the disagreement is the exhibit: every judge is consistent, and they still crown different winners.",
+    biggerExtra:"the reader as fourth judge, their scores shown beside the panel (this visit only, nothing saved)" }
+];
+/* ========================= END EDIT HERE: DEALER ========================== */
+
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
+const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
+
+function starterPrompt(c){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
+    "Before you write any code, ask me two questions that would make this idea more mine.";
+}
+
+function biggerPrompt(c){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
+    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
+    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
+    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+}
+
+function copyText(txt, btn, pre, label){
+  pre.textContent = txt;
+  pre.classList.add("open");
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
+  } else { done(false); }
+}
+
+/* --- lane chips --- */
+const chipbar = document.getElementById("laneChips");
+const laneKeys = ["all", ...Object.keys(LANES)];
+let activeLane = "all";
+laneKeys.forEach(k=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (k==="yours" ? " yours-chip" : "");
+  b.textContent = k==="all" ? "All lanes" : LANES[k];
+  b.setAttribute("aria-pressed", k===activeLane ? "true" : "false");
+  b.addEventListener("click", ()=>{
+    activeLane = k;
+    chipbar.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    renderCards();
+  });
+  chipbar.appendChild(b);
+});
+
+/* --- cards --- */
+const grid = document.getElementById("cardGrid");
+function renderCards(){
+  grid.innerHTML = "";
+  CARDS.filter(c => activeLane==="all" || c.lane===activeLane).forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "idea-card" + (c.lane==="yours" ? " yours" : "");
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "eyebrow";
+    eyebrow.innerHTML = "<span>" + LANES[c.lane] + "</span><span class='ladder'>" + LADDER_LABEL[c.ladder] + "</span>";
+    const h = document.createElement("h3"); h.textContent = c.spark;
+    const p = document.createElement("p"); p.textContent = c.body;
+    const build = document.createElement("p"); build.className = "build";
+    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
+    const bigger = document.createElement("p"); bigger.className = "build bigger";
+    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    const pre = document.createElement("pre"); pre.className = "prompt-pre";
+    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
+    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, bigger, row, pre);
+    grid.appendChild(el);
+  });
+}
+renderCards();
+
+/* --- the dealer --- */
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+let deal = null;
+const dealBtn = document.getElementById("dealBtn");
+const dealPre = document.getElementById("dealPromptPre");
+
+function dealStarter(d){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+}
+function dealBigger(d){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
+    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+}
+
+dealBtn.addEventListener("click", ()=>{
+  const laneKey = pick(Object.keys(DEAL_LANES));
+  const lane = DEAL_LANES[laneKey];
+  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
+  document.getElementById("dealSentence").innerHTML =
+    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
+    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
+  document.getElementById("dealMeans").textContent = deal.aspect.explain;
+  document.getElementById("dealProduce").textContent = deal.genre.produce;
+  document.getElementById("dealOut").classList.add("open");
+  dealPre.classList.remove("open");
+  dealBtn.textContent = "Deal another";
+});
+document.getElementById("dealStarterBtn").addEventListener("click", function(){
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+});
+document.getElementById("dealBiggerBtn").addEventListener("click", function(){
+  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+});
+</script>
+</body>
+</html>

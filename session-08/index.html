@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailheads · Session 8 — The Naming of Your Things</title>
+<style>
+  :root {
+    --ink:#22222a; --muted:#6b6b76; --paper:#fdfcf9; --card:#ffffff;
+    --line:#e3e0d8; --accent:#c96b32; --accent-soft:#faeee6;
+    --green:#2f6f5e; --green-soft:#e7f1ee; --blue:#315f91; --blue-soft:#eef3f8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; line-height:1.65; font-size:1.05rem; }
+  main { width:min(72rem,calc(100% - 2rem)); margin:0 auto; padding:2.5rem 0 5rem; }
+  h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
+  h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
+  a { color:inherit; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
+  .crumb a { color:var(--accent); font-weight:700; }
+  .byline { max-width:58ch; color:var(--muted); font-size:1.2rem; margin-bottom:1.6rem; }
+  .bridge { max-width:70ch; background:var(--green-soft); border-left:4px solid var(--green); padding:1rem 1.15rem; margin:1.4rem 0 1rem; }
+  .bridge .eyebrow { color:var(--green); font-size:.75rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
+  .bridge p { margin:.45rem 0; }
+  .bridge a { color:var(--green); font-weight:700; }
+  .note { font-size:.86rem; color:var(--muted); }
+  section { margin-top:3rem; scroll-margin-top:1rem; }
+  .section-head { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1rem; }
+  .section-head p { max-width:56ch; margin:0; color:var(--muted); }
+  .chipbar { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .chip { padding:.42rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:.85rem; font-weight:750; cursor:pointer; }
+  .chip[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
+  .chip.yours-chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
+  .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+  .idea-card { display:flex; flex-direction:column; padding:1.1rem 1.15rem; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+  .idea-card.yours { border:1.5px dashed var(--accent); background:var(--accent-soft); }
+  .idea-card .eyebrow { display:flex; align-items:center; gap:.5rem; color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; }
+  .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
+  .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
+  .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
+  .idea-card .build strong { color:var(--accent); }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
+  .prompt-pre.open { display:block; }
+  .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
+  .deal-out { display:none; }
+  .deal-out.open { display:block; }
+  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
+  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
+  .deal-read p { margin:.35rem 0; }
+  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
+  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
+  footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
+  footer a { color:var(--accent); font-weight:700; }
+  @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:620px) {
+    main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
+    .card-grid { grid-template-columns:1fr; }
+    .section-head { display:block; } section { margin-top:2.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="../">← Trailheads</a> · Session 8</div>
+  <div class="kicker">Session 8 · Explanation and honest scope</div>
+  <h1>The naming of your things</h1>
+  <div class="byline">The traveling question: <strong>what becomes visible only after it has a name — and what can your page honestly claim to show?</strong></div>
+
+  <div class="bridge">
+    <span class="eyebrow">The bridge from class</span>
+    <p>In this week's <a href="https://buildlittleworlds.github.io/instructor-study/session-08/">Instructor Study page</a>, a random soup burns down to ash — anonymous debris, until the field guide switches on and the same pixels become blocks, blinkers, and beehives. Nothing changed on the board; everything changed in the room. And across soups, the census keeps finding the same few citizens: the ash is the false mean of the Life universe.</p>
+    <p>That's what this page sends into your territory: <strong>names make patterns visible — and a page should claim only what it shows.</strong> Every lane below has a census waiting for a field guide.</p>
+  </div>
+
+  <section id="trails" aria-labelledby="trails-title">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Pick a lane, or wander</div>
+        <h2 id="trails-title">Trailheads</h2>
+      </div>
+      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+    </div>
+    <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section id="dealer" aria-labelledby="dealer-title">
+    <div class="dealer">
+      <div class="kicker">Keep dealing until one grabs you</div>
+      <h2 id="dealer-title">The Dealer</h2>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <button class="deal-btn" id="dealBtn">Deal an idea</button>
+      <div class="deal-out" id="dealOut">
+        <div class="deal-sentence" id="dealSentence"></div>
+        <div class="deal-read">
+          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
+          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
+        </div>
+        <div class="btn-row">
+          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
+        </div>
+        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="honesty">
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> Your feeder's birds are not the world's birds; a week's census is an anecdote with a tally. The idea travels; the mechanism doesn't.
+    </div>
+  </section>
+
+  <footer>
+    Trailheads · Session 8 · nothing to turn in ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/session-08/">this week's Instructor Study page</a> ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/anthology/">the Anthology</a> ·
+    <a href="../">all trailheads</a>
+  </footer>
+</main>
+
+<script>
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about naming and honest scope — names make patterns visible, and a page should claim only what it shows"
+};
+
+/* ============================ EDIT HERE: CARDS =========================== */
+const LANES = {
+  living:   "Living things",
+  games:    "Games & play",
+  music:    "Music & sound",
+  stories:  "Stories & words",
+  art:      "Art & pictures",
+  everyday: "Everyday life",
+  yours:    "Your app"
+};
+
+const CARDS = [
+  { lane:"living", ladder:"watch",
+    spark:"The field guide is the original names-on toggle",
+    body:"Birdwatchers have run names-on/names-off for two centuries: the tree is full of 'birds' until you know five names — then it's full of individuals. Census your feeder, your street, your window.",
+    build:"A mini field-guide page: five local birds (or leaves, or bugs) with spotting rules and tally buttons — a week of looking, counts on the page, dated and placed honestly.",
+    bigger:"Add names-on/names-off: the same week of sightings shown first as anonymous silhouettes, then labeled — plus a scope line written from the data's own limits: five species, one window, one week." },
+  { lane:"living", ladder:"wonder",
+    spark:"Once you know a birdcall, you can't unhear it",
+    body:"Learning a name rewires your attention. The soundscape doesn't change; you do. That before/after is buildable.",
+    build:"A before/after page: one scene (sound or photo), first unlabeled, then with three named things marked. The reader compares what they noticed on each pass.",
+    bigger:"Three scenes and a 'plant a name' game: the reader learns one name on scene one, then hunts it across the other two — a page that demonstrates a name installing itself in your attention." },
+  { lane:"music", ladder:"compare",
+    spark:"Four chords are the ash of pop",
+    body:"Learn to hear one progression and it starts showing up everywhere — the same few citizens, every random soup of radio. Naming it is what makes the sameness audible.",
+    build:"Three song sketches sharing one progression, with a names-on/names-off toggle (the numerals appear over the chords). Same audio, new hearing.",
+    bigger:"A census bench: eight sketches, the reader tallies progressions, and a few names end up covering almost everything — plus the honest line: this census covers these eight sketches; the famous claim about all of pop is cited, not measured here." },
+  { lane:"music", ladder:"wonder",
+    spark:"Is 'the chorus' a discovery or a decision?",
+    body:"Verse, chorus, bridge — do the names describe the song's structure, or help create it? Two listeners can map the same song differently, and both be consistent.",
+    build:"One song mapped two ways: as raw time blocks, then with part names. The reader marks where 'the chorus' starts — and notices the name did some of the deciding.",
+    bigger:"Two listeners' maps of the same song, compared: where the names agree (the chorus) and where they argue (bridge, or second verse?). Names as instruments — with error bars." },
+  { lane:"games", ladder:"compare",
+    spark:"Fork, skewer, camp, cheese",
+    body:"Players invented a field guide for strategy: once a move has a name, you can spot it, teach it, and count it. Time to census your own matches.",
+    build:"A match-log namer: ten authored match moments; the reader names each one from a five-move field guide, and the tally builds as they go.",
+    bigger:"Add the punch card: after the tally, reveal that the same three moves covered most of the moments — the meta is the false mean of your matches — with the scope line: these ten moments, this field guide, nothing more." },
+  { lane:"games", ladder:"wonder",
+    spark:"The move without a name",
+    body:"You do something in your game that has no name yet. Unnamed, it's a habit; named, it's teachable. Naming is compression.",
+    build:"A name-it-to-teach-it page: one unnamed strategy shown three times; the reader coins a name for it, and the page shows how much shorter the explanation gets with the name doing the carrying.",
+    bigger:"A tiny field-guide builder: the reader names three of their own recurring moves and drafts a one-line spotting rule for each — their personal guide, assembled on screen (this visit only; copy it out to keep it)." },
+  { lane:"stories", ladder:"compare",
+    spark:"Annoyed, slighted, betrayed",
+    body:"With three feeling-words you see three feelings; with nine you see nine. Finer names don't just describe experience more precisely — they change what you can notice and say.",
+    build:"Three short scenes, each read twice: once with a three-word feeling menu, once with a nine-word menu. Do the finer names change the reading?",
+    bigger:"Add a granularity slider on one scene — three, six, twelve feeling-names — and watch the reading sharpen (or splinter) as the vocabulary grows. Where's the useful level?" },
+  { lane:"stories", ladder:"wonder",
+    spark:"The word your language doesn't have",
+    body:"Some languages have a word for the pause before bad news, or the joy of canceled plans. A missing word is a name your attention doesn't have yet.",
+    build:"A gallery of four borrowed words with honest one-line glosses — and for each, the question: what becomes noticeable once you have it?",
+    bigger:"Add a coin-one finale: the reader shuffles authored 'gaps' (feelings and moments with no English name) and drafts a word for one — naming as a creative act with a job to do." },
+  { lane:"art", ladder:"compare",
+    spark:"Name the color, change the color",
+    body:"'Red' is one pile. Brick, cherry, rust — three piles. The swatches never changed. Labels carve the space your eye searches.",
+    build:"A color-sort page: sort nine swatches with three names available, then again with nine names. The piles change — what changed, the swatches or you?",
+    bigger:"Add the paint-store test: the reader names the swatches BEFORE seeing the official paint-store names, then compares. Whose names carved the space better — and for what job?" },
+  { lane:"everyday", ladder:"watch",
+    spark:"Cumulus or cirrus: the sky has a field guide",
+    body:"Clouds are the free census running over everyone's head. Four names is enough to start seeing weather instead of white shapes.",
+    build:"A cloud census page: four cloud types with spotting rules and tally buttons for a week of looking up — your counts, dated, honest.",
+    bigger:"Names-on/names-off for the sky: ten of your own sky photos, first anonymous, then labeled — plus the scope line: one town, one week, four names. The sky is bigger than my guide, and the page says so." },
+  { lane:"everyday", ladder:"wonder",
+    spark:"The ash of your lunchroom",
+    body:"Census what always shows up — the seat-saver, the phone circle, the same three complaints. The boring stuff that appears every single day is the false mean of your lunchroom. (Name patterns, never people.)",
+    build:"A gentle census card: five recurring lunchroom 'objects,' named kindly and tallied for a week — patterns only, no individuals.",
+    bigger:"Add the reveal panel: which three names covered most days — your lunchroom's ash — plus what escaped the guide (the rare spaceship sightings) and an honest line about what one week can't show." },
+  { lane:"yours", ladder:"week",
+    spark:"Sort your own sentences into the three bins",
+    body:"Your paper layer makes claims. Each one belongs in a bin: this page shows it / a source I can cite shows it / this page can't show it. The third bin isn't shameful — it's just not a claim your page gets to make.",
+    build:"Take your app's four paper-layer sentences and sort each into its bin. Rewrite the one that overclaims.",
+    bigger:"Put the bins ON your page: a small 'what this page shows' section with each claim tagged shows / cites / can't-show. Readers trust pages that grade their own claims." },
+  { lane:"yours", ladder:"compare",
+    spark:"Name your app's parts",
+    body:"'The thing on the left' is not a name. Once the three main things on your page have real names, your explanation gets shorter, and your readers can finally talk about what they're seeing.",
+    build:"Give the three main things on your app's page real names, and use them in your what-to-notice note.",
+    bigger:"Add a tiny legend to your app — three named parts with one-line spotting rules, field-guide style — and watch how much explanation the names now carry for you." }
+];
+/* ========================== END EDIT HERE: CARDS ========================== */
+
+/* ============================ EDIT HERE: DEALER =========================== */
+const DEAL_LANES = {
+  living:   { name:"living things",   objects:["the birds at a feeder","the leaves on one street","backyard bugs","the sounds at dawn","the dogs at a park"] },
+  games:    { name:"games & play",    objects:["your last ten matches","the moves in one rally","boss patterns","player types in a lobby","opening strategies"] },
+  music:    { name:"music & sound",   objects:["the chords in a playlist","the drum patterns in one genre","hooks on the radio","the parts of one song","hallway sounds with rhythm"] },
+  stories:  { name:"stories & words", objects:["the feelings in one chapter","plot shapes across five movies","texting styles in a group chat","kinds of jokes in one show","first lines on a shelf"] },
+  art:      { name:"art & pictures",  objects:["the colors in one painting","this month's meme formats","fonts around your school","comic panel layouts","margin doodles"] },
+  everyday: { name:"everyday life",   objects:["lunchroom patterns","hallway greetings","this month's weather","the lost-and-found","kinds of excuses"] }
+};
+
+const DEAL_ASPECTS = [
+  { phrase:"what a name makes visible",
+    explain:"The board doesn't change when the labels switch on — the room does. A good name is an instrument: it points attention at something that was already there." },
+  { phrase:"the census that finds the same few things",
+    explain:"Count what shows up and a pattern appears: the same few citizens, almost every time. The ash is the false mean — and you can only see the sameness once things have names." },
+  { phrase:"the rare thing the guide doesn't know",
+    explain:"Every field guide has edges. The specimen that lands in 'unnamed — rarer than my guide' isn't a failure; it's the most interesting row in the census." },
+  { phrase:"what this page can honestly claim",
+    explain:"Three bins: the page shows it, a source you can cite shows it, the page can't show it. Honest scope is stronger than overclaiming — readers trust pages that grade their own claims." },
+  { phrase:"names that decide instead of describe",
+    explain:"Sometimes the label does some of the deciding — where the chorus 'starts,' which gray counts as 'blue.' A name is a choice wearing a fact's clothes; a page can make the choice visible." }
+];
+
+const DEAL_GENRES = [
+  { action:"flip the labels on and off over the same scene",
+    produce:"a page where nothing on screen changes but the reader's seeing does — the toggle is the exhibit.",
+    biggerExtra:"a predict-first gate: the reader guesses how many kinds are present before the names arrive" },
+  { action:"tally what shows up, using a small field guide",
+    produce:"a counting page where a few names cover almost everything — and the tally makes the sameness visible.",
+    biggerExtra:"an 'unnamed' row for what the guide doesn't know, with the honest note that rare is not broken" },
+  { action:"sort claims into shows-it / cites-it / can't-show-it",
+    produce:"a sorting page where plausible sentences land in different bins — and one planted trap teaches the week's lesson.",
+    biggerExtra:"one claim whose bin the reader can actually verify on the page itself, receipt and all" },
+  { action:"invent a name for a thing that has none",
+    produce:"a naming page: once the thing is named, the explanation gets shorter and the spotting gets faster — naming as compression.",
+    biggerExtra:"a spotting-rule step: every coined name gets a one-line 'how to spot it,' field-guide style" },
+  { action:"re-see the same scene with a finer set of names",
+    produce:"a page where three names become nine and the piles rearrange — the reader watches vocabulary resize what they can see.",
+    biggerExtra:"a 'useful level' question at the end: which vocabulary size actually helped, and for what job?" },
+  { action:"shrink a big claim until the page can back it",
+    produce:"a page where an overclaiming sentence gets trimmed, word by word, into one the evidence can carry — and gets stronger, not weaker.",
+    biggerExtra:"a before/after toggle of the whole paper layer: the loud draft versus the honest draft" }
+];
+/* ========================= END EDIT HERE: DEALER ========================== */
+
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
+const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
+
+function starterPrompt(c){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
+    "Before you write any code, ask me two questions that would make this idea more mine.";
+}
+
+function biggerPrompt(c){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
+    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
+    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
+    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+}
+
+function copyText(txt, btn, pre, label){
+  pre.textContent = txt;
+  pre.classList.add("open");
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
+  } else { done(false); }
+}
+
+/* --- lane chips --- */
+const chipbar = document.getElementById("laneChips");
+const laneKeys = ["all", ...Object.keys(LANES)];
+let activeLane = "all";
+laneKeys.forEach(k=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (k==="yours" ? " yours-chip" : "");
+  b.textContent = k==="all" ? "All lanes" : LANES[k];
+  b.setAttribute("aria-pressed", k===activeLane ? "true" : "false");
+  b.addEventListener("click", ()=>{
+    activeLane = k;
+    chipbar.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    renderCards();
+  });
+  chipbar.appendChild(b);
+});
+
+/* --- cards --- */
+const grid = document.getElementById("cardGrid");
+function renderCards(){
+  grid.innerHTML = "";
+  CARDS.filter(c => activeLane==="all" || c.lane===activeLane).forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "idea-card" + (c.lane==="yours" ? " yours" : "");
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "eyebrow";
+    eyebrow.innerHTML = "<span>" + LANES[c.lane] + "</span><span class='ladder'>" + LADDER_LABEL[c.ladder] + "</span>";
+    const h = document.createElement("h3"); h.textContent = c.spark;
+    const p = document.createElement("p"); p.textContent = c.body;
+    const build = document.createElement("p"); build.className = "build";
+    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
+    const bigger = document.createElement("p"); bigger.className = "build bigger";
+    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    const pre = document.createElement("pre"); pre.className = "prompt-pre";
+    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
+    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, bigger, row, pre);
+    grid.appendChild(el);
+  });
+}
+renderCards();
+
+/* --- the dealer --- */
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+let deal = null;
+const dealBtn = document.getElementById("dealBtn");
+const dealPre = document.getElementById("dealPromptPre");
+
+function dealStarter(d){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+}
+function dealBigger(d){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
+    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+}
+
+dealBtn.addEventListener("click", ()=>{
+  const laneKey = pick(Object.keys(DEAL_LANES));
+  const lane = DEAL_LANES[laneKey];
+  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
+  document.getElementById("dealSentence").innerHTML =
+    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
+    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
+  document.getElementById("dealMeans").textContent = deal.aspect.explain;
+  document.getElementById("dealProduce").textContent = deal.genre.produce;
+  document.getElementById("dealOut").classList.add("open");
+  dealPre.classList.remove("open");
+  dealBtn.textContent = "Deal another";
+});
+document.getElementById("dealStarterBtn").addEventListener("click", function(){
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+});
+document.getElementById("dealBiggerBtn").addEventListener("click", function(){
+  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+});
+</script>
+</body>
+</html>

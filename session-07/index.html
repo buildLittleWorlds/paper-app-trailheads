@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailheads · Session 7 — Describe It, Then Change One Layer</title>
+<style>
+  :root {
+    --ink:#22222a; --muted:#6b6b76; --paper:#fdfcf9; --card:#ffffff;
+    --line:#e3e0d8; --accent:#c96b32; --accent-soft:#faeee6;
+    --green:#2f6f5e; --green-soft:#e7f1ee; --blue:#315f91; --blue-soft:#eef3f8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; line-height:1.65; font-size:1.05rem; }
+  main { width:min(72rem,calc(100% - 2rem)); margin:0 auto; padding:2.5rem 0 5rem; }
+  h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
+  h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
+  a { color:inherit; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
+  .crumb a { color:var(--accent); font-weight:700; }
+  .byline { max-width:58ch; color:var(--muted); font-size:1.2rem; margin-bottom:1.6rem; }
+  .bridge { max-width:70ch; background:var(--green-soft); border-left:4px solid var(--green); padding:1rem 1.15rem; margin:1.4rem 0 1rem; }
+  .bridge .eyebrow { color:var(--green); font-size:.75rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
+  .bridge p { margin:.45rem 0; }
+  .bridge a { color:var(--green); font-weight:700; }
+  .note { font-size:.86rem; color:var(--muted); }
+  section { margin-top:3rem; scroll-margin-top:1rem; }
+  .section-head { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1rem; }
+  .section-head p { max-width:56ch; margin:0; color:var(--muted); }
+  .chipbar { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .chip { padding:.42rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:.85rem; font-weight:750; cursor:pointer; }
+  .chip[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
+  .chip.yours-chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
+  .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+  .idea-card { display:flex; flex-direction:column; padding:1.1rem 1.15rem; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+  .idea-card.yours { border:1.5px dashed var(--accent); background:var(--accent-soft); }
+  .idea-card .eyebrow { display:flex; align-items:center; gap:.5rem; color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; }
+  .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
+  .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
+  .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
+  .idea-card .build strong { color:var(--accent); }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
+  .prompt-pre.open { display:block; }
+  .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
+  .deal-out { display:none; }
+  .deal-out.open { display:block; }
+  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
+  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
+  .deal-read p { margin:.35rem 0; }
+  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
+  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
+  footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
+  footer a { color:var(--accent); font-weight:700; }
+  @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:620px) {
+    main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
+    .card-grid { grid-template-columns:1fr; }
+    .section-head { display:block; } section { margin-top:2.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="../">← Trailheads</a> · Session 7</div>
+  <div class="kicker">Session 7 · Iteration and debugging</div>
+  <h1>Describe it, then change one layer</h1>
+  <div class="byline">The traveling question: <strong>when something you care about breaks, what counts as a precise description — and which layer do you actually control?</strong></div>
+
+  <div class="bridge">
+    <span class="eyebrow">The bridge from class</span>
+    <p>In this week's <a href="https://buildlittleworlds.github.io/instructor-study/session-07/">Instructor Study page</a>, a spaceship and a block annihilate each other at generation 43 — and "the page is broken" bounces off the describe-gate; only a description a stranger could act on unlocks the tools. The fix panel offers three layers: the seed, the rule, and a brush that paints the outcome onto glass the rule never reads. One rule swap even turns the check green for the wrong reason.</p>
+    <p>That's the loop this page sends into your territory: <strong>observe, describe precisely, change one layer you control, rerun.</strong> Everything that breaks can be debugged like this — and some fixes are just paint.</p>
+  </div>
+
+  <section id="trails" aria-labelledby="trails-title">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Pick a lane, or wander</div>
+        <h2 id="trails-title">Trailheads</h2>
+      </div>
+      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+    </div>
+    <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section id="dealer" aria-labelledby="dealer-title">
+    <div class="dealer">
+      <div class="kicker">Keep dealing until one grabs you</div>
+      <h2 id="dealer-title">The Dealer</h2>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <button class="deal-btn" id="dealBtn">Deal an idea</button>
+      <div class="deal-out" id="dealOut">
+        <div class="deal-sentence" id="dealSentence"></div>
+        <div class="deal-read">
+          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
+          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
+        </div>
+        <div class="btn-row">
+          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
+        </div>
+        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="honesty">
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A recipe is not a codebase; tuning a string is not training a network. The idea travels; the mechanism doesn't.
+    </div>
+  </section>
+
+  <footer>
+    Trailheads · Session 7 · nothing to turn in ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/session-07/">this week's Instructor Study page</a> ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/anthology/">the Anthology</a> ·
+    <a href="../">all trailheads</a>
+  </footer>
+</main>
+
+<script>
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about the debug loop — observe, describe precisely, change one layer you control, and rerun"
+};
+
+/* ============================ EDIT HERE: CARDS =========================== */
+const LANES = {
+  living:   "Living things",
+  games:    "Games & play",
+  music:    "Music & sound",
+  stories:  "Stories & words",
+  art:      "Art & pictures",
+  everyday: "Everyday life",
+  yours:    "Your app"
+};
+
+const CARDS = [
+  { lane:"everyday", ladder:"compare",
+    spark:"The cookie came out flat",
+    body:"'They're bad' fixes nothing. 'Flat and greasy at the edges' points at the butter. Precision is the difference between a complaint and a diagnosis — and you only get one change per bake.",
+    build:"A recipe debugger: pick exactly one change (butter temp, flour, oven), see the outcome card, repeat. One variable per bake, always.",
+    bigger:"Add a describe-gate up front: three complaint cards — 'they're bad,' 'too sweet,' 'flat and greasy at the edges' — and only the precise one unlocks the oven. Then a two-bake compare strip." },
+  { lane:"music", ladder:"watch",
+    spark:"You can't paint the pitch",
+    body:"A string is tuned by iterating: play, listen, adjust, play again. You can move a tuner's needle with your thumb, but the note doesn't care. The pitch only changes at the peg.",
+    build:"A two-tone tuning game (WebAudio): the reader drags a slider and listens for the beats to slow as they close in on the note.",
+    bigger:"Three strings, plus a 'show the wave' toggle that reveals the beating visually only after the reader has tuned by ear — and a 'paint the needle' trap button that moves a fake tuner needle and changes nothing. Paint on glass, in sound." },
+  { lane:"living", ladder:"watch",
+    spark:"Diagnose the creature",
+    body:"A vet can't work with 'it's acting weird.' Where, since when, what changed? The precise description isn't paperwork before the fix — it usually IS most of the fix.",
+    build:"A diagnosis page: a sick toy creature; vague descriptions bounce ('a vet would ask more'), and the precise one unlocks the cure.",
+    bigger:"Two creatures with lookalike symptoms and one shared trap: a treatment that makes the chart look better while the cause continues underneath — green for the wrong reason, with fur." },
+  { lane:"living", ladder:"wonder",
+    spark:"Fever is a debug loop",
+    body:"Detect, respond, check, stand down — your immune system runs the loop you're learning, a few million times a day. (Cartoon biology, honestly labeled — but the loop shape is real.)",
+    build:"A step-through page of the body's loop on one bug: detect → respond → check → stand down. The reader steps it like generations.",
+    bigger:"Add a 'shortcut' button that suppresses the symptom while the cause continues — two timelines side by side: treating the signal versus fixing the cause. Honest note: authored cartoon, not medical advice." },
+  { lane:"games", ladder:"compare",
+    spark:"Balance patch: change one number",
+    body:"Every patch note is a debug-loop entry: one stat changed, the whole meta reruns. The discipline is touching one number at a time — and rerunning before you touch the next.",
+    build:"A tiny auto-battler where the reader adjusts exactly one stat between runs and watches the fight replay.",
+    bigger:"Add a patch log that records each change and its result this visit — and let the reader discover that the fix for one matchup breaks another. One layer, many consequences." },
+  { lane:"games", ladder:"watch",
+    spark:"The speedrunner's bug report",
+    body:"'The trick doesn't work' helps nobody. 'I clip at frame 3 when I jump on the descending edge' — a stranger could act on that. Precision is the whole toolkit.",
+    build:"A bug-report sorter: six descriptions of the same game problem; the reader picks the ones a stranger could act on, with reveals explaining each verdict.",
+    bigger:"A tiny broken platformer moment (one screen): the reader watches it fail, then assembles a precise report from parts — where, when, what changed — and the assembled report literally becomes the caption that unlocks the fix panel." },
+  { lane:"stories", ladder:"compare",
+    spark:"Which sentence is the bug?",
+    body:"A paragraph reads wrong. Editing is debugging prose: find the load-bearing flaw, make the minimal change, reread. Deleting everything is the panic move, not the fix.",
+    build:"A paragraph with one load-bearing flaw; the reader picks the broken sentence, then compares against the author's diagnosis and the minimal fix.",
+    bigger:"Three patched drafts of the same paragraph — one deletes, one rewrites, one reorders — and the reader votes which fix changed the least while repairing the most. Minimal-diff editing, made visible." },
+  { lane:"stories", ladder:"wonder",
+    spark:"'It's boring' is not a bug report",
+    body:"Feedback you can't act on isn't feedback — it's weather. 'I stopped caring when the letter was opened off-page' is a repair ticket. The difference is learnable.",
+    build:"A feedback-translator gallery: vague notes on one story ('boring,' 'confusing') paired with their precise versions. The reader matches vague to precise.",
+    bigger:"Add a scaffold round: the reader assembles one precise note about an authored story from where/what/when parts, then compares it against the author's own note — two precise descriptions can differ and both be actionable." },
+  { lane:"art", ladder:"compare",
+    spark:"Fix the drawing without redrawing it",
+    body:"The drawing looks 'off.' Which layer — line, values, color, crop? Artists debug too; the trap is redoing everything when one layer was the problem.",
+    build:"One 'off' drawing with four one-layer fixes (recrop, darken values, thicken line, shift color): the reader predicts which layer was the real problem, then reveals.",
+    bigger:"Stackable toggles: apply the layers one at a time in any order and discover that order changes the diagnosis — plus one 'filter' trap that prettifies everything and fixes nothing. Paint on glass, art edition." },
+  { lane:"everyday", ladder:"wonder",
+    spark:"Steps are the price",
+    body:"Some answers can be looked up. Others — the cookie, the kickflip, the garden — only exist after the steps run. There is no formula door; the only shortcut is running the steps faster.",
+    build:"A sorting card: six examples sorted into 'can look it up' versus 'must run the steps,' with reveals.",
+    bigger:"Add a step-by-step demo with a 'skip to the answer' button that visibly just runs the steps faster — the kitchen edition of 'thinking tokens are generations.'" },
+  { lane:"yours", ladder:"week",
+    spark:"Describe your last bug like a stranger will fix it",
+    body:"Where it happens, when it started, what changed right before. If your description works without you standing next to it, it's precise enough — for AI helpers especially.",
+    build:"Write your app's last bug in one sentence a stranger could act on, and name the layer you changed: the prompt, the context you gave, the code you accepted, or the test you ran.",
+    bigger:"Add a visible repair log to your app's page: bug (precise), layer changed, before/after — one line each. Three entries by showcase and your page tells the story of how it got good." },
+  { lane:"yours", ladder:"compare",
+    spark:"Green for the wrong reason",
+    body:"Your check passed — is the behavior right? The most dangerous state isn't a red X; it's a green check on top of wrong behavior. The instructor's B2/S23 moment, pointed at your app.",
+    build:"Find one place your app 'works' only because the check is weak (it loads — but is it readable on a phone?). Strengthen exactly that check.",
+    bigger:"Write two checks for the same feature — a weak one and a strong one — and show both results honestly on your page. Readers see the difference between passing and working." }
+];
+/* ========================== END EDIT HERE: CARDS ========================== */
+
+/* ============================ EDIT HERE: DEALER =========================== */
+const DEAL_LANES = {
+  living:   { name:"living things",   objects:["a wilting houseplant","a sick toy creature","a garden that won't grow","a dog that won't sit","a cloudy fish tank"] },
+  games:    { name:"games & play",    objects:["a broken level","an unbeatable boss","a laggy control","an unfair matchup","a glitchy jump"] },
+  music:    { name:"music & sound",   objects:["an out-of-tune string","a beat that drags","a mix where the voice drowns","a squeaky note","a song that falls apart live"] },
+  stories:  { name:"stories & words", objects:["a boring opening","a confusing scene","a joke that doesn't land","a character nobody likes","an ending that fizzles"] },
+  art:      { name:"art & pictures",  objects:["a drawing that looks 'off'","a muddy painting","a comic panel that reads wrong","a photo that's almost great","a logo that feels cheap"] },
+  everyday: { name:"everyday life",   objects:["a flat cookie","a wobbly shelf","a group-chat misunderstanding","a morning that always runs late","a backpack that hurts"] }
+};
+
+const DEAL_ASPECTS = [
+  { phrase:"a description a stranger could act on",
+    explain:"'It's broken' bounces. Where, when, and what changed — stated so someone who wasn't there could find it — is what unlocks a fix." },
+  { phrase:"the layers you actually control",
+    explain:"You can't edit the weights, the weather, or the other player. Your layers are the seed, the settings, the request, the thing you accept or reject, and the test you run. Change one at a time." },
+  { phrase:"the fix that only paints the outcome",
+    explain:"Some 'fixes' decorate the symptom while the cause runs underneath — paint on glass the rule never reads. The page's job is making the paint visible." },
+  { phrase:"a check that can go green for the wrong reason",
+    explain:"A passing test is only as good as the test. The most dangerous state isn't red; it's green with the wrong behavior underneath." },
+  { phrase:"steps that can't be skipped",
+    explain:"Some answers aren't lying in a book — they're manufactured by running the steps. The only shortcut is running the steps faster." }
+];
+
+const DEAL_GENRES = [
+  { action:"describe the failure precisely before the tools unlock",
+    produce:"a page where vague complaints bounce and the precise description opens the fix panel — the gate is the lesson.",
+    biggerExtra:"three failures behind three gates, with the reader's unlocking streak shown at the end" },
+  { action:"change exactly one thing, then rerun",
+    produce:"a repair bench where every rerun answers exactly one question — changing two things at once is impossible by design.",
+    biggerExtra:"a visible log of this visit's changes and outcomes, so the debugging reads like a lab notebook" },
+  { action:"sort real fixes from cosmetic ones",
+    produce:"a page where some fixes repair the cause and some just repaint the symptom — and the rerun exposes which is which.",
+    biggerExtra:"one deliberately tempting paint-fix that makes everything LOOK right, exposed by a second, harsher test" },
+  { action:"make a passing test lie",
+    produce:"a page with a check that goes green for the wrong reason — the reader's job is noticing the behavior is still wrong underneath.",
+    biggerExtra:"a 'strengthen the check' step where the reader picks the tougher test that would have caught it" },
+  { action:"step through it one stage at a time, no skipping",
+    produce:"a page where the answer only exists after the steps run — with a 'skip' button that visibly just runs them faster.",
+    biggerExtra:"a guess-first gate before the walk, so the reader can compare guessing with stepping" },
+  { action:"compare the broken run with the repaired run",
+    produce:"a split-screen page: same start, one layer changed, two endings — the whole debug loop in one picture.",
+    biggerExtra:"a slider that scrubs both runs in sync, so the exact moment the fix matters is findable" }
+];
+/* ========================= END EDIT HERE: DEALER ========================== */
+
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
+const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
+
+function starterPrompt(c){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
+    "Before you write any code, ask me two questions that would make this idea more mine.";
+}
+
+function biggerPrompt(c){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
+    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
+    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
+    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+}
+
+function copyText(txt, btn, pre, label){
+  pre.textContent = txt;
+  pre.classList.add("open");
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
+  } else { done(false); }
+}
+
+/* --- lane chips --- */
+const chipbar = document.getElementById("laneChips");
+const laneKeys = ["all", ...Object.keys(LANES)];
+let activeLane = "all";
+laneKeys.forEach(k=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (k==="yours" ? " yours-chip" : "");
+  b.textContent = k==="all" ? "All lanes" : LANES[k];
+  b.setAttribute("aria-pressed", k===activeLane ? "true" : "false");
+  b.addEventListener("click", ()=>{
+    activeLane = k;
+    chipbar.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    renderCards();
+  });
+  chipbar.appendChild(b);
+});
+
+/* --- cards --- */
+const grid = document.getElementById("cardGrid");
+function renderCards(){
+  grid.innerHTML = "";
+  CARDS.filter(c => activeLane==="all" || c.lane===activeLane).forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "idea-card" + (c.lane==="yours" ? " yours" : "");
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "eyebrow";
+    eyebrow.innerHTML = "<span>" + LANES[c.lane] + "</span><span class='ladder'>" + LADDER_LABEL[c.ladder] + "</span>";
+    const h = document.createElement("h3"); h.textContent = c.spark;
+    const p = document.createElement("p"); p.textContent = c.body;
+    const build = document.createElement("p"); build.className = "build";
+    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
+    const bigger = document.createElement("p"); bigger.className = "build bigger";
+    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    const pre = document.createElement("pre"); pre.className = "prompt-pre";
+    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
+    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, bigger, row, pre);
+    grid.appendChild(el);
+  });
+}
+renderCards();
+
+/* --- the dealer --- */
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+let deal = null;
+const dealBtn = document.getElementById("dealBtn");
+const dealPre = document.getElementById("dealPromptPre");
+
+function dealStarter(d){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+}
+function dealBigger(d){
+  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
+    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
+    "• the thing on stage: " + d.object + "\n" +
+    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
+    "• the reader's job: " + d.genre.action + "\n\n" +
+    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
+    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+}
+
+dealBtn.addEventListener("click", ()=>{
+  const laneKey = pick(Object.keys(DEAL_LANES));
+  const lane = DEAL_LANES[laneKey];
+  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
+  document.getElementById("dealSentence").innerHTML =
+    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
+    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
+  document.getElementById("dealMeans").textContent = deal.aspect.explain;
+  document.getElementById("dealProduce").textContent = deal.genre.produce;
+  document.getElementById("dealOut").classList.add("open");
+  dealPre.classList.remove("open");
+  dealBtn.textContent = "Deal another";
+});
+document.getElementById("dealStarterBtn").addEventListener("click", function(){
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+});
+document.getElementById("dealBiggerBtn").addEventListener("click", function(){
+  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+});
+</script>
+</body>
+</html>
