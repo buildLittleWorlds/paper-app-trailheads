@@ -49,6 +49,12 @@
   .copy-btn:hover { background:var(--accent); color:#fff; }
   .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
   .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .idea-card .build.go { margin-bottom:.2rem; }
+  .idea-card .build.go strong { color:var(--blue); }
+  .branches { margin:.15rem 0 .8rem; padding-left:1.15rem; font-size:.92rem; color:var(--ink); }
+  .branches li { margin:.32rem 0; }
+  .branches li::marker { color:var(--blue); }
+  .branch-tag { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.1rem .5rem; margin-left:.35rem; vertical-align:middle; white-space:nowrap; }
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
@@ -89,7 +95,7 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
@@ -99,7 +105,7 @@
     <div class="dealer">
       <div class="kicker">Keep dealing until one grabs you</div>
       <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a try-it prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
       <button class="deal-btn" id="dealBtn">Deal an idea</button>
       <div class="deal-out" id="dealOut">
         <div class="deal-sentence" id="dealSentence"></div>
@@ -108,7 +114,7 @@
           <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
         </div>
         <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn" id="dealStarterBtn">Copy try-it prompt</button>
           <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
         </div>
         <pre class="prompt-pre" id="dealPromptPre"></pre>
@@ -152,67 +158,119 @@ const CARDS = [
     spark:"Four notes took Beethoven a symphony",
     body:"Da-da-da-dum. A three-second motif carried thirty minutes of music. A tiny phrase, followed seriously, becomes material — how far can four notes go before they stop feeling like themselves?",
     build:"A motif player: one tiny phrase plus buttons that repeat it, flip it, stretch it, and shift it (WebAudio). The reader watches four notes become material.",
-    bigger:"Add a 'how far did we get?' trail: each transformation the reader applies gets appended to a chain they can replay start-to-finish — their own little development section, with a step counter and a reset." },
+    branches:[
+      { text:"Let the reader chain transformations into a replayable trail — their own little development section." },
+      { text:"Does the trick work on rhythm, or only pitch? Same four notes, now bend the timing instead." },
+      { text:"When does a variation stop feeling like the same phrase? That's a yardstick question.", tag:"Session 6" }
+    ] },
   { lane:"music", ladder:"wonder",
     spark:"The hook nobody could have predicted",
     body:"Why does one three-note hook take over a school while a nearly identical one dies quietly? You can't compute it from the notes alone — which is exactly what makes it a curiosity worth chasing.",
     build:"Two tiny hooks, deliberately similar; the reader votes which one would stick, then the page asks what they used to decide — the notes, or something outside the notes?",
-    bigger:"Add a 'what would settle it?' panel: after voting, the reader picks the smallest test that could actually check their prediction (loop each for a day? play both to ten people?) — the lesson is that some predictions need a next move, not more staring." },
+    branches:[
+      { text:"Add a 'what would settle it?' panel: the reader picks the smallest real test of their prediction — loop it for a day? play both to ten people?", tag:"Session 6" },
+      { text:"Same hook, two settings: does where you 'heard' it change the vote more than the notes do?" },
+      { text:"Swap in hooks you compose yourself — does knowing the maker rig the vote?", tag:"Session 10" }
+    ] },
   { lane:"living", ladder:"watch",
     spark:"One pair of rabbits",
     body:"A couple dozen rabbits released in Australia became hundreds of millions. A tiny seed, a continent-sized consequence — the R-pentomino with fur.",
     build:"A predict-then-run population toy: pick the starting pair count, lock in a guess for year five, run a simple model, compare.",
-    bigger:"Add a second species — a predator or a competitor — and let the reader hunt for the smallest change that prevents the explosion, one dial at a time, with a snapshot strip of this visit's runs to compare." },
+    branches:[
+      { text:"Add a predator or competitor dial and hunt the smallest change that prevents the explosion." },
+      { text:"Push the dials until the numbers stop being believable — then say so on the page. Where does your model break?", tag:"Session 6" },
+      { text:"Trade rabbits for something of yours: rumors, followers, dandelions. What else explodes from a small seed?" }
+    ] },
   { lane:"living", ladder:"wonder",
     spark:"One letter changes in the code",
     body:"A single swap in a DNA string sometimes changes nothing, and sometimes changes everything. Most tiny changes are quiet; a few are loud. Which is which?",
     build:"A 'one change' page: a short toy genome string; the reader flips one character and the page grows a different creature (an authored mapping — say so honestly on the page).",
-    bigger:"Let the reader hunt the whole space: of every possible single flip, which change nothing and which change everything? The page tallies a census of consequences — mostly quiet, occasionally loud — the R-pentomino lesson in biology clothes." },
+    branches:[
+      { text:"Census the whole space of single flips: which change nothing, which change everything? Count them.", tag:"Session 8" },
+      { text:"Let flips stack: do two quiet changes ever add up to one loud one?" },
+      { text:"Design the alphabet: the reader decides what each letter controls — then discovers what their rules imply." }
+    ] },
   { lane:"games", ladder:"watch",
     spark:"The opening that ate the tournament",
     body:"One weird move shows up in one match; three weeks later everyone plays it. Some openings fizzle, some become the meta — could you have called it?",
     build:"A predict-the-fate page for one opening in a game you know: the reader locks a verdict — dies out, niche trick, takes over — then your reveal walks through what actually happened (your history, honestly labeled).",
-    bigger:"Add a tiny playable beat: the reader tries the move against a simple scripted opponent for three turns and feels why it works or breaks — then gets to re-vote before the reveal." },
+    branches:[
+      { text:"Make it playable: three turns against a scripted opponent, then let the reader re-vote before the reveal." },
+      { text:"Add more openings and a running score — does the reader's fate-calling improve by round three?" },
+      { text:"What actually decides an opening's fate — strength, or fashion? Deciding how you'd measure that is next week's tool.", tag:"Session 6" }
+    ] },
   { lane:"games", ladder:"wonder",
     spark:"The glitch that became a sport",
     body:"A physics bug nobody designed became a speedrunning category people train for. A mistake handed thousands of players a next move. Bug, feature, or sport?",
     build:"A story-plus-toy page: one famous glitch retold, with a tiny recreation (a character that clips a corner) the reader can trigger — and the closing question: who authored this?",
-    bigger:"Add a 'curiosity ladder' for the glitch: watch it → recreate it smaller → measure it (how many pixels? how many frames?). The reader climbs one rung per click and feels a surprise turning into a study." },
+    branches:[
+      { text:"Climb the ladder: watch it, recreate it smaller, measure it — pixels, frames, attempts." },
+      { text:"Give the glitch a credits box: the devs, the player who found it, the physics itself. Who authored the sport?", tag:"Session 10" },
+      { text:"Hunt the glitch's cousin in another game. Is 'mistake becomes technique' a pattern?" }
+    ] },
   { lane:"stories", ladder:"watch",
     spark:"The rumor with a life of its own",
     body:"One message enters a group chat of twenty. Where it ends up — who hears it, how warped — is genuinely unpredictable. That unpredictability is buildable.",
     build:"A spread toy: seed one message on a little network of dots and watch it hop. Run it twice — same seed, different path. (Label the randomness honestly: the dice are in the rules.)",
-    bigger:"Give the reader one rule to control — share probability, or who's connected to whom — and set the challenge: find the smallest change that stops the spread cold, or makes it reach everyone. Snapshot strip for comparing runs." },
+    branches:[
+      { text:"Hand the reader one rule — share-chance, or who's connected — and set the hunt: stop the spread cold, or reach everyone." },
+      { text:"Same seed, ten runs, a strip of outcomes: how differently can the identical rumor land?" },
+      { text:"Find the input that makes your sim do something silly, and label it honestly on the page. Repairing it is next.", tag:"Session 7" }
+    ] },
   { lane:"stories", ladder:"wonder",
     spark:"The what-if that won't leave you alone",
     body:"Every story starts as a small what-if with unpredictable consequences: what if the dragon was the librarian? The good ones hand you the next scene before you've finished the sentence.",
     build:"A what-if collider: the reader shuffles two halves of authored what-ifs into collisions, and each deal comes with a 'the next move this hands you' line.",
-    bigger:"Add a 'keep the good ones' tray (this visit only) and a final screen that lines up the reader's kept what-ifs beside the smallest buildable version of each — from shuffle to shippable in two clicks." },
+    branches:[
+      { text:"A keep-the-good-ones tray (this visit only), and each kept what-if shown beside its smallest buildable version." },
+      { text:"Swap the authored halves for your own twenty — the collider becomes a self-portrait." },
+      { text:"Sort the collisions with tonight's tool: which hand you a next scene instantly, and which just sit there?" }
+    ] },
   { lane:"art", ladder:"watch",
     spark:"The doodle that repeats",
     body:"A small mark, repeated with one rule — rotate a little, shrink a little, step right — becomes a pattern you couldn't have drawn on purpose. Small rule, big consequence.",
     build:"A mark-and-rule page: pick a simple mark, pick a repeat rule, predict the shape, press go.",
-    bigger:"Interleave two rules (rotate-then-shrink versus shrink-then-rotate): the reader predicts whether order matters, then sees. A gallery strip of this visit's results makes the comparison a picture." },
+    branches:[
+      { text:"Interleave two rules — rotate-then-shrink versus shrink-then-rotate. Predict whether order matters, then look.", tag:"Session 9" },
+      { text:"Add a third rule slot: when do three simple rules start producing things none of them states?" },
+      { text:"A this-visit gallery of keepers — then the real question: what did the keepers have in common?" }
+    ] },
   { lane:"everyday", ladder:"watch",
     spark:"Close one hallway, reroute the school",
     body:"One corridor shut on Monday; by Friday the whole building walks a new pattern. Nobody planned the new pattern — it emerged from a thousand small detours.",
     build:"A corridor-flow toy: close one hallway, watch simple agents reroute. The reader predicts the new busiest hallway before pressing go.",
-    bigger:"Let the reader design the school — place three rooms and two closures — and hunt for the closure with the biggest ripple, measured by a congestion meter. Smallest cause, largest consequence." },
+    branches:[
+      { text:"Design the school: place three rooms and two closures, and hunt the closure with the biggest ripple." },
+      { text:"Add a congestion meter — then ask whether your meter measures what 'crowded' actually means.", tag:"Session 6" },
+      { text:"Swap hallways for something of yours: group-chat replies, lunch lines, the route to your bus." }
+    ] },
   { lane:"everyday", ladder:"wonder",
     spark:"Your family's butterfly effect",
     body:"The missed bus that led to the best friend. You can't rerun real life — which is exactly why little simulations exist. But you can map the fork.",
     build:"A fork-map page: one small event, then a two-branch tree of what followed (authored — your own story or a fictional one). The reader walks both branches.",
-    bigger:"Three forks deep, with a 'how sure am I?' shading on every branch — an honest map of a story you can't rerun, and a caption that says exactly that." },
+    branches:[
+      { text:"Go three forks deep, with 'how sure am I?' shading on every branch — an honest map of a story you can't rerun." },
+      { text:"Collect a second story — a friend's, a grandparent's — and let the reader walk both trees." },
+      { text:"End on a mirror, not a moral: what does the reader start wondering about their own forks?", tag:"Session 9" }
+    ] },
   { lane:"yours", ladder:"week",
     spark:"Which surprise deserves a direction?",
     body:"You've built things this course. Something surprised you — a behavior, a reaction, a weird input. That surprise might be your R-pentomino: the small thing worth following seriously.",
     build:"List three moments your builds surprised you; pick the one you still wonder about; make that the app you extend this week.",
-    bigger:"Add a 'surprise log' section to your app's page: what I expected, what happened, what I did about it. Three entries by showcase and your page reads like a real lab notebook." },
+    branches:[
+      { text:"Start the surprise log on your page: what I expected, what happened, what I did about it.", tag:"Session 8" },
+      { text:"Make the surprise happen on purpose: the smallest page where the surprising behavior is the exhibit." },
+      { text:"Leave one corner unexplained and ask someone at home to poke it. What do they find that you didn't?" }
+    ] },
   { lane:"yours", ladder:"compare",
     spark:"The idea you abandoned",
     body:"The instructor's page has a module called 'the study I stopped building.' Abandoning a direction is a research move — when you can say what you kept.",
     build:"Write the two-line epitaph for one abandoned idea: why it stalled, and one thing it taught you that your current app uses.",
-    bigger:"Give your portfolio a small 'graveyard with gifts' page: each abandoned idea gets a card — what it was, why it stopped, what survived into later builds. Honest, and quietly impressive to readers." }
+    branches:[
+      { text:"The graveyard-with-gifts page: each abandoned idea, why it stopped, what survived into later builds." },
+      { text:"Resurrect one: what's the smallest version that dodges the exact reason it stalled?" },
+      { text:"Write the abandonment's credits: who called it — you, the build, or the deadline?", tag:"Session 10" }
+    ] }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
@@ -266,20 +324,24 @@ const DEAL_GENRES = [
 
 const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
 
-function starterPrompt(c){
+const branchLines = c => c.branches.map(b => "• " + b.text).join("\n");
+
+function tryPrompt(c){
   return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
     "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
     "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
-    "Before you write any code, ask me two questions that would make this idea more mine.";
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests. Before you write any code, ask me two questions that would make this idea more mine.\n\n" +
+    "Once the small version works, STOP — don't add features on your own. This idea has branches I might explore next:\n" + branchLines(c) + "\n" +
+    "When I pick one, we'll grow the page one small step at a time, and I'll test after every step.";
 }
 
-function biggerPrompt(c){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
-    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
-    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
-    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+function branchPrompt(c){
+  return "I'm a student who builds one-page “paper apps” for GitHub Pages: single self-contained index.html files (HTML/CSS/JS only, no build tools, no API keys). I'm not after a one-night build right now — I'm looking for MY version of a question I could keep exploring for weeks.\n\n" +
+    "The question that caught me: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Ways it could branch (from my course's map — I might follow one, or none):\n" + branchLines(c) + "\n\n" +
+    "Don't write any code yet. First interview me: two or three questions, ONE AT A TIME, to figure out which branch actually pulls me — or whether I have a branch of my own this map missed.\n\n" +
+    "Then propose three one-page versions, two sentences each (what the page does, what the reader does): at least one growing from the branch I liked best, and at least one that surprises me. Wait for me to pick or remix.\n\n" +
+    "Only then build, in stages: the smallest working core first" + (c.promptHint ? " (" + c.promptHint + ")" : "") + ", then ONE addition at a time, stopping after each so I can test it and steer. Keep the reader's job clear, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests.";
 }
 
 function copyText(txt, btn, pre, label){
@@ -322,19 +384,25 @@ function renderCards(){
     const h = document.createElement("h3"); h.textContent = c.spark;
     const p = document.createElement("p"); p.textContent = c.body;
     const build = document.createElement("p"); build.className = "build";
-    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
-    const bigger = document.createElement("p"); bigger.className = "build bigger";
-    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    build.innerHTML = "<strong>Try it:</strong> " + c.build;
+    const go = document.createElement("div"); go.className = "build go";
+    go.innerHTML = "<strong>Where it could go:</strong>";
+    const ul = document.createElement("ul"); ul.className = "branches";
+    c.branches.forEach(b=>{
+      const li = document.createElement("li"); li.textContent = b.text;
+      if(b.tag){ const t = document.createElement("span"); t.className = "branch-tag"; t.textContent = b.tag; li.append(t); }
+      ul.appendChild(li);
+    });
     const row = document.createElement("div"); row.className = "btn-row";
     const b1 = document.createElement("button");
-    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    b1.className = "copy-btn"; b1.textContent = "Copy try-it prompt";
     const b2 = document.createElement("button");
-    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy branch prompt";
     const pre = document.createElement("pre"); pre.className = "prompt-pre";
-    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
-    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    b1.addEventListener("click", ()=>copyText(tryPrompt(c), b1, pre, "Copy try-it prompt"));
+    b2.addEventListener("click", ()=>copyText(branchPrompt(c), b2, pre, "Copy branch prompt"));
     row.append(b1, b2);
-    el.append(eyebrow, h, p, build, bigger, row, pre);
+    el.append(eyebrow, h, p, build, go, ul, row, pre);
     grid.appendChild(el);
   });
 }
@@ -378,7 +446,7 @@ dealBtn.addEventListener("click", ()=>{
   dealBtn.textContent = "Deal another";
 });
 document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy try-it prompt");
 });
 document.getElementById("dealBiggerBtn").addEventListener("click", function(){
   if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");

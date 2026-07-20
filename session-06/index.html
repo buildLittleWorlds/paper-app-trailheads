@@ -49,6 +49,12 @@
   .copy-btn:hover { background:var(--accent); color:#fff; }
   .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
   .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .idea-card .build.go { margin-bottom:.2rem; }
+  .idea-card .build.go strong { color:var(--blue); }
+  .branches { margin:.15rem 0 .8rem; padding-left:1.15rem; font-size:.92rem; color:var(--ink); }
+  .branches li { margin:.32rem 0; }
+  .branches li::marker { color:var(--blue); }
+  .branch-tag { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.1rem .5rem; margin-left:.35rem; vertical-align:middle; white-space:nowrap; }
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
@@ -89,7 +95,7 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
@@ -99,7 +105,7 @@
     <div class="dealer">
       <div class="kicker">Keep dealing until one grabs you</div>
       <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
+      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a try-it prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
       <button class="deal-btn" id="dealBtn">Deal an idea</button>
       <div class="deal-out" id="dealOut">
         <div class="deal-sentence" id="dealSentence"></div>
@@ -108,7 +114,7 @@
           <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
         </div>
         <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
+          <button class="copy-btn" id="dealStarterBtn">Copy try-it prompt</button>
           <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
         </div>
         <pre class="prompt-pre" id="dealPromptPre"></pre>
@@ -152,67 +158,119 @@ const CARDS = [
     spark:"Fun, fair, deep — pick two?",
     body:"A level can be a blast and totally unfair. Another is perfectly balanced and boring. 'Good level' is three different claims wearing one word.",
     build:"Three tiny authored levels and three meters — fun, fair, deep. The reader rates, and the winner changes with the meter.",
-    bigger:"Make the levels actually playable as one-screen mini-challenges; after playing each, the reader rates all three on all three meters and the page shows how each yardstick crowns a different level." },
+    branches:[
+      { text:"Make the levels genuinely playable one-screen challenges, so the meters get earned instead of guessed." },
+      { text:"Whose meters? Let the reader define what 'fair' checks before rating — then watch two readers disagree." },
+      { text:"When a level fails your fun test, change ONE thing and re-test. What did the failure teach?", tag:"Session 7" }
+    ] },
   { lane:"games", ladder:"compare",
     spark:"The GOAT machine",
     body:"Rings? Points? Era-adjusted stats? Every 'greatest of all time' argument is secretly an argument about the yardstick. Build the machine that makes that visible.",
     build:"Three athletes (or players, or speedrunners) × four stats; the reader picks the criterion and watches the crown move.",
-    bigger:"Add a build-your-own-formula mixer — the reader weights the stats and the page crowns their GOAT — ending on the honest line: every crown is a formula wearing a trophy." },
+    branches:[
+      { text:"The formula mixer: reader-weighted stats, a moving crown, and the honest closing line — every crown is a formula wearing a trophy." },
+      { text:"Add the era problem: can any formula fairly compare players from different decades — different worlds?" },
+      { text:"Name what each stat actually measures — and what it misses. The names are half the argument.", tag:"Session 8" }
+    ] },
   { lane:"music", ladder:"compare",
     spark:"What's your catchiness test?",
     body:"Catchy meaning you remember it tomorrow? Can't stop humming it? Everyone dances? Three tests, three different winners — 'catchy' is a yardstick choice.",
     build:"Three short hooks ranked under two different yardsticks — memorable versus danceable — and the order flips between them.",
-    bigger:"Add one real (tiny, honest) test: play a hook once at the top of the page, hide it behind two minutes of reading, then ask the reader to pick it out of three — one actual data point of 'remembered it later,' labeled as exactly that." },
+    branches:[
+      { text:"Run one real test: a hook at the top of the page, two minutes of reading, pick-it-from-three at the bottom — one honest data point of 'remembered it.'" },
+      { text:"Three yardsticks — memorable, hummable, danceable — three podiums for the same three hooks." },
+      { text:"Famous hooks versus hooks you wrote: does knowing the maker rig the test?", tag:"Session 10" }
+    ] },
   { lane:"music", ladder:"wonder",
     spark:"The song that survives the campfire",
     body:"Some songs work sung badly around a fire with half the words missing. Others fall apart outside the studio. Which kind is stronger — and what does 'works' even mean for a song?",
     build:"One melody rendered two ways — clean, and degraded (missing notes, rough timing, WebAudio). The reader answers: which version still 'works'?",
-    bigger:"A degradation slider (note-drop percentage, timing wobble) across three melodies: the reader finds each one's breaking point — a robustness curve for tunes, measured by ear." },
+    branches:[
+      { text:"The degradation slider: note-drop and timing wobble across three melodies — find each one's breaking point by ear." },
+      { text:"Drop notes one at a time to find the note the tune can't live without. Change one thing, listen again.", tag:"Session 7" },
+      { text:"Flip it: compose a melody designed to survive the campfire. What survives tells you what a melody really is." }
+    ] },
   { lane:"living", ladder:"compare",
     spark:"Fittest for which environment?",
     body:"The 'fittest' creature in the pond is lunch in the desert. Fitness isn't a property of the creature — it's a relationship between the creature and the test.",
     build:"A creature card with three stats, scored pass/fail against two environments; the reader flips the environment and watches success invert.",
-    bigger:"Let the reader design the creature — spend ten points across stats — then run it against three environments. No build passes all three; that impossibility is the exhibit." },
+    branches:[
+      { text:"Design-a-creature: spend ten points, face three environments — no build passes all three, and the impossibility is the exhibit." },
+      { text:"Reverse it: the reader designs the environment where the 'weak' creature wins." },
+      { text:"Point it home: what's your app's environment — phone at night, laptop in class, a stranger in a hurry? Score it against all three." }
+    ] },
   { lane:"living", ladder:"watch",
     spark:"Grow once, survive a season, regrow after the storm",
     body:"The instructor's glider gun faces three tests; so does a garden. Reaching the goal once, persisting, and recovering from damage are three different kinds of success — and you can garden for each.",
     build:"A toy garden with three buttons: grow it, run a season, storm it. Three different meanings of 'the garden works.'",
-    bigger:"Add a training choice before the run — deep roots or fast blooms — and watch which tests each strategy passes. Success was chosen before the test ran; that's the week's secret." },
+    branches:[
+      { text:"Add the training choice — deep roots or fast blooms — and watch which tests each strategy passes. Success was chosen before the test ran." },
+      { text:"Vary the storm: wind, drought, frost. Robust against one threat isn't robust against all." },
+      { text:"Keep a season log on the page: which test failed this run, what you changed before the next.", tag:"Session 8" }
+    ] },
   { lane:"stories", ladder:"compare",
     spark:"Two endings, two rubrics",
     body:"One ending you never saw coming; one you should have seen coming all along. Both 'good' — under different rubrics. Surprise and inevitability pull in opposite directions.",
     build:"One mini-story with two endings; the reader rates both on 'didn't see it coming' and 'should have seen it coming' — and the ratings disagree.",
-    bigger:"Add a third rubric the reader picks themselves (moved me / made me laugh / want to reread) and re-rate: three rubrics, three different winning endings. Criteria are instruments." },
+    branches:[
+      { text:"Add a third rubric the reader picks — moved me, made me laugh, want to reread — and watch a third winner appear." },
+      { text:"Rewrite one paragraph to raise ending B on one rubric without dropping it on the other. Harder than it sounds.", tag:"Session 7" },
+      { text:"Does order rig the vote? Swap which ending readers meet first and compare the ratings.", tag:"Session 9" }
+    ] },
   { lane:"stories", ladder:"wonder",
     spark:"What does 'good at reading' even mean?",
     body:"Fastest? Best memory? Notices the planted detail? Rank your class three ways and you get three different podiums. The yardstick decides who's 'good.'",
     build:"Three tiny reading challenges — speed, recall, noticing — and the reader discovers they rank differently on each.",
-    bigger:"Add a grader's-choice reveal: the same performance scored by three graders with different priorities, landing the yardstick-makes-the-jump lesson — the instrument can manufacture the ranking." },
+    branches:[
+      { text:"The grader's-choice reveal: one performance, three graders with different priorities, three podiums." },
+      { text:"Design the fourth challenge yourself: what reading skill do the first three completely miss?" },
+      { text:"Name the skills honestly — speed, recall, noticing — then ask what a report-card reading grade actually tests.", tag:"Session 8" }
+    ] },
   { lane:"art", ladder:"compare",
     spark:"Is it good, or is it finished?",
     body:"'Done' under the says-what-I-meant test and 'done' under the polished test are different moments — and artists confuse them constantly.",
     build:"The same sketch at three stages; the reader marks where it's 'done' under two tests — says-what-I-meant versus polished — and the marks land in different places.",
-    bigger:"Add a third test — 'would a stranger stop scrolling?' — and a compare panel of all three cut points. Closing line: pick your test before you draw, or the scroll picks it for you." },
+    branches:[
+      { text:"Add the third test — would a stranger stop scrolling? — and a panel comparing where all three tests say 'stop.'" },
+      { text:"Run it on your own art: three stages of one real drawing, marked where each test calls it done." },
+      { text:"Date your verdicts: do last-month-you and today-you agree on 'done'? Put both marks on the page." }
+    ] },
   { lane:"everyday", ladder:"watch",
     spark:"Three tests of a paper airplane",
     body:"Flies once. Flies every time. Survives a crash and flies again. That's reach, persist, recover — the glider gun's three tests, on your desk.",
     build:"A build-log page: one paper plane put through the three tests, with honest results (yours — dated, described, no exaggerating).",
-    bigger:"A reusable test bench: the reader picks anything on their desk (plane, block tower, phone stand), runs reach/persist/recover, and the page assembles the three-verdict report — locally, nothing stored." },
+    branches:[
+      { text:"The reusable bench: anything on your desk through reach, persist, recover — a three-verdict report, nothing stored." },
+      { text:"Fix the loser: change one fold between runs and log what each change did.", tag:"Session 7" },
+      { text:"Who set the pass line — ten feet or two? Move the line and watch the verdicts flip. The line is authored." }
+    ] },
   { lane:"everyday", ladder:"wonder",
     spark:"Clean by whose test?",
     body:"The room passes Mom's doorway glance, fails the friend-hangout test, and fails hard on can-you-find-your-charger. 'Clean' is three inspectors with three checklists.",
     build:"One room, three inspectors, three verdicts: a compare card that makes 'clean' three different claims.",
-    bigger:"An inspector-builder: the reader picks what each inspector checks (floor visible? desk usable? smells fine?) and watches the same room pass and fail. Write the test, decide the verdict." },
+    branches:[
+      { text:"The inspector-builder: the reader picks what each inspector checks, then watches the same room pass and fail." },
+      { text:"Let the inspectors argue: same room, two verdicts, aired as dialogue on the page." },
+      { text:"Run all three inspectors on your actual room, honestly, with dates. Results on the page; no photos required." }
+    ] },
   { lane:"yours", ladder:"week",
     spark:"One success check, run for real",
     body:"Not 'my app is good' — that's a claim. One concrete check, run today, result on the page — that's evidence. The gap between those two is this week.",
     build:"Pick ONE check for your app — loads on a phone? survives a stranger with no narration? recovers from a weird input? — run it today, and put the result on the page, pass or fail.",
-    bigger:"Give your app a small test-bench section: three named checks with today's honest results and a date. Re-run and update after each build — your page starts showing not just what it does, but how you know." },
+    branches:[
+      { text:"Grow it into a test-bench section: three named checks, today's honest results, a date — re-run after every build.", tag:"Session 8" },
+      { text:"Make one check a stranger test: someone at home, no narration, one minute. Write down what they actually did." },
+      { text:"Publish one failing result on purpose — 'fails on phones; fix planned.' Honest, and it hands next week its job.", tag:"Session 7" }
+    ] },
   { lane:"yours", ladder:"compare",
     spark:"Which yardstick flatters your app?",
     body:"'Impressive in a demo' and 'usable by a stranger with no narration' are different tests — and most of us have been building for the first one without noticing.",
     build:"Score your app honestly under both yardsticks. Which one have you been building for?",
-    bigger:"Hand your app to someone at home, say nothing, and watch for one minute. Write down which test their behavior actually ran — then make one fix aimed at the yardstick you actually care about." }
+    branches:[
+      { text:"Run the stranger minute: hand it over, say nothing, and watch which test their behavior actually runs." },
+      { text:"Put both scores on the page — demo yardstick and stranger yardstick — so readers can see the gap." },
+      { text:"Choose the yardstick you're building for from here on, and say so on the page. That sentence is a direction." }
+    ] }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
@@ -266,20 +324,24 @@ const DEAL_GENRES = [
 
 const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
 
-function starterPrompt(c){
+const branchLines = c => c.branches.map(b => "• " + b.text).join("\n");
+
+function tryPrompt(c){
   return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
     "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
     "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
-    "Before you write any code, ask me two questions that would make this idea more mine.";
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests. Before you write any code, ask me two questions that would make this idea more mine.\n\n" +
+    "Once the small version works, STOP — don't add features on your own. This idea has branches I might explore next:\n" + branchLines(c) + "\n" +
+    "When I pick one, we'll grow the page one small step at a time, and I'll test after every step.";
 }
 
-function biggerPrompt(c){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
-    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
-    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
-    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+function branchPrompt(c){
+  return "I'm a student who builds one-page “paper apps” for GitHub Pages: single self-contained index.html files (HTML/CSS/JS only, no build tools, no API keys). I'm not after a one-night build right now — I'm looking for MY version of a question I could keep exploring for weeks.\n\n" +
+    "The question that caught me: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Ways it could branch (from my course's map — I might follow one, or none):\n" + branchLines(c) + "\n\n" +
+    "Don't write any code yet. First interview me: two or three questions, ONE AT A TIME, to figure out which branch actually pulls me — or whether I have a branch of my own this map missed.\n\n" +
+    "Then propose three one-page versions, two sentences each (what the page does, what the reader does): at least one growing from the branch I liked best, and at least one that surprises me. Wait for me to pick or remix.\n\n" +
+    "Only then build, in stages: the smallest working core first" + (c.promptHint ? " (" + c.promptHint + ")" : "") + ", then ONE addition at a time, stopping after each so I can test it and steer. Keep the reader's job clear, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests.";
 }
 
 function copyText(txt, btn, pre, label){
@@ -322,19 +384,25 @@ function renderCards(){
     const h = document.createElement("h3"); h.textContent = c.spark;
     const p = document.createElement("p"); p.textContent = c.body;
     const build = document.createElement("p"); build.className = "build";
-    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
-    const bigger = document.createElement("p"); bigger.className = "build bigger";
-    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    build.innerHTML = "<strong>Try it:</strong> " + c.build;
+    const go = document.createElement("div"); go.className = "build go";
+    go.innerHTML = "<strong>Where it could go:</strong>";
+    const ul = document.createElement("ul"); ul.className = "branches";
+    c.branches.forEach(b=>{
+      const li = document.createElement("li"); li.textContent = b.text;
+      if(b.tag){ const t = document.createElement("span"); t.className = "branch-tag"; t.textContent = b.tag; li.append(t); }
+      ul.appendChild(li);
+    });
     const row = document.createElement("div"); row.className = "btn-row";
     const b1 = document.createElement("button");
-    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    b1.className = "copy-btn"; b1.textContent = "Copy try-it prompt";
     const b2 = document.createElement("button");
-    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy branch prompt";
     const pre = document.createElement("pre"); pre.className = "prompt-pre";
-    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
-    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    b1.addEventListener("click", ()=>copyText(tryPrompt(c), b1, pre, "Copy try-it prompt"));
+    b2.addEventListener("click", ()=>copyText(branchPrompt(c), b2, pre, "Copy branch prompt"));
     row.append(b1, b2);
-    el.append(eyebrow, h, p, build, bigger, row, pre);
+    el.append(eyebrow, h, p, build, go, ul, row, pre);
     grid.appendChild(el);
   });
 }
@@ -378,7 +446,7 @@ dealBtn.addEventListener("click", ()=>{
   dealBtn.textContent = "Deal another";
 });
 document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
+  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy try-it prompt");
 });
 document.getElementById("dealBiggerBtn").addEventListener("click", function(){
   if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
