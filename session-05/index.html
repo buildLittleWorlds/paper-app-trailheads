@@ -17,7 +17,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -58,13 +58,19 @@
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-out { display:none; }
-  .deal-out.open { display:block; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
-  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
-  .deal-read p { margin:.35rem 0; }
-  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
-  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .bench-step { margin:1.5rem 0 0; }
+  .bench-q { display:block; font-family:system-ui,sans-serif; font-weight:800; font-size:.98rem; margin-bottom:.5rem; }
+  .step-n { display:inline-grid; place-items:center; width:1.45rem; height:1.45rem; margin-right:.4rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; }
+  .bench-in { font-family:system-ui,sans-serif; font-size:.95rem; padding:.5rem .7rem; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; }
+  .bench-in:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .bench-in.inline { display:inline-block; width:min(26ch,100%); padding:.2rem .5rem; }
+  .knob-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; }
+  .knob { display:flex; flex-direction:column; gap:.28rem; }
+  .knob span { font-family:system-ui,sans-serif; font-size:.82rem; font-weight:750; color:var(--muted); }
+  .knob-out { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+  .knob-chip { font-family:system-ui,sans-serif; font-size:.8rem; font-weight:750; background:var(--green-soft); color:var(--green); border:1px solid var(--green); border-radius:999px; padding:.25rem .7rem; }
+  .predict-line { margin:.9rem 0 .3rem; font-size:1.05rem; }
+  .stuck-note { max-width:64ch; margin-top:1.6rem; padding-top:.9rem; border-top:1px dashed var(--line); }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
@@ -95,36 +101,55 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>. <strong>Your app</strong> is its own lane — those cards do not hand you a curiosity, they send you back into something you already built to go looking for one.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
   </section>
 
-  <section id="dealer" aria-labelledby="dealer-title">
+  <section id="bench" aria-labelledby="bench-title">
     <div class="dealer">
-      <div class="kicker">Keep dealing until one grabs you</div>
-      <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a try-it prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
-      <button class="deal-btn" id="dealBtn">Deal an idea</button>
-      <div class="deal-out" id="dealOut">
-        <div class="deal-sentence" id="dealSentence"></div>
-        <div class="deal-read">
-          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
-          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
-        </div>
-        <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy try-it prompt</button>
-          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
-        </div>
-        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      <div class="kicker">Start from what you already built</div>
+      <h2 id="bench-title">The Bench</h2>
+      <p class="note" style="max-width:64ch">Every card above starts with somebody else's curiosity. This starts with yours — the app already sitting on your GitHub page. You are going to find one thing in it you chose almost without thinking, change that one thing, and see what happens. That is the whole move, and it is the same move real researchers make.</p>
+
+      <div class="bench-step">
+        <label class="bench-q" for="bApp"><span class="step-n">1</span> What did you build? One line is plenty.</label>
+        <input class="bench-in" id="bApp" type="text" placeholder="a page where dots spread a rumor across a little network">
       </div>
+
+      <div class="bench-step">
+        <div class="bench-q"><span class="step-n">2</span> Find a knob. Fill in any that apply — you do not need all five.</div>
+        <p class="note" style="margin:.1rem 0 .7rem">A knob is anything you picked but could have picked differently.</p>
+        <div class="knob-grid">
+          <label class="knob"><span>A number you chose</span><input class="bench-in" data-knob="the number I set for" type="text" placeholder="how many dots — I put 20"></label>
+          <label class="knob"><span>Something that happens by chance</span><input class="bench-in" data-knob="the chance that" type="text" placeholder="each dot passes it on 50% of the time"></label>
+          <label class="knob"><span>The order things happen in</span><input class="bench-in" data-knob="the order of" type="text" placeholder="it picks a dot, then it spreads"></label>
+          <label class="knob"><span>Something the reader can't change</span><input class="bench-in" data-knob="the thing the reader can't change:" type="text" placeholder="where the rumor starts"></label>
+          <label class="knob"><span>What your app counts as done</span><input class="bench-in" data-knob="what my app counts as done:" type="text" placeholder="it stops when everyone has heard"></label>
+        </div>
+        <div class="knob-out" id="knobOut"></div>
+      </div>
+
+      <div class="bench-step" id="step3" hidden>
+        <div class="bench-q"><span class="step-n">3</span> Pick one and guess what happens.</div>
+        <select class="bench-in" id="bPick" aria-label="Which knob will you change"></select>
+        <p class="predict-line">If I changed it, I think <input class="bench-in inline" id="bPredict" type="text" placeholder="the rumor would reach everyone much faster"> would happen — <strong>but I don't actually know.</strong></p>
+        <p class="note">Guessing wrong is the good outcome. If you already knew, there would be nothing to find out.</p>
+        <div class="btn-row">
+          <button class="copy-btn" id="benchBuildBtn">Copy build prompt</button>
+          <button class="copy-btn bigger" id="benchTalkBtn">Copy interview prompt</button>
+        </div>
+        <pre class="prompt-pre" id="benchPre"></pre>
+      </div>
+
+      <p class="note stuck-note"><strong>Nothing to put in box 2?</strong> Open your app's code and read the first ten lines. The first number you find is a knob. If there genuinely isn't one, that itself is the finding — your app has no dials, and giving it one is this week's build.</p>
     </div>
   </section>
 
   <section>
     <div class="honesty">
-      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A rumor is not an R-pentomino; a school hallway is not a Life board. The idea travels; the mechanism doesn't.
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor. Anything you type into the Bench stays in your own browser — it is never saved, never sent, and gone the moment you close the tab; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A rumor is not an R-pentomino; a school hallway is not a Life board. The idea travels; the mechanism doesn't.
     </div>
   </section>
 
@@ -253,6 +278,51 @@ const CARDS = [
       { text:"Collect a second story — a friend's, a grandparent's — and let the reader walk both trees." },
       { text:"End on a mirror, not a moral: what does the reader start wondering about their own forks?", tag:"Session 9" }
     ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The number you picked without thinking",
+    body:"Every app you have built has a number you just… chose. Grid size, speed, how many dots, how often something happens. You picked it in about two seconds and never went back. It might be the most interesting thing in there.",
+    build:"Open your app and find three numbers you set. Circle the one you chose fastest. Make it three times bigger, then a third as big — writing down what you expect BEFORE each run. Put the three results on the page side by side.",
+    branches:[
+      { text:"Hunt the flip point: somewhere between your extremes the behaviour probably changes character, not just degree. Find it and mark it." },
+      { text:"Does that point move when a second number changes too?", tag:"Session 6" },
+      { text:"Whichever number changed the least is also a finding — say so on the page instead of hiding it.", tag:"Session 8" }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"Run it once, run it ten times",
+    body:"If anything in your app happens by chance, one run is an anecdote. You have been looking at anecdotes. Ten runs of the same thing is a different kind of picture — and it is the picture that tells you whether a change you make later actually did anything.",
+    build:"Run the same thing ten times with nothing changed at all. Show all ten results at once instead of one. The spread IS the result.",
+    branches:[
+      { text:"Now change one thing and run ten more. Is the difference bigger than the spread you already had? If not, you have not found anything yet.", tag:"Session 6" },
+      { text:"If ten runs come out identical, your app is not actually random — and knowing that is worth a line on the page." },
+      { text:"Let the reader choose how many runs, and watch them discover the same thing you did.", tag:"Session 9" }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The order you happened to choose",
+    body:"Your app does one thing, then another. You probably never decided that order on purpose — it is just how you wrote it. Swap two steps and you sometimes get the same thing, and sometimes get something completely different. Nobody can tell you which without trying.",
+    build:"Find two steps that happen in a row. Predict whether swapping them changes anything. Swap them. Put both versions on the page with your prediction visible.",
+    branches:[
+      { text:"If the order mattered, that is a rule of your little world you did not know you had written." },
+      { text:"Try a third arrangement. Is one order special, or is it just that first-is-different?" },
+      { text:"Name the two versions honestly on the page — what each one actually shows.", tag:"Session 8" }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The input you never tried",
+    body:"You have been feeding your app the things you built it for. Feed it something ridiculous instead: nothing at all, an enormous number, a word where a number goes. Something will break, and how it breaks is information about what you actually made.",
+    build:"Give your app three inputs you never intended. Do NOT fix what happens. Put the three results on the page and label plainly what each one shows about your rules.",
+    branches:[
+      { text:"Find the exact edge — the last input that works and the first that does not." },
+      { text:"Now repair one of them, and keep the broken version on the page beside it.", tag:"Session 7" },
+      { text:"Ask someone at home to try to break it in a way you did not think of." }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"The choice you made for the reader",
+    body:"Your app decides what the visitor cannot touch. Every one of those is a decision you made — usually without noticing you were making it. Hand one of them over and the page can turn into something else entirely.",
+    build:"List three things the reader cannot change in your app. Pick one and give it to them as a control. Does the app still make sense? Does it get better, or just noisier?",
+    branches:[
+      { text:"Give away a second control and find the point where too much freedom makes the page mean less." },
+      { text:"Keep the one that ruined it, but label it as the ruined version — a page can show a bad idea on purpose." },
+      { text:"Which control did you most want to keep for yourself? That reluctance is worth a sentence.", tag:"Session 10" }
+    ] },
   { lane:"yours", ladder:"week",
     spark:"Which surprise deserves a direction?",
     body:"You've built things this course. Something surprised you — a behavior, a reaction, a weird input. That surprise might be your R-pentomino: the small thing worth following seriously.",
@@ -274,50 +344,31 @@ const CARDS = [
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER =========================== */
-const DEAL_LANES = {
-  living:   { name:"living things",   objects:["one mutation","a pair of rabbits","a single seed","one bee's waggle dance","a crumb dropped near an anthill"] },
-  games:    { name:"games & play",    objects:["one opening move","a physics glitch","a new house rule","one lucky roll","a trade nobody understood"] },
-  music:    { name:"music & sound",   objects:["a three-note motif","one weird chord","a snippet that loops in your head","a beat dropped one step early","one sampled sound"] },
-  stories:  { name:"stories & words", objects:["a what-if","one rumor","a nickname","the first line of a story","one typo"] },
-  art:      { name:"art & pictures",  objects:["a repeated doodle","one brushstroke rule","a color picked at random","a crop that changes the subject","one pixel out of place"] },
-  everyday: { name:"everyday life",   objects:["a closed hallway","a missed bus","one new lunch table","a tiny habit","a text sent to the wrong chat"] }
+/* ============================ EDIT HERE: BENCH =========================== */
+/* The Bench replaced the Dealer at Session 5. The Dealer shuffled combinations
+   AT the student; the Bench interrogates the student until they supply their
+   own app, their own knob and their own prediction. The prompts below are
+   therefore useless to anyone who did not fill the boxes in — which is the
+   point: a prompt you cannot copy off a friend's screen. */
+
+const BENCH = {
+  build: d =>
+    "I'm a student with a one-page \u201cpaper app\u201d already published on GitHub Pages (a single self-contained index.html \u2014 HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "One thing I chose almost without thinking: " + d.knob + "\n\n" +
+    "I want to find out what actually happens if I change it. My guess: " + d.predict + " \u2014 but I don't know.\n\n" +
+    "Do NOT rebuild my app. Add ONE comparison to the page I already have: the original beside the changed version, with my guess shown so a reader can see whether I was right. Add a short \u201cwhat to notice\u201d line, and keep it honest about what the comparison really shows versus what it only hints at.\n\n" +
+    "Before you write any code, ask me two questions about my app so the comparison fits what I actually made. Then build the smallest working version and STOP so I can test it.",
+
+  talk: d =>
+    "I'm a student with a one-page \u201cpaper app\u201d already published on GitHub Pages (a single self-contained index.html \u2014 HTML/CSS/JS only, no build tools, no API keys). I'm not ready to build yet \u2014 I want to work out which change is worth making.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "The thing I'm thinking of changing: " + d.knob + "\n\n" +
+    "My guess about what would happen: " + d.predict + "\n\n" +
+    "Don't write any code. First interview me: three questions, ONE AT A TIME, about what I actually made and what I'd find surprising. You're helping me work out whether this is the change worth making, or whether there's a more interesting one hiding in my app that I haven't noticed.\n\n" +
+    "Then suggest three versions of the comparison I could build, two sentences each, and wait for me to pick. At least one should be a change I did not think of. Only after I choose, build the smallest version, one step at a time, stopping so I can test."
 };
-
-const DEAL_ASPECTS = [
-  { phrase:"consequences nobody can predict",
-    explain:"The thing is tiny but the outcome isn't computable in your head — the only way to know is to run it and watch. That's the R-pentomino's whole lesson." },
-  { phrase:"the next move it hands you",
-    explain:"A useful curiosity doesn't just sit there being interesting — it tells you what to build, measure, or try next. No next move? Shrink it or sharpen it." },
-  { phrase:"one surprise becoming a direction",
-    explain:"One surprise, followed seriously, turns into a project: glider → wager → gun. The move is following one thread instead of collecting more surprises." },
-  { phrase:"the smallest version that would teach you something",
-    explain:"You don't need the whole city, season, or symphony — one intersection, one match, eight bars. Small enough to build this week, real enough to surprise you." },
-  { phrase:"rerunning what real life won't let you rerun",
-    explain:"Life gives you one run; a little simulation gives you a thousand. Make rerunning cheap and the question gets answered by watching." }
-];
-
-const DEAL_GENRES = [
-  { action:"lock in a prediction, then run it and see",
-    produce:"a page where the reader commits to a fate — fizzles, stabilizes, explodes — then watches the real answer unfold.",
-    biggerExtra:"three seeds of increasing weirdness with a running score, so the reader feels their predictions improving (or not)" },
-  { action:"follow one small thing through every consequence",
-    produce:"a walk-through page where each click advances the consequence chain one step, and the reader keeps asking 'would I have predicted that?'",
-    biggerExtra:"a second thread the reader can switch to mid-walk, to feel how early steps lock in later ones" },
-  { action:"hunt for the smallest change with the biggest consequence",
-    produce:"a page with a few dials where most changes do nothing — and the reader's job is finding the one that changes everything.",
-    biggerExtra:"a consequence meter and a snapshot strip of this visit's runs, so the hunt has a scoreboard (nothing saved)" },
-  { action:"rerun the same start, over and over",
-    produce:"a page where the same beginning plays out again and again — identical if the world is deterministic, different if chance is in the rules — and the reader learns which world they're in.",
-    biggerExtra:"a toggle between a deterministic mode and a chancy mode, so the reader compares the two kinds of surprise (Session 2 says hello)" },
-  { action:"sort curiosities by whether they hand you a next move",
-    produce:"a sorting page where each curiosity lands as buildable-now, needs-shrinking, or just-an-opinion — and the stubborn ones turn out to be the interesting ones.",
-    biggerExtra:"a 'shrink it' step: every too-big curiosity gets one click that proposes its one-intersection version" },
-  { action:"climb it one rung: watch it, build it smaller, measure it",
-    produce:"a ladder page where the same small thing gets more interesting at each rung — from spectacle to experiment in three clicks.",
-    biggerExtra:"a fourth rung — 'what would settle it?' — where the reader picks the smallest test that could answer the question" }
-];
-/* ========================= END EDIT HERE: DEALER ========================== */
+/* ========================= END EDIT HERE: BENCH ========================== */
 
 /* ======================= SHARED MACHINERY (edit below only if you want to
    change how prompts are worded — the content lives in the blocks above) */
@@ -408,48 +459,51 @@ function renderCards(){
 }
 renderCards();
 
-/* --- the dealer --- */
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-let deal = null;
-const dealBtn = document.getElementById("dealBtn");
-const dealPre = document.getElementById("dealPromptPre");
+/* --- the bench --- */
+const knobInputs = Array.from(document.querySelectorAll("[data-knob]"));
+const knobOut  = document.getElementById("knobOut");
+const step3    = document.getElementById("step3");
+const pickSel  = document.getElementById("bPick");
+const benchPre = document.getElementById("benchPre");
 
-function dealStarter(d){
-  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+function knobs(){
+  return knobInputs.filter(i => i.value.trim())
+                   .map(i => i.dataset.knob + " " + i.value.trim());
 }
-function dealBigger(d){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
-    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+function refreshKnobs(){
+  const list = knobs();
+  knobOut.innerHTML = "";
+  list.forEach(k => {
+    const c = document.createElement("span");
+    c.className = "knob-chip"; c.textContent = k;
+    knobOut.appendChild(c);
+  });
+  const prev = pickSel.value;
+  pickSel.innerHTML = "";
+  list.forEach(k => {
+    const o = document.createElement("option"); o.value = k; o.textContent = k;
+    pickSel.appendChild(o);
+  });
+  if (list.includes(prev)) pickSel.value = prev;
+  step3.hidden = list.length === 0;
 }
+knobInputs.forEach(i => i.addEventListener("input", refreshKnobs));
+refreshKnobs();
 
-dealBtn.addEventListener("click", ()=>{
-  const laneKey = pick(Object.keys(DEAL_LANES));
-  const lane = DEAL_LANES[laneKey];
-  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
-    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
-  document.getElementById("dealMeans").textContent = deal.aspect.explain;
-  document.getElementById("dealProduce").textContent = deal.genre.produce;
-  document.getElementById("dealOut").classList.add("open");
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal another";
+function benchData(){
+  const app = document.getElementById("bApp").value.trim();
+  const predict = document.getElementById("bPredict").value.trim();
+  return {
+    app: app || "(I haven't described it yet \u2014 ask me first)",
+    knob: pickSel.value || "(I haven't picked one yet)",
+    predict: predict || "I genuinely can't guess, which is why I want to run it"
+  };
+}
+document.getElementById("benchBuildBtn").addEventListener("click", function(){
+  copyText(BENCH.build(benchData()), this, benchPre, "Copy build prompt");
 });
-document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy try-it prompt");
-});
-document.getElementById("dealBiggerBtn").addEventListener("click", function(){
-  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+document.getElementById("benchTalkBtn").addEventListener("click", function(){
+  copyText(BENCH.talk(benchData()), this, benchPre, "Copy interview prompt");
 });
 </script>
 </body>
