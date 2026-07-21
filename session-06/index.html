@@ -17,7 +17,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -58,13 +58,19 @@
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-out { display:none; }
-  .deal-out.open { display:block; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
-  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
-  .deal-read p { margin:.35rem 0; }
-  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
-  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .bench-step { margin:1.5rem 0 0; }
+  .bench-q { display:block; font-family:system-ui,sans-serif; font-weight:800; font-size:.98rem; margin-bottom:.5rem; }
+  .step-n { display:inline-grid; place-items:center; width:1.45rem; height:1.45rem; margin-right:.4rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; }
+  .bench-in { font-family:system-ui,sans-serif; font-size:.95rem; padding:.5rem .7rem; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; }
+  .bench-in:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .bench-in.inline { display:inline-block; width:min(26ch,100%); padding:.2rem .5rem; }
+  .knob-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; }
+  .knob { display:flex; flex-direction:column; gap:.28rem; }
+  .knob span { font-family:system-ui,sans-serif; font-size:.82rem; font-weight:750; color:var(--muted); }
+  .knob-out { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+  .knob-chip { font-family:system-ui,sans-serif; font-size:.8rem; font-weight:750; background:var(--green-soft); color:var(--green); border:1px solid var(--green); border-radius:999px; padding:.25rem .7rem; }
+  .predict-line { margin:.9rem 0 .3rem; font-size:1.05rem; }
+  .stuck-note { max-width:64ch; margin-top:1.6rem; padding-top:.9rem; border-top:1px dashed var(--line); }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
@@ -95,36 +101,53 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>. <strong>Your app</strong> is its own lane — those cards do not hand you a curiosity, they send you back into something you already built to go looking for one.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
   </section>
 
-  <section id="dealer" aria-labelledby="dealer-title">
+  <section id="bench" aria-labelledby="bench-title">
     <div class="dealer">
-      <div class="kicker">Keep dealing until one grabs you</div>
-      <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a try-it prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
-      <button class="deal-btn" id="dealBtn">Deal an idea</button>
-      <div class="deal-out" id="dealOut">
-        <div class="deal-sentence" id="dealSentence"></div>
-        <div class="deal-read">
-          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
-          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
-        </div>
-        <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy try-it prompt</button>
-          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
-        </div>
-        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      <div class="kicker">Three tests of your own app</div>
+      <h2 id="bench-title">The Bench</h2>
+      <p class="note" style="max-width:64ch">Every card above tests somebody else's thing. This one tests yours — the app already sitting on your GitHub page. "It works" is three different claims. Write what each one means for your app, pick the one you are least sure of, and run it tonight — for real, with the result on the page.</p>
+
+      <div class="bench-step">
+        <label class="bench-q" for="bApp"><span class="step-n">1</span> What did you build? One line is plenty.</label>
+        <input class="bench-in" id="bApp" type="text" placeholder="a page where dots spread a rumor across a little network">
       </div>
+
+      <div class="bench-step">
+        <div class="bench-q"><span class="step-n">2</span> Write the three tests for YOUR app. Fill in any — you do not need all three.</div>
+        <p class="note" style="margin:.1rem 0 .7rem">The same app can pass one and fail another. That gap is the finding.</p>
+        <div class="knob-grid">
+          <label class="knob"><span>It works once means…</span><input class="bench-in" data-knob="works once:" type="text" placeholder="one full rumor run finishes on my phone"></label>
+          <label class="knob"><span>It works every time means…</span><input class="bench-in" data-knob="works every time:" type="text" placeholder="still runs after reload, and tomorrow, on the school laptop"></label>
+          <label class="knob"><span>It survives trouble means…</span><input class="bench-in" data-knob="survives trouble:" type="text" placeholder="a stranger clicks everything and nothing gets stuck"></label>
+        </div>
+        <div class="knob-out" id="knobOut"></div>
+      </div>
+
+      <div class="bench-step" id="step3" hidden>
+        <div class="bench-q"><span class="step-n">3</span> Pick the one you are least sure of, and call it.</div>
+        <select class="bench-in" id="bPick" aria-label="Which test will you run"></select>
+        <p class="predict-line">I think my app would <select class="bench-in inline" id="bVerdict" style="width:auto" aria-label="Pass or fail"><option value="pass">pass</option><option value="fail">fail</option></select> it, because <input class="bench-in inline" id="bPredict" type="text" placeholder="I've only ever run it on my own laptop"> — <strong>but I don't actually know.</strong></p>
+        <p class="note">Calling it wrong is the good outcome. If you already knew, there would be nothing to find out.</p>
+        <div class="btn-row">
+          <button class="copy-btn" id="benchBuildBtn">Copy run-it prompt</button>
+          <button class="copy-btn bigger" id="benchTalkBtn">Copy interview prompt</button>
+        </div>
+        <pre class="prompt-pre" id="benchPre"></pre>
+      </div>
+
+      <p class="note stuck-note"><strong>Can't name a test?</strong> Try to break your app for one minute. Whatever you did first IS your survives-trouble test. And if you can't break it in a minute, that goes on the page too — dated, not bragged.</p>
     </div>
   </section>
 
   <section>
     <div class="honesty">
-      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A catchiness test is not a model benchmark; a level's fun meter is not a loss function. The idea travels; the mechanism doesn't.
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor. Anything you type into the Bench stays in your own browser — it is never saved, never sent, and gone the moment you close the tab; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A catchiness test is not a model benchmark; a level's fun meter is not a loss function. The idea travels; the mechanism doesn't.
     </div>
   </section>
 
@@ -270,54 +293,65 @@ const CARDS = [
       { text:"Run the stranger minute: hand it over, say nothing, and watch which test their behavior actually runs." },
       { text:"Put both scores on the page — demo yardstick and stranger yardstick — so readers can see the gap." },
       { text:"Choose the yardstick you're building for from here on, and say so on the page. That sentence is a direction." }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The test you've been avoiding",
+    body:"You already know which check your app would flunk. You have been carefully not running it. That dodge is a compass needle: it points straight at this week's work.",
+    build:"Write down exactly how the avoided test will fail — then run it today. Prediction and result go on the page side by side, dated.",
+    branches:[
+      { text:"If it failed, don't fix it tonight. Name the failure precisely — that's next week's whole job.", tag:"Session 7" },
+      { text:"If it passed, you were scared of a ghost. Find the harsher version: what line would it have to cross to really convince you?" },
+      { text:"Say the dodge on the page: 'I hadn't run this because I suspected it would fail.' Readers trust pages that admit that.", tag:"Session 8" }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The app you haven't opened in two weeks",
+    body:"'Works every time' has a clock in it that nobody checks. Your oldest deployed app has been running unwatched since you shipped it — or it hasn't, and you don't know which.",
+    build:"Open your oldest app right now, on your phone, and write down what still works and what quietly broke — with today's date.",
+    branches:[
+      { text:"Run the same check across everything you've deployed. The survival tally is a census of your own portfolio.", tag:"Session 8" },
+      { text:"Whatever broke by itself was depending on something you didn't know it depended on. Name the luck." },
+      { text:"Re-ship one small fix and date it. 'Still works' is a claim with a clock on it.", tag:"Session 7" }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"Move the pass line",
+    body:"Your app 'works' — at what, exactly? Loads in two seconds or ten? A stranger finds the button in five seconds or fifty? Every pass line is a number somebody picked.",
+    build:"Write your app's pass line as a number. Then move the line stricter and looser and watch the same app flip between passing and failing. Nothing about the app changed.",
+    branches:[
+      { text:"Have someone at home set the line without seeing yours. Two honest lines that disagree are not a fight — they're data." },
+      { text:"Say who set the line on the page. A pass line is authored, not discovered.", tag:"Session 8" },
+      { text:"Which line will the showcase audience secretly use? Design for that one.", tag:"Session 10" }
     ] }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER =========================== */
-const DEAL_LANES = {
-  living:   { name:"living things",   objects:["a creature","a garden","a bird's nest","a houseplant","an ant colony"] },
-  games:    { name:"games & play",    objects:["a level","a strategy","a boss fight","a party game","a speedrun route"] },
-  music:    { name:"music & sound",   objects:["a hook","a playlist","a cover version","a talent-show act","a beat"] },
-  stories:  { name:"stories & words", objects:["an ending","a plot twist","a book recommendation","a joke","an opening line"] },
-  art:      { name:"art & pictures",  objects:["a sketch","a poster","a color palette","a comic page","a photo edit"] },
-  everyday: { name:"everyday life",   objects:["a paper airplane","a clean room","a study method","a morning routine","a group project"] }
+/* ============================ EDIT HERE: BENCH =========================== */
+/* The Bench replaced the Dealer from Session 5 on. Session 6's knob is the
+   TEST, not the app: the student writes what works-once / works-every-time /
+   survives-trouble mean for their own app, picks the one they're least sure
+   of, calls pass-or-fail, and runs it for real. The prompts below are useless
+   to anyone who did not fill the boxes in — which is the point. */
+
+const BENCH = {
+  build: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "This week is about testing it for real. The check I picked: " + d.knob + "\n\n" +
+    "My call, made before running it: I think my app would " + d.verdict + ", because " + d.predict + " — but I don't actually know.\n\n" +
+    "Do NOT rebuild my app and do NOT add features. Help me do two things:\n" +
+    "1. Turn my check into steps I can actually run tonight: on which device, doing exactly what, and what counts as pass versus fail.\n" +
+    "2. After I run it, help me add one small dated line to my page: the check, my call, and the honest result. Pass or fail, it goes on the page.\n\n" +
+    "If it fails, we do not fix it tonight — the honest failure is the finding, and repair is next week's session.\n\n" +
+    "Before any of that, ask me two questions about what my app actually does, so the check fits what I really made.",
+
+  talk: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys). I'm not ready to run anything yet — I want to work out which test is worth running.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "The check I'm considering: " + d.knob + "\n\n" +
+    "My guess about how it would go: I'd " + d.verdict + ", because " + d.predict + "\n\n" +
+    "Don't write any code and don't design the test yet. First interview me: three questions, ONE AT A TIME, about where my app actually gets used, who touches it, and what would embarrass me if it broke. You're helping me find the test I've been avoiding — that one is usually the interesting one.\n\n" +
+    "Then offer three versions of a check I could run tonight, one line each: one easy, one honest, one harsh. Wait for me to pick. Only then turn the one I picked into exact steps, and stop so I can go run it."
 };
-
-const DEAL_ASPECTS = [
-  { phrase:"three different tests of 'it works'",
-    explain:"Reach the goal once, keep working, recover from damage — the instructor's glider gun passes two and fails one. Every made thing has its own version of the three." },
-  { phrase:"the yardstick that changes the winner",
-    explain:"Change the measure and the ranking reshuffles. The result isn't just in the thing; it's partly in the instrument you point at it." },
-  { phrase:"the test it was never trained for",
-    explain:"Things pass the tests they were shaped by and fail the ones they never met — the gun never met a reader with a damage brush. What test has your subject never met?" },
-  { phrase:"pass/fail versus partial credit",
-    explain:"All-or-nothing grading shows a sudden cliff; partial credit shows a smooth slope — same skill, two stories. The jump can live in the grader, not the thing." },
-  { phrase:"success you can check versus success you can only claim",
-    explain:"'It's good' is a claim; 'it loads in two seconds and a stranger used it without help' is a check. The move is turning one claim into one check." }
-];
-
-const DEAL_GENRES = [
-  { action:"put it through three different tests of success",
-    produce:"a bench page where the same thing passes some tests and fails others — and the reader feels 'it works' split into three separate claims.",
-    biggerExtra:"a fourth test the reader designs themselves, plus a verdict strip comparing all four" },
-  { action:"change the measuring stick and watch the winner change",
-    produce:"a ranking page where the crown moves every time the criterion does — the yardstick IS the argument.",
-    biggerExtra:"a build-your-own-formula mixer with weights, ending with the reader's formula named honestly as an opinion" },
-  { action:"degrade it until it stops working",
-    produce:"a page with a stress slider — the reader finds exactly where 'works' becomes 'broken,' and discovers the edge is a place, not a switch.",
-    biggerExtra:"three subjects on the same slider, so robustness becomes a comparison instead of a compliment" },
-  { action:"grade the same performance two different ways",
-    produce:"a page where one performance earns two different scores — the cliff and the slope — and the reader sees the grader inside the grade.",
-    biggerExtra:"a reroll button that generates fresh performances, so the two graders disagree anew every time" },
-  { action:"damage it a little, then test it again",
-    produce:"a page with a damage brush and a retest button — the reader learns whether recovery was ever part of the design.",
-    biggerExtra:"a choice of what to strengthen before the damage, so the reader feels 'trained for it' versus 'never met it'" },
-  { action:"watch three judges score the same thing",
-    produce:"a judging page where the disagreement is the exhibit: every judge is consistent, and they still crown different winners.",
-    biggerExtra:"the reader as fourth judge, their scores shown beside the panel (this visit only, nothing saved)" }
-];
-/* ========================= END EDIT HERE: DEALER ========================== */
+/* ========================= END EDIT HERE: BENCH ========================== */
 
 /* ======================= SHARED MACHINERY (edit below only if you want to
    change how prompts are worded — the content lives in the blocks above) */
@@ -408,48 +442,52 @@ function renderCards(){
 }
 renderCards();
 
-/* --- the dealer --- */
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-let deal = null;
-const dealBtn = document.getElementById("dealBtn");
-const dealPre = document.getElementById("dealPromptPre");
+/* --- the bench --- */
+const knobInputs = Array.from(document.querySelectorAll("[data-knob]"));
+const knobOut  = document.getElementById("knobOut");
+const step3    = document.getElementById("step3");
+const pickSel  = document.getElementById("bPick");
+const benchPre = document.getElementById("benchPre");
 
-function dealStarter(d){
-  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+function knobs(){
+  return knobInputs.filter(i => i.value.trim())
+                   .map(i => i.dataset.knob + " " + i.value.trim());
 }
-function dealBigger(d){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
-    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
+function refreshKnobs(){
+  const list = knobs();
+  knobOut.innerHTML = "";
+  list.forEach(k => {
+    const c = document.createElement("span");
+    c.className = "knob-chip"; c.textContent = k;
+    knobOut.appendChild(c);
+  });
+  const prev = pickSel.value;
+  pickSel.innerHTML = "";
+  list.forEach(k => {
+    const o = document.createElement("option"); o.value = k; o.textContent = k;
+    pickSel.appendChild(o);
+  });
+  if (list.includes(prev)) pickSel.value = prev;
+  step3.hidden = list.length === 0;
 }
+knobInputs.forEach(i => i.addEventListener("input", refreshKnobs));
+refreshKnobs();
 
-dealBtn.addEventListener("click", ()=>{
-  const laneKey = pick(Object.keys(DEAL_LANES));
-  const lane = DEAL_LANES[laneKey];
-  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
-    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
-  document.getElementById("dealMeans").textContent = deal.aspect.explain;
-  document.getElementById("dealProduce").textContent = deal.genre.produce;
-  document.getElementById("dealOut").classList.add("open");
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal another";
+function benchData(){
+  const app = document.getElementById("bApp").value.trim();
+  const predict = document.getElementById("bPredict").value.trim();
+  return {
+    app: app || "(I haven't described it yet — ask me first)",
+    knob: pickSel.value || "(I haven't picked one yet)",
+    verdict: document.getElementById("bVerdict").value + " it",
+    predict: predict || "I can't say why — which is part of why I need to run it"
+  };
+}
+document.getElementById("benchBuildBtn").addEventListener("click", function(){
+  copyText(BENCH.build(benchData()), this, benchPre, "Copy run-it prompt");
 });
-document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy try-it prompt");
-});
-document.getElementById("dealBiggerBtn").addEventListener("click", function(){
-  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+document.getElementById("benchTalkBtn").addEventListener("click", function(){
+  copyText(BENCH.talk(benchData()), this, benchPre, "Copy interview prompt");
 });
 </script>
 </body>

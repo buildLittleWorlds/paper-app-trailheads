@@ -17,7 +17,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -49,16 +49,28 @@
   .copy-btn:hover { background:var(--accent); color:#fff; }
   .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
   .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .idea-card .build.go { margin-bottom:.2rem; }
+  .idea-card .build.go strong { color:var(--blue); }
+  .branches { margin:.15rem 0 .8rem; padding-left:1.15rem; font-size:.92rem; color:var(--ink); }
+  .branches li { margin:.32rem 0; }
+  .branches li::marker { color:var(--blue); }
+  .branch-tag { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.1rem .5rem; margin-left:.35rem; vertical-align:middle; white-space:nowrap; }
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-out { display:none; }
-  .deal-out.open { display:block; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
-  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
-  .deal-read p { margin:.35rem 0; }
-  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
-  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
+  .bench-step { margin:1.5rem 0 0; }
+  .bench-q { display:block; font-family:system-ui,sans-serif; font-weight:800; font-size:.98rem; margin-bottom:.5rem; }
+  .step-n { display:inline-grid; place-items:center; width:1.45rem; height:1.45rem; margin-right:.4rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; }
+  .bench-in { font-family:system-ui,sans-serif; font-size:.95rem; padding:.5rem .7rem; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; }
+  .bench-in:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .bench-in.inline { display:inline-block; width:min(26ch,100%); padding:.2rem .5rem; }
+  .knob-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; }
+  .knob { display:flex; flex-direction:column; gap:.28rem; }
+  .knob span { font-family:system-ui,sans-serif; font-size:.82rem; font-weight:750; color:var(--muted); }
+  .knob-out { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+  .knob-chip { font-family:system-ui,sans-serif; font-size:.8rem; font-weight:750; background:var(--green-soft); color:var(--green); border:1px solid var(--green); border-radius:999px; padding:.25rem .7rem; }
+  .predict-line { margin:.9rem 0 .3rem; font-size:1.05rem; }
+  .stuck-note { max-width:64ch; margin-top:1.6rem; padding-top:.9rem; border-top:1px dashed var(--line); }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
@@ -89,36 +101,58 @@
         <div class="kicker">Pick a lane, or wander</div>
         <h2 id="trails-title">Trailheads</h2>
       </div>
-      <p>Every card is a question you could chase, with two prompts ready to copy: a <strong>starter</strong> (the smallest version) and a <strong>bigger build</strong> (same idea, more ambitious — still one page). Chips mark the ladder: <strong>wonder → watch → compare</strong>.</p>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>. <strong>Your app</strong> is its own lane — those cards do not hand you a curiosity, they send you back into something you already built to go looking for one.</p>
     </div>
     <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
     <div class="card-grid" id="cardGrid"></div>
   </section>
 
-  <section id="dealer" aria-labelledby="dealer-title">
+  <section id="bench" aria-labelledby="bench-title">
     <div class="dealer">
-      <div class="kicker">Keep dealing until one grabs you</div>
-      <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
-      <button class="deal-btn" id="dealBtn">Deal an idea</button>
-      <div class="deal-out" id="dealOut">
-        <div class="deal-sentence" id="dealSentence"></div>
-        <div class="deal-read">
-          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
-          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
-        </div>
-        <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
-          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
-        </div>
-        <pre class="prompt-pre" id="dealPromptPre"></pre>
+      <div class="kicker">The repair bench</div>
+      <h2 id="bench-title">The Bench</h2>
+      <p class="note" style="max-width:64ch">Every card above debugs somebody else's thing. This one repairs yours. The rule of the week travels here: no tools until the failure is described precisely. Then you change one layer you control, rerun, and keep or revert.</p>
+
+      <div class="bench-step">
+        <label class="bench-q" for="bApp"><span class="step-n">1</span> What did you build? One line is plenty.</label>
+        <input class="bench-in" id="bApp" type="text" placeholder="a page where dots spread a rumor across a little network">
       </div>
+
+      <div class="bench-step">
+        <div class="bench-q"><span class="step-n">2</span> Describe the failure so a stranger could act on it.</div>
+        <p class="note" style="margin:.1rem 0 .7rem">"It's broken" bounces. The tools below unlock when the <em>where</em> and the <em>what-instead</em> are filled in.</p>
+        <div class="knob-grid">
+          <label class="knob"><span>Where it goes wrong</span><input class="bench-in" id="bWhere" data-gate="where:" type="text" placeholder="on the second click of the run button"></label>
+          <label class="knob"><span>When it started</span><input class="bench-in" id="bSince" data-gate="since:" type="text" placeholder="after I added the speed slider"></label>
+          <label class="knob"><span>What I expected</span><input class="bench-in" id="bExpected" data-gate="expected:" type="text" placeholder="the dots should reset to the start"></label>
+          <label class="knob"><span>What happens instead</span><input class="bench-in" id="bInstead" data-gate="instead:" type="text" placeholder="they freeze mid-hop"></label>
+        </div>
+        <div class="knob-out" id="knobOut"></div>
+      </div>
+
+      <div class="bench-step" id="step3" hidden>
+        <div class="bench-q"><span class="step-n">3</span> Choose the one layer you'll change, and guess.</div>
+        <select class="bench-in" id="bLayer" aria-label="Which layer will you change">
+          <option>a setting — one number or value I can change</option>
+          <option>a rule — what the app actually does</option>
+          <option>the paint — how it looks, not what it does</option>
+        </select>
+        <p class="predict-line">If I change that one layer, I think <input class="bench-in inline" id="bPredict" type="text" placeholder="the dots will reset properly again"> — <strong>but I don't actually know.</strong></p>
+        <p class="note">One layer per rerun. Changing two things at once answers zero questions.</p>
+        <div class="btn-row">
+          <button class="copy-btn" id="benchBuildBtn">Copy fix prompt</button>
+          <button class="copy-btn bigger" id="benchTalkBtn">Copy interview prompt</button>
+        </div>
+        <pre class="prompt-pre" id="benchPre"></pre>
+      </div>
+
+      <p class="note stuck-note"><strong>Nothing broken right now?</strong> Lucky. Feed your app an input you never intended (Session 5's card) and something will be — or open your oldest app. Time breaks things quietly.</p>
     </div>
   </section>
 
   <section>
     <div class="honesty">
-      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A recipe is not a codebase; tuning a string is not training a network. The idea travels; the mechanism doesn't.
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor. Anything you type into the Bench stays in your own browser — it is never saved, never sent, and gone the moment you close the tab; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A recipe is not a codebase; tuning a string is not training a network. The idea travels; the mechanism doesn't.
     </div>
   </section>
 
@@ -152,129 +186,200 @@ const CARDS = [
     spark:"The cookie came out flat",
     body:"'They're bad' fixes nothing. 'Flat and greasy at the edges' points at the butter. Precision is the difference between a complaint and a diagnosis — and you only get one change per bake.",
     build:"A recipe debugger: pick exactly one change (butter temp, flour, oven), see the outcome card, repeat. One variable per bake, always.",
-    bigger:"Add a describe-gate up front: three complaint cards — 'they're bad,' 'too sweet,' 'flat and greasy at the edges' — and only the precise one unlocks the oven. Then a two-bake compare strip." },
+    branches:[
+      { text:"Add the describe-gate: 'they're bad' bounces; 'flat and greasy at the edges' unlocks the oven. The gate is the lesson." },
+      { text:"A two-bake compare strip: this bake beside the last one, with the one change labeled." },
+      { text:"Name each failure honestly — 'the butter was the bug' — and the log becomes a field guide.", tag:"Session 8" }
+    ] },
   { lane:"music", ladder:"watch",
     spark:"You can't paint the pitch",
     body:"A string is tuned by iterating: play, listen, adjust, play again. You can move a tuner's needle with your thumb, but the note doesn't care. The pitch only changes at the peg.",
     build:"A two-tone tuning game (WebAudio): the reader drags a slider and listens for the beats to slow as they close in on the note.",
-    bigger:"Three strings, plus a 'show the wave' toggle that reveals the beating visually only after the reader has tuned by ear — and a 'paint the needle' trap button that moves a fake tuner needle and changes nothing. Paint on glass, in sound." },
+    branches:[
+      { text:"Add the trap: a 'paint the needle' button that moves a fake tuner needle and changes nothing. Paint on glass, in sound." },
+      { text:"A 'show the wave' toggle that reveals the beating visually — but only after the reader has tuned by ear." },
+      { text:"Which order teaches better — hear first, or see first? Swap them and watch a friend try each.", tag:"Session 9" }
+    ] },
   { lane:"living", ladder:"watch",
     spark:"Diagnose the creature",
     body:"A vet can't work with 'it's acting weird.' Where, since when, what changed? The precise description isn't paperwork before the fix — it usually IS most of the fix.",
     build:"A diagnosis page: a sick toy creature; vague descriptions bounce ('a vet would ask more'), and the precise one unlocks the cure.",
-    bigger:"Two creatures with lookalike symptoms and one shared trap: a treatment that makes the chart look better while the cause continues underneath — green for the wrong reason, with fur." },
+    branches:[
+      { text:"Two creatures with lookalike symptoms — the precise description is the only thing that tells them apart." },
+      { text:"Add the trap: a treatment that makes the chart look better while the cause continues underneath. Green for the wrong reason, with fur." },
+      { text:"Write each cure card so it claims only what the chart really shows.", tag:"Session 8" }
+    ] },
   { lane:"living", ladder:"wonder",
     spark:"Fever is a debug loop",
     body:"Detect, respond, check, stand down — your immune system runs the loop you're learning, a few million times a day. (Cartoon biology, honestly labeled — but the loop shape is real.)",
     build:"A step-through page of the body's loop on one bug: detect → respond → check → stand down. The reader steps it like generations.",
-    bigger:"Add a 'shortcut' button that suppresses the symptom while the cause continues — two timelines side by side: treating the signal versus fixing the cause. Honest note: authored cartoon, not medical advice." },
+    branches:[
+      { text:"Add a 'shortcut' button that suppresses the symptom while the cause continues — two timelines side by side." },
+      { text:"Let the reader break the loop on purpose — never detects, never stands down — and watch what each broken loop costs." },
+      { text:"Keep the cartoon honest on the page: label what's real biology and what's your drawing.", tag:"Session 8" }
+    ] },
   { lane:"games", ladder:"compare",
     spark:"Balance patch: change one number",
     body:"Every patch note is a debug-loop entry: one stat changed, the whole meta reruns. The discipline is touching one number at a time — and rerunning before you touch the next.",
     build:"A tiny auto-battler where the reader adjusts exactly one stat between runs and watches the fight replay.",
-    bigger:"Add a patch log that records each change and its result this visit — and let the reader discover that the fix for one matchup breaks another. One layer, many consequences." },
+    branches:[
+      { text:"A patch log of this visit's changes and results — the debugging reads like a lab notebook." },
+      { text:"Hunt the trade-off: the fix for one matchup breaks another. One layer, many consequences." },
+      { text:"Publish patch notes a stranger could follow: what changed, why, what to watch for.", tag:"Session 9" }
+    ] },
   { lane:"games", ladder:"watch",
     spark:"The speedrunner's bug report",
     body:"'The trick doesn't work' helps nobody. 'I clip at frame 3 when I jump on the descending edge' — a stranger could act on that. Precision is the whole toolkit.",
     build:"A bug-report sorter: six descriptions of the same game problem; the reader picks the ones a stranger could act on, with reveals explaining each verdict.",
-    bigger:"A tiny broken platformer moment (one screen): the reader watches it fail, then assembles a precise report from parts — where, when, what changed — and the assembled report literally becomes the caption that unlocks the fix panel." },
+    branches:[
+      { text:"Make it playable: one broken screen; the reader assembles where/when/what-changed from parts, and the finished report literally unlocks the fix panel." },
+      { text:"Time the repair both ways: does the precise report actually make the fix faster? Show the difference." },
+      { text:"Keep the best report on the page as a template for the next bug.", tag:"Session 8" }
+    ] },
   { lane:"stories", ladder:"compare",
     spark:"Which sentence is the bug?",
     body:"A paragraph reads wrong. Editing is debugging prose: find the load-bearing flaw, make the minimal change, reread. Deleting everything is the panic move, not the fix.",
     build:"A paragraph with one load-bearing flaw; the reader picks the broken sentence, then compares against the author's diagnosis and the minimal fix.",
-    bigger:"Three patched drafts of the same paragraph — one deletes, one rewrites, one reorders — and the reader votes which fix changed the least while repairing the most. Minimal-diff editing, made visible." },
+    branches:[
+      { text:"Three patches side by side — delete, rewrite, reorder — and the vote: which changed least and repaired most?" },
+      { text:"Minimal-diff editing on your own paragraph: repair it by touching one sentence only." },
+      { text:"Which sentence a reader trips on is data — watch someone read it aloud and mark the stumbles.", tag:"Session 9" }
+    ] },
   { lane:"stories", ladder:"wonder",
     spark:"'It's boring' is not a bug report",
     body:"Feedback you can't act on isn't feedback — it's weather. 'I stopped caring when the letter was opened off-page' is a repair ticket. The difference is learnable.",
     build:"A feedback-translator gallery: vague notes on one story ('boring,' 'confusing') paired with their precise versions. The reader matches vague to precise.",
-    bigger:"Add a scaffold round: the reader assembles one precise note about an authored story from where/what/when parts, then compares it against the author's own note — two precise descriptions can differ and both be actionable." },
+    branches:[
+      { text:"Add a scaffold round: assemble one precise note from where/what/when parts, then compare against the author's own note." },
+      { text:"Two precise notes can disagree and both be actionable — show a pair and say why both work." },
+      { text:"Run the translator on feedback your own app has received: which notes could you act on, and which were weather?" }
+    ] },
   { lane:"art", ladder:"compare",
     spark:"Fix the drawing without redrawing it",
     body:"The drawing looks 'off.' Which layer — line, values, color, crop? Artists debug too; the trap is redoing everything when one layer was the problem.",
     build:"One 'off' drawing with four one-layer fixes (recrop, darken values, thicken line, shift color): the reader predicts which layer was the real problem, then reveals.",
-    bigger:"Stackable toggles: apply the layers one at a time in any order and discover that order changes the diagnosis — plus one 'filter' trap that prettifies everything and fixes nothing. Paint on glass, art edition." },
+    branches:[
+      { text:"Stack the fixes in any order — and discover the order changes the diagnosis.", tag:"Session 9" },
+      { text:"Add the filter trap: one button that prettifies everything and fixes nothing. Paint on glass, art edition." },
+      { text:"Run it on your own drawing: which single layer was the real problem?" }
+    ] },
   { lane:"everyday", ladder:"wonder",
     spark:"Steps are the price",
     body:"Some answers can be looked up. Others — the cookie, the kickflip, the garden — only exist after the steps run. There is no formula door; the only shortcut is running the steps faster.",
     build:"A sorting card: six examples sorted into 'can look it up' versus 'must run the steps,' with reveals.",
-    bigger:"Add a step-by-step demo with a 'skip to the answer' button that visibly just runs the steps faster — the kitchen edition of 'thinking tokens are generations.'" },
+    branches:[
+      { text:"Add a step-by-step demo with a 'skip to the answer' button that visibly just runs the steps faster." },
+      { text:"Collect a week of your own examples: which answers could you look up, and which had to be run?" },
+      { text:"Say it on the page without jargon: why some questions have no shortcut.", tag:"Session 8" }
+    ] },
   { lane:"yours", ladder:"week",
     spark:"Describe your last bug like a stranger will fix it",
     body:"Where it happens, when it started, what changed right before. If your description works without you standing next to it, it's precise enough — for AI helpers especially.",
     build:"Write your app's last bug in one sentence a stranger could act on, and name the layer you changed: the prompt, the context you gave, the code you accepted, or the test you ran.",
-    bigger:"Add a visible repair log to your app's page: bug (precise), layer changed, before/after — one line each. Three entries by showcase and your page tells the story of how it got good." },
+    branches:[
+      { text:"Grow it into a visible repair log: bug (precise), layer changed, before/after — one line each.", tag:"Session 8" },
+      { text:"Three entries by showcase and your page tells the story of how it got good.", tag:"Session 10" },
+      { text:"Hand the description to your AI with no extra context. If the fix comes back wrong, the description was the bug." }
+    ] },
   { lane:"yours", ladder:"compare",
     spark:"Green for the wrong reason",
     body:"Your check passed — is the behavior right? The most dangerous state isn't a red X; it's a green check on top of wrong behavior. The instructor's B2/S23 moment, pointed at your app.",
     build:"Find one place your app 'works' only because the check is weak (it loads — but is it readable on a phone?). Strengthen exactly that check.",
-    bigger:"Write two checks for the same feature — a weak one and a strong one — and show both results honestly on your page. Readers see the difference between passing and working." }
+    branches:[
+      { text:"Write the weak check and the strong check for the same feature, and show both results honestly on the page." },
+      { text:"Hunt one more: where else does your app pass a test while doing the wrong thing?" },
+      { text:"The strong check becomes your showcase demo — run it live in front of people.", tag:"Session 11" }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"Describe it from memory, then look",
+    body:"Your memory of your app is a model of your app — and models have bugs. The gap between what you remember and what the page actually does is where problems hide.",
+    build:"Without opening your app, write the precise description of its last failure: where, when, what changed right before. Then open it, rerun it, and grade your own description.",
+    branches:[
+      { text:"The places your description was wrong are the bug's real address — start the repair there." },
+      { text:"Have someone else describe the same failure. Two precise descriptions that differ are both useful." },
+      { text:"Keep the wrong description on the page, honestly labeled: what I thought was happening versus what was.", tag:"Session 8" }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"Break it on purpose",
+    body:"You fixed it — can you un-fix it? If you can summon the old bug on demand, you understand what happened. If you can't, the fix was luck wearing a fix's clothes.",
+    build:"Re-create the bug you repaired, deliberately. Write the summon-steps on the page. If you can't summon it, write that instead — 'fixed, cause unknown' is honest and rare.",
+    branches:[
+      { text:"Keep a broken copy as an exhibit: the before your after gets compared to." },
+      { text:"Invite someone at home to break it a way you didn't think of.", tag:"Session 11" },
+      { text:"'Fixed by luck' is a real scope line. Saying it beats pretending.", tag:"Session 8" }
+    ] },
+  { lane:"yours", ladder:"wonder",
+    spark:"The fix that was just paint",
+    body:"Somewhere in your app you made a thing look right without touching why it was wrong. The class calls it paint on glass: the rule underneath never read your paint.",
+    build:"Find one paint-fix in your own app and label it on the page: 'this made it look right; the cause is still there.' Then decide out loud — fix the cause, or keep the paint and say so.",
+    branches:[
+      { text:"Write the harsher check that sees through the paint — the one the pretty version still fails." },
+      { text:"Fix the cause and keep both versions side by side. The pair is the exhibit." },
+      { text:"Which does a first-time reader notice, the paint or the behavior? Watch one and find out.", tag:"Session 9" }
+    ] }
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER =========================== */
-const DEAL_LANES = {
-  living:   { name:"living things",   objects:["a wilting houseplant","a sick toy creature","a garden that won't grow","a dog that won't sit","a cloudy fish tank"] },
-  games:    { name:"games & play",    objects:["a broken level","an unbeatable boss","a laggy control","an unfair matchup","a glitchy jump"] },
-  music:    { name:"music & sound",   objects:["an out-of-tune string","a beat that drags","a mix where the voice drowns","a squeaky note","a song that falls apart live"] },
-  stories:  { name:"stories & words", objects:["a boring opening","a confusing scene","a joke that doesn't land","a character nobody likes","an ending that fizzles"] },
-  art:      { name:"art & pictures",  objects:["a drawing that looks 'off'","a muddy painting","a comic panel that reads wrong","a photo that's almost great","a logo that feels cheap"] },
-  everyday: { name:"everyday life",   objects:["a flat cookie","a wobbly shelf","a group-chat misunderstanding","a morning that always runs late","a backpack that hurts"] }
+/* ============================ EDIT HERE: BENCH =========================== */
+/* Session 7's Bench is the repair bench: the describe-gate as a form. Step 3
+   stays locked until the where and the what-instead are filled in — vague
+   bounces here exactly like it does on the instructor page. The knob is the
+   LAYER: a setting, a rule, or the paint (and picking paint is allowed, but
+   the prompt says honestly which kind of fix it is). */
+
+const BENCH = {
+  build: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "Something is wrong, and here is my precise description:\n" +
+    "• where it goes wrong: " + d.where + "\n" +
+    "• when it started: " + d.since + "\n" +
+    "• what I expected: " + d.expected + "\n" +
+    "• what happens instead: " + d.instead + "\n\n" +
+    "The one layer I have chosen to change: " + d.layer + ".\n" +
+    (d.layer.indexOf("the paint") === 0 ?
+      "I know this is a looks-only change — it changes how the page looks, not what it does. Keep the underlying behavior visible, and help me say honestly on the page which kind of fix this was.\n" : "") +
+    "My guess: if I change that layer, " + d.predict + " — but I don't actually know.\n\n" +
+    "Change ONLY that layer. Make the smallest bounded fix, then STOP so I can rerun it and keep or revert. Do not touch anything else and do not add features. Keep a visible before/after on my page: what it did, the one thing I changed, what it does now — one line each.\n\n" +
+    "If my description is too vague to act on, do not guess — tell me exactly which piece is missing and ask for it first.",
+
+  talk: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys). I have a failure but I'm not sure which layer to change.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "The failure, described as precisely as I can:\n" +
+    "• where: " + d.where + "\n" +
+    "• when it started: " + d.since + "\n" +
+    "• expected: " + d.expected + "\n" +
+    "• instead: " + d.instead + "\n\n" +
+    "Don't propose any fix yet. First interview me: three questions, ONE AT A TIME, about what changed recently and what I've already tried.\n\n" +
+    "Then tell me the harsher second check my repaired app should pass — the one that a fix that only LOOKS right would fail.\n\n" +
+    "Then propose two bounded fixes on two different layers (a setting I could change, or a rule of the app — and say plainly if an option is really just paint: a change to how it looks, not what it does). Two sentences each. Wait for me to pick. After I pick, smallest fix first, then stop so I can rerun."
 };
-
-const DEAL_ASPECTS = [
-  { phrase:"a description a stranger could act on",
-    explain:"'It's broken' bounces. Where, when, and what changed — stated so someone who wasn't there could find it — is what unlocks a fix." },
-  { phrase:"the layers you actually control",
-    explain:"You can't edit the weights, the weather, or the other player. Your layers are the seed, the settings, the request, the thing you accept or reject, and the test you run. Change one at a time." },
-  { phrase:"the fix that only paints the outcome",
-    explain:"Some 'fixes' decorate the symptom while the cause runs underneath — paint on glass the rule never reads. The page's job is making the paint visible." },
-  { phrase:"a check that can go green for the wrong reason",
-    explain:"A passing test is only as good as the test. The most dangerous state isn't red; it's green with the wrong behavior underneath." },
-  { phrase:"steps that can't be skipped",
-    explain:"Some answers aren't lying in a book — they're manufactured by running the steps. The only shortcut is running the steps faster." }
-];
-
-const DEAL_GENRES = [
-  { action:"describe the failure precisely before the tools unlock",
-    produce:"a page where vague complaints bounce and the precise description opens the fix panel — the gate is the lesson.",
-    biggerExtra:"three failures behind three gates, with the reader's unlocking streak shown at the end" },
-  { action:"change exactly one thing, then rerun",
-    produce:"a repair bench where every rerun answers exactly one question — changing two things at once is impossible by design.",
-    biggerExtra:"a visible log of this visit's changes and outcomes, so the debugging reads like a lab notebook" },
-  { action:"sort real fixes from cosmetic ones",
-    produce:"a page where some fixes repair the cause and some just repaint the symptom — and the rerun exposes which is which.",
-    biggerExtra:"one deliberately tempting paint-fix that makes everything LOOK right, exposed by a second, harsher test" },
-  { action:"make a passing test lie",
-    produce:"a page with a check that goes green for the wrong reason — the reader's job is noticing the behavior is still wrong underneath.",
-    biggerExtra:"a 'strengthen the check' step where the reader picks the tougher test that would have caught it" },
-  { action:"step through it one stage at a time, no skipping",
-    produce:"a page where the answer only exists after the steps run — with a 'skip' button that visibly just runs them faster.",
-    biggerExtra:"a guess-first gate before the walk, so the reader can compare guessing with stepping" },
-  { action:"compare the broken run with the repaired run",
-    produce:"a split-screen page: same start, one layer changed, two endings — the whole debug loop in one picture.",
-    biggerExtra:"a slider that scrubs both runs in sync, so the exact moment the fix matters is findable" }
-];
-/* ========================= END EDIT HERE: DEALER ========================== */
+/* ========================= END EDIT HERE: BENCH ========================== */
 
 /* ======================= SHARED MACHINERY (edit below only if you want to
    change how prompts are worded — the content lives in the blocks above) */
 
 const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
 
-function starterPrompt(c){
+const branchLines = c => c.branches.map(b => "• " + b.text).join("\n");
+
+function tryPrompt(c){
   return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
     "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
     "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests.\n\n" +
-    "Before you write any code, ask me two questions that would make this idea more mine.";
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests. Before you write any code, ask me two questions that would make this idea more mine.\n\n" +
+    "Once the small version works, STOP — don't add features on your own. This idea has branches I might explore next:\n" + branchLines(c) + "\n" +
+    "When I pick one, we'll grow the page one small step at a time, and I'll test after every step.";
 }
 
-function biggerPrompt(c){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and I want to try something a bit more ambitious this time — still one file, still finishable.\n\n" +
-    "The question I'm chasing: “" + c.spark + " — " + c.body + "”\n\n" +
-    "The bigger version I want: " + c.bigger + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
-    "Build it in stages so I can test as we go: stage 1 is the smallest working core (" + c.build + "), then add ONE feature at a time and stop after each so I can try it before we continue.\n\n" +
-    "Keep the reader's job clear at every stage, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests. Before you write any code, ask me two questions: one about scope, and one about what the reader should feel.";
+function branchPrompt(c){
+  return "I'm a student who builds one-page “paper apps” for GitHub Pages: single self-contained index.html files (HTML/CSS/JS only, no build tools, no API keys). I'm not after a one-night build right now — I'm looking for MY version of a question I could keep exploring for weeks.\n\n" +
+    "The question that caught me: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Ways it could branch (from my course's map — I might follow one, or none):\n" + branchLines(c) + "\n\n" +
+    "Don't write any code yet. First interview me: two or three questions, ONE AT A TIME, to figure out which branch actually pulls me — or whether I have a branch of my own this map missed.\n\n" +
+    "Then propose three one-page versions, two sentences each (what the page does, what the reader does): at least one growing from the branch I liked best, and at least one that surprises me. Wait for me to pick or remix.\n\n" +
+    "Only then build, in stages: the smallest working core first" + (c.promptHint ? " (" + c.promptHint + ")" : "") + ", then ONE addition at a time, stopping after each so I can test it and steer. Keep the reader's job clear, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests.";
 }
 
 function copyText(txt, btn, pre, label){
@@ -317,66 +422,68 @@ function renderCards(){
     const h = document.createElement("h3"); h.textContent = c.spark;
     const p = document.createElement("p"); p.textContent = c.body;
     const build = document.createElement("p"); build.className = "build";
-    build.innerHTML = "<strong>Starter build:</strong> " + c.build;
-    const bigger = document.createElement("p"); bigger.className = "build bigger";
-    bigger.innerHTML = "<strong>Bigger build:</strong> " + c.bigger;
+    build.innerHTML = "<strong>Try it:</strong> " + c.build;
+    const go = document.createElement("div"); go.className = "build go";
+    go.innerHTML = "<strong>Where it could go:</strong>";
+    const ul = document.createElement("ul"); ul.className = "branches";
+    c.branches.forEach(b=>{
+      const li = document.createElement("li"); li.textContent = b.text;
+      if(b.tag){ const t = document.createElement("span"); t.className = "branch-tag"; t.textContent = b.tag; li.append(t); }
+      ul.appendChild(li);
+    });
     const row = document.createElement("div"); row.className = "btn-row";
     const b1 = document.createElement("button");
-    b1.className = "copy-btn"; b1.textContent = "Copy starter prompt";
+    b1.className = "copy-btn"; b1.textContent = "Copy try-it prompt";
     const b2 = document.createElement("button");
-    b2.className = "copy-btn bigger"; b2.textContent = "Copy bigger-build prompt";
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy branch prompt";
     const pre = document.createElement("pre"); pre.className = "prompt-pre";
-    b1.addEventListener("click", ()=>copyText(starterPrompt(c), b1, pre, "Copy starter prompt"));
-    b2.addEventListener("click", ()=>copyText(biggerPrompt(c), b2, pre, "Copy bigger-build prompt"));
+    b1.addEventListener("click", ()=>copyText(tryPrompt(c), b1, pre, "Copy try-it prompt"));
+    b2.addEventListener("click", ()=>copyText(branchPrompt(c), b2, pre, "Copy branch prompt"));
     row.append(b1, b2);
-    el.append(eyebrow, h, p, build, bigger, row, pre);
+    el.append(eyebrow, h, p, build, go, ul, row, pre);
     grid.appendChild(el);
   });
 }
 renderCards();
 
-/* --- the dealer --- */
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-let deal = null;
-const dealBtn = document.getElementById("dealBtn");
-const dealPre = document.getElementById("dealPromptPre");
+/* --- the bench --- */
+const gateInputs = Array.from(document.querySelectorAll("[data-gate]"));
+const knobOut  = document.getElementById("knobOut");
+const step3    = document.getElementById("step3");
+const benchPre = document.getElementById("benchPre");
 
-function dealStarter(d){
-  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
+function refreshGate(){
+  knobOut.innerHTML = "";
+  gateInputs.filter(i => i.value.trim()).forEach(i => {
+    const c = document.createElement("span");
+    c.className = "knob-chip"; c.textContent = i.dataset.gate + " " + i.value.trim();
+    knobOut.appendChild(c);
+  });
+  step3.hidden = !(document.getElementById("bWhere").value.trim() && document.getElementById("bInstead").value.trim());
 }
-function dealBigger(d){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
-    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
-}
+gateInputs.forEach(i => i.addEventListener("input", refreshGate));
+refreshGate();
 
-dealBtn.addEventListener("click", ()=>{
-  const laneKey = pick(Object.keys(DEAL_LANES));
-  const lane = DEAL_LANES[laneKey];
-  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
-    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
-  document.getElementById("dealMeans").textContent = deal.aspect.explain;
-  document.getElementById("dealProduce").textContent = deal.genre.produce;
-  document.getElementById("dealOut").classList.add("open");
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal another";
+function val(id, fallback){
+  const v = document.getElementById(id).value.trim();
+  return v || fallback;
+}
+function benchData(){
+  return {
+    app: val("bApp", "(I haven't described it yet — ask me first)"),
+    where: val("bWhere", "(I left this blank — ask me)"),
+    since: val("bSince", "(I left this blank — ask me)"),
+    expected: val("bExpected", "(I left this blank — ask me)"),
+    instead: val("bInstead", "(I left this blank — ask me)"),
+    layer: document.getElementById("bLayer").value,
+    predict: val("bPredict", "I genuinely can't guess, which is why I want to rerun it")
+  };
+}
+document.getElementById("benchBuildBtn").addEventListener("click", function(){
+  copyText(BENCH.build(benchData()), this, benchPre, "Copy fix prompt");
 });
-document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
-});
-document.getElementById("dealBiggerBtn").addEventListener("click", function(){
-  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
+document.getElementById("benchTalkBtn").addEventListener("click", function(){
+  copyText(BENCH.talk(benchData()), this, benchPre, "Copy interview prompt");
 });
 </script>
 </body>

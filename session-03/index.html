@@ -17,7 +17,7 @@
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
   h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
   a { color:inherit; }
-  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,.deal-btn,footer,.prompt-pre,.crumb,.deal-label { font-family:system-ui,sans-serif; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
   .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
   .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
   .crumb a { color:var(--accent); font-weight:700; }
@@ -52,13 +52,6 @@
   .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
   .prompt-pre.open { display:block; }
   .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
-  .deal-out { display:none; }
-  .deal-out.open { display:block; }
-  .deal-sentence { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:.9rem 1.05rem; margin:1rem 0 .9rem; font-size:1.1rem; }
-  .deal-read { background:#fff; border:1px solid var(--line); border-radius:12px; padding:.85rem 1.05rem; margin:0 0 .9rem; font-size:.97rem; }
-  .deal-read p { margin:.35rem 0; }
-  .deal-label { display:inline-block; font-size:.7rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; color:var(--accent); margin-right:.35rem; }
-  .deal-btn { border:none; color:#fff; background:var(--accent); border-radius:999px; padding:.55rem 1.05rem; font-size:.9rem; font-weight:800; cursor:pointer; margin-right:.5rem; }
   .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
   footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
   footer a { color:var(--accent); font-weight:700; }
@@ -95,30 +88,9 @@
     <div class="card-grid" id="cardGrid"></div>
   </section>
 
-  <section id="dealer" aria-labelledby="dealer-title">
-    <div class="dealer">
-      <div class="kicker">Keep dealing until one grabs you</div>
-      <h2 id="dealer-title">The Dealer</h2>
-      <p class="note" style="max-width:62ch">Every deal mixes a territory, a piece of this week's idea, and a reader action — then tells you what the combination means and what you might end up with, plus a starter prompt and a bigger build. The dealer deals <em>combinations, not vetted questions</em> — some deals are duds. Deal again.</p>
-      <button class="deal-btn" id="dealBtn">Deal an idea</button>
-      <div class="deal-out" id="dealOut">
-        <div class="deal-sentence" id="dealSentence"></div>
-        <div class="deal-read">
-          <p><span class="deal-label">What this means</span> <span id="dealMeans"></span></p>
-          <p><span class="deal-label">What you might end up with</span> <span id="dealProduce"></span></p>
-        </div>
-        <div class="btn-row">
-          <button class="copy-btn" id="dealStarterBtn">Copy starter prompt</button>
-          <button class="copy-btn bigger" id="dealBiggerBtn">Copy bigger-build prompt</button>
-        </div>
-        <pre class="prompt-pre" id="dealPromptPre"></pre>
-      </div>
-    </div>
-  </section>
-
   <section>
     <div class="honesty">
-      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the Dealer's shuffles happen randomly in your browser; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A chord is not attention; a chat app is not a transformer. Real attention weighs many words at once, through learned math, in ways a note-muting toy only gestures at. The idea travels; the mechanism doesn't.
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A chord is not attention; a chat app is not a transformer. Real attention weighs many words at once, through learned math, in ways a note-muting toy only gestures at. The idea travels; the mechanism doesn't.
     </div>
   </section>
 
@@ -225,54 +197,6 @@ const CARDS = [
 ];
 /* ========================== END EDIT HERE: CARDS ========================== */
 
-/* ============================ EDIT HERE: DEALER ===========================
-   DEAL_LANES: each lane offers concrete "things on stage."
-   DEAL_ASPECTS: pieces of this week's idea — phrase + plain-English explain.
-   DEAL_GENRES: reader actions — action, what it produces, and a bigger extra. */
-const DEAL_LANES = {
-  living:   { name:"living things",   objects:["a bird call","a dog's bark","a wagging tail","one flower","a warning color","an animal's freeze"] },
-  games:    { name:"games & play",    objects:["one chess move","a card in a hand","a power-up","one play from a match","a single die roll"] },
-  music:    { name:"music & sound",   objects:["one note","a drum hit","a three-note hook","a pause in a song","one chord"] },
-  stories:  { name:"stories & words", objects:["a pronoun","one line of dialogue","an emoji","a nickname","the word 'fine'"] },
-  art:      { name:"art & pictures",  objects:["one color","a single comic panel","a smile in a portrait","one brushstroke","a photo crop"] },
-  everyday: { name:"everyday life",   objects:["a one-word text","a thumbs-up","a siren","the phrase 'we need to talk'","a wave hello"] }
-};
-
-const DEAL_ASPECTS = [
-  { phrase:"the neighbors that settle its meaning",
-    explain:"Alone, the thing is ambiguous. Its meaning gets settled by whatever sits next to it — change the neighbors and you change the reading." },
-  { phrase:"how far back context reaches",
-    explain:"Some meanings settle from the thing right before; others depend on something from way earlier. The question is how far back a reader — or a model — has to look." },
-  { phrase:"the same thing in two settings",
-    explain:"Nothing shows context's power like an exact copy landing differently in two places. Same thing, two worlds — the difference is pure context." },
-  { phrase:"the one swap that flips everything",
-    explain:"Most changes barely matter; one swap flips the whole reading (the instructor page's reply → knife). Finding the smallest change with the biggest effect is a real research move." },
-  { phrase:"what deserves attention first",
-    explain:"When everything is visible, the skill is choosing what matters. A spotlight is a choice — and the wrong spotlight reads the whole scene wrong." }
-];
-
-const DEAL_GENRES = [
-  { action:"lock in a guess before the surroundings appear",
-    produce:"a page where the reader commits to a reading, then the context appears and the page shows whether their reading survived.",
-    biggerExtra:"three rounds with a running score, so the reader can watch their own guessing improve" },
-  { action:"flip between two versions of the same thing",
-    produce:"a split-screen page where the only difference between left and right is the surroundings — and the meaning refuses to stay the same.",
-    biggerExtra:"a third panel the reader assembles themselves from parts" },
-  { action:"uncover the scene one piece at a time",
-    produce:"a page where the meaning visibly sharpens — or flips — with each reveal, and the reader can feel exactly when it settled.",
-    biggerExtra:"a little meter that marks the moment the reader's mind changed, shown at the end" },
-  { action:"swap the surroundings and read it again",
-    produce:"a page where one click re-dresses the scene and the same centerpiece lands completely differently.",
-    biggerExtra:"letting the reader build the context from parts instead of choosing presets" },
-  { action:"turn the clues off one at a time",
-    produce:"a page that shows which clue was doing the real work — hide the right one and the meaning collapses.",
-    biggerExtra:"a clue ranking the reader assembles first, then tests by muting in their chosen order" },
-  { action:"point the spotlight at the clue they think settles it",
-    produce:"a page where the reader plays the spotlight, then compares their pick against the page's answer.",
-    biggerExtra:"two spotlights — the reader's and a friend's — compared on the same scene" }
-];
-/* ========================= END EDIT HERE: DEALER ========================== */
-
 /* ======================= SHARED MACHINERY (edit below only if you want to
    change how prompts are worded — the content lives in the blocks above) */
 
@@ -351,50 +275,6 @@ function renderCards(){
   });
 }
 renderCards();
-
-/* --- the dealer --- */
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-let deal = null;
-const dealBtn = document.getElementById("dealBtn");
-const dealPre = document.getElementById("dealPromptPre");
-
-function dealStarter(d){
-  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "First suggest three small, concrete versions of this page and wait for me to pick or remix one. Then build the smallest working version: one clear thing for the reader to do, a short “what to notice” note, and honesty about what the page really shows.";
-}
-function dealBigger(d){
-  return "I'm a student making a one-page “paper app” for GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys). I've shipped small pages before and want something a bit more ambitious — still one file, still finishable.\n\n" +
-    "A shuffle dealt me this idea (" + PAGE.weekLine + "):\n" +
-    "• the thing on stage: " + d.object + "\n" +
-    "• the angle: " + d.aspect.phrase + " — " + d.aspect.explain + "\n" +
-    "• the reader's job: " + d.genre.action + "\n\n" +
-    "For the bigger version, also work in: " + d.genre.biggerExtra + ".\n\n" +
-    "First suggest three concrete versions (small, medium, ambitious) and wait for me to choose. Then build in stages: smallest working core first, then ONE feature at a time, stopping after each so I can test. Keep the reader's job clear, add a “what to notice” note, and stay honest about what the page shows versus suggests.";
-}
-
-dealBtn.addEventListener("click", ()=>{
-  const laneKey = pick(Object.keys(DEAL_LANES));
-  const lane = DEAL_LANES[laneKey];
-  deal = { lane: lane.name, object: pick(lane.objects), aspect: pick(DEAL_ASPECTS), genre: pick(DEAL_GENRES) };
-  document.getElementById("dealSentence").innerHTML =
-    "Make a page about <strong>" + deal.object + "</strong> (" + deal.lane + "), built around <strong>" +
-    deal.aspect.phrase + "</strong>, where the reader can <strong>" + deal.genre.action + "</strong>.";
-  document.getElementById("dealMeans").textContent = deal.aspect.explain;
-  document.getElementById("dealProduce").textContent = deal.genre.produce;
-  document.getElementById("dealOut").classList.add("open");
-  dealPre.classList.remove("open");
-  dealBtn.textContent = "Deal another";
-});
-document.getElementById("dealStarterBtn").addEventListener("click", function(){
-  if(deal) copyText(dealStarter(deal), this, dealPre, "Copy starter prompt");
-});
-document.getElementById("dealBiggerBtn").addEventListener("click", function(){
-  if(deal) copyText(dealBigger(deal), this, dealPre, "Copy bigger-build prompt");
-});
 </script>
 </body>
 </html>

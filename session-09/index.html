@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailheads · Session 9 — Order Is an Argument</title>
+<script defer src="../studio-nav.js" data-site="trailheads"></script>
+<style>
+  :root {
+    --ink:#22222a; --muted:#6b6b76; --paper:#fdfcf9; --card:#ffffff;
+    --line:#e3e0d8; --accent:#c96b32; --accent-soft:#faeee6;
+    --green:#2f6f5e; --green-soft:#e7f1ee; --blue:#315f91; --blue-soft:#eef3f8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; line-height:1.65; font-size:1.05rem; }
+  main { width:min(72rem,calc(100% - 2rem)); margin:0 auto; padding:2.5rem 0 5rem; }
+  h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
+  h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
+  a { color:inherit; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
+  .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
+  .crumb a { color:var(--accent); font-weight:700; }
+  .byline { max-width:58ch; color:var(--muted); font-size:1.2rem; margin-bottom:1.6rem; }
+  .bridge { max-width:70ch; background:var(--green-soft); border-left:4px solid var(--green); padding:1rem 1.15rem; margin:1.4rem 0 1rem; }
+  .bridge .eyebrow { color:var(--green); font-size:.75rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
+  .bridge p { margin:.45rem 0; }
+  .bridge a { color:var(--green); font-weight:700; }
+  .note { font-size:.86rem; color:var(--muted); }
+  section { margin-top:3rem; scroll-margin-top:1rem; }
+  .section-head { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1rem; }
+  .section-head p { max-width:56ch; margin:0; color:var(--muted); }
+  .chipbar { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .chip { padding:.42rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:.85rem; font-weight:750; cursor:pointer; }
+  .chip[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
+  .chip.yours-chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
+  .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+  .idea-card { display:flex; flex-direction:column; padding:1.1rem 1.15rem; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+  .idea-card.yours { border:1.5px dashed var(--accent); background:var(--accent-soft); }
+  .idea-card .eyebrow { display:flex; align-items:center; gap:.5rem; color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; }
+  .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
+  .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
+  .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
+  .idea-card .build strong { color:var(--accent); }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .idea-card .build.go { margin-bottom:.2rem; }
+  .idea-card .build.go strong { color:var(--blue); }
+  .branches { margin:.15rem 0 .8rem; padding-left:1.15rem; font-size:.92rem; color:var(--ink); }
+  .branches li { margin:.32rem 0; }
+  .branches li::marker { color:var(--blue); }
+  .branch-tag { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.1rem .5rem; margin-left:.35rem; vertical-align:middle; white-space:nowrap; }
+  .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
+  .prompt-pre.open { display:block; }
+  .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
+  .bench-step { margin:1.5rem 0 0; }
+  .bench-q { display:block; font-family:system-ui,sans-serif; font-weight:800; font-size:.98rem; margin-bottom:.5rem; }
+  .step-n { display:inline-grid; place-items:center; width:1.45rem; height:1.45rem; margin-right:.4rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; }
+  .bench-in { font-family:system-ui,sans-serif; font-size:.95rem; padding:.5rem .7rem; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; }
+  .bench-in:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .bench-in.inline { display:inline-block; width:min(26ch,100%); padding:.2rem .5rem; }
+  .knob-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; }
+  .knob { display:flex; flex-direction:column; gap:.28rem; }
+  .knob span { font-family:system-ui,sans-serif; font-size:.82rem; font-weight:750; color:var(--muted); }
+  .knob-out { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+  .knob-chip { font-family:system-ui,sans-serif; font-size:.8rem; font-weight:750; background:var(--green-soft); color:var(--green); border:1px solid var(--green); border-radius:999px; padding:.25rem .7rem; }
+  .predict-line { margin:.9rem 0 .3rem; font-size:1.05rem; }
+  .stuck-note { max-width:64ch; margin-top:1.6rem; padding-top:.9rem; border-top:1px dashed var(--line); }
+  .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
+  footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
+  footer a { color:var(--accent); font-weight:700; }
+  @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:620px) {
+    main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
+    .card-grid { grid-template-columns:1fr; }
+    .section-head { display:block; } section { margin-top:2.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="../">← Trailheads</a> · Session 9</div>
+  <div class="kicker">Session 9 · Reader path and argument</div>
+  <h1>Order is an argument</h1>
+  <div class="byline">The traveling question: <strong>in your world, what order do things have to come in — and what breaks when you shuffle them?</strong></div>
+
+  <div class="bridge">
+    <span class="eyebrow">The bridge from class</span>
+    <p>In this week's <a href="https://buildlittleworlds.github.io/instructor-study/session-09/">Instructor Study page</a>, you become a 1970 reader: Martin Gardner's column shows a little pattern, and the only way to know its fate is to compute the next generation yourself — so you click the cells you believe come next, and the page grades your squares against the real rule. Then five section cards — hook, what to do, the interaction, what to notice, next question — become movable, and every arrangement re-renders the page live. Explanation-first buries the button under three paragraphs; payoff-first spoils the reveal before you've acted.</p>
+    <p>That's what this page sends into your territory: <strong>order is an argument.</strong> Everything you love — jokes, songs, recipes, levels — argues in a particular order, and shuffling it changes what it says.</p>
+  </div>
+
+  <section id="trails" aria-labelledby="trails-title">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Pick a lane, or wander</div>
+        <h2 id="trails-title">Trailheads</h2>
+      </div>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>. <strong>Your app</strong> is its own lane — those cards do not hand you a curiosity, they send you back into something you already built to go looking for one.</p>
+    </div>
+    <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section id="bench" aria-labelledby="bench-title">
+    <div class="dealer">
+      <div class="kicker">The order bench</div>
+      <h2 id="bench-title">The Bench</h2>
+      <p class="note" style="max-width:64ch">Every card above rearranges somebody else's thing. This one rearranges yours. Your page argues in an order you probably never chose on purpose. Take inventory, move one piece, and predict the first ten seconds before you test them.</p>
+
+      <div class="bench-step">
+        <label class="bench-q" for="bApp"><span class="step-n">1</span> What did you build? One line is plenty.</label>
+        <input class="bench-in" id="bApp" type="text" placeholder="a page where dots spread a rumor across a little network">
+      </div>
+
+      <div class="bench-step">
+        <div class="bench-q"><span class="step-n">2</span> Take inventory of your page as it is right now. No judging yet — just look.</div>
+        <p class="note" style="margin:.1rem 0 .7rem">Fill in any that apply. Each one becomes a piece you could move.</p>
+        <div class="knob-grid">
+          <label class="knob"><span>What a stranger meets first</span><input class="bench-in" data-knob="first thing a stranger meets:" type="text" placeholder="my title and two paragraphs"></label>
+          <label class="knob"><span>Where the thing-to-click is</span><input class="bench-in" data-knob="the thing to click:" type="text" placeholder="below the second paragraph, halfway down"></label>
+          <label class="knob"><span>What comes after the click</span><input class="bench-in" data-knob="after the click:" type="text" placeholder="the dots run; nothing says what to notice"></label>
+          <label class="knob"><span>The sentence you always say out loud when you demo it</span><input class="bench-in" id="bSay" data-knob="what I always say out loud:" type="text" placeholder="wait — first you have to press reset"></label>
+        </div>
+        <div class="knob-out" id="knobOut"></div>
+      </div>
+
+      <div class="bench-step" id="step3" hidden>
+        <div class="bench-q"><span class="step-n">3</span> Pick the one piece you'll move, and guess.</div>
+        <select class="bench-in" id="bPick" aria-label="Which piece will you move"></select>
+        <p class="predict-line">With that moved, in their first ten seconds a stranger would <input class="bench-in inline" id="bPredict" type="text" placeholder="press the button before reading anything"> — <strong>but I don't actually know.</strong></p>
+        <p class="note">Then run the sound-off test: hand it over, say nothing for ten seconds, watch the cursor. Keep the new order only if the stranger acts sooner.</p>
+        <div class="btn-row">
+          <button class="copy-btn" id="benchBuildBtn">Copy reorder prompt</button>
+          <button class="copy-btn bigger" id="benchTalkBtn">Copy interview prompt</button>
+        </div>
+        <pre class="prompt-pre" id="benchPre"></pre>
+      </div>
+
+      <p class="note stuck-note"><strong>Not sure what's first?</strong> Open your page on your phone, count three seconds, close it. Whatever you remember — that was first. And that sentence you always say out loud during demos? It's probably a missing label, not a speech.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="honesty">
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor. Anything you type into the Bench stays in your own browser — it is never saved, never sent, and gone the moment you close the tab; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A recipe is not a proof; a movie trailer is not a thesis. The idea travels; the mechanism doesn't.
+    </div>
+  </section>
+
+  <footer>
+    Trailheads · Session 9 · nothing to turn in ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/session-09/">this week's Instructor Study page</a> ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/anthology/">the Anthology</a> ·
+    <a href="../">all trailheads</a>
+  </footer>
+</main>
+
+<script>
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about reader path — order, labels, and interaction do the arguing, and a stranger should know where to start"
+};
+
+/* ============================ EDIT HERE: CARDS =========================== */
+const LANES = {
+  living:   "Living things",
+  games:    "Games & play",
+  music:    "Music & sound",
+  stories:  "Stories & words",
+  art:      "Art & pictures",
+  everyday: "Everyday life",
+  yours:    "Your app"
+};
+
+const CARDS = [
+  { lane:"stories", ladder:"compare",
+    spark:"Spoil the punchline",
+    body:"A joke is a tiny machine with a strict order: the setup loads the spring, the punchline releases it. Read the punchline first and the same words just lie there. Where exactly does the joke die?",
+    build:"Reorderable joke cards: one joke, each line a card. The reader shuffles, reads the result, and feels the payoff move — or vanish.",
+    branches:[
+      { text:"Three jokes of different shapes — one-liner, story joke, anti-joke. Which shape survives shuffling best?" },
+      { text:"Find the one line that kills the joke wherever it lands. Every joke has a load-bearing card." },
+      { text:"Write the joke's credits: who does the work, the setup or the punchline?", tag:"Session 10" }
+    ] },
+  { lane:"stories", ladder:"compare",
+    spark:"The trailer tells it out of order on purpose",
+    body:"A movie trailer scrambles the story deliberately: the explosion before the argument, the kiss before the meeting. It isn't telling the story — it's selling a feeling. Out-of-order is a tool, not a mistake.",
+    build:"One tiny authored story cut into six moments, shown in story order beside trailer order. The reader plays both and names what each order is trying to do.",
+    branches:[
+      { text:"Build the spoiler-proof trailer: sell the story without giving away the turn." },
+      { text:"Trailer your own app: three beats, best part hinted but never spoiled.", tag:"Session 12" },
+      { text:"Find a trailer that fooled you about a story's real order. What exactly fooled you?" }
+    ] },
+  { lane:"music", ladder:"compare",
+    spark:"Chorus first? What does song order argue?",
+    body:"Verse-chorus-verse is an argument: here's the situation, here's the feeling, back to the situation. Put the chorus first and the song claims something different. Order is doing work your ears already understand.",
+    build:"Reorderable song-section cards with a tiny loop for each arrangement (WebAudio). The reader rearranges and listens to what the new order argues.",
+    branches:[
+      { text:"Map three songs you love: which one opens with its chorus — and what does that opening buy it?" },
+      { text:"Build the arrangement that delays the best part as long as you can stand. Where is too long?" },
+      { text:"Play two arrangements for someone and ask what the song is 'about' each time. Same notes, different answer." }
+    ] },
+  { lane:"games", ladder:"compare",
+    spark:"Mario 1-1 teaches without words",
+    body:"The first screen of a great level is a silent teacher: it shows you the jump before the pit, one enemy before the crowd. The order of what you meet IS the tutorial. Shuffle it and the level stops teaching.",
+    build:"A reorder-the-teaching-beats page for a tiny level you design: five beats as cards; the reader arranges them and the page shows what a new player meets first.",
+    branches:[
+      { text:"Design the cruel order on purpose — pit before jump — and label honestly what it costs a new player." },
+      { text:"Steal the pattern: what does the first screen of your favorite game teach, and in what order?" },
+      { text:"Your app has a first screen too. What does it teach before the reader's first click?" }
+    ] },
+  { lane:"living", ladder:"watch",
+    spark:"Egg, caterpillar, chrysalis, butterfly",
+    body:"Nature runs sequences with non-negotiable steps: no butterfly skips the chrysalis. Some orders in the world are laws, not choices. Which steps could never swap — and how do you know?",
+    build:"A reorderable life-cycle page: the reader shuffles the stages and the page says, gently and honestly, what breaks (authored by you — say so on the page).",
+    branches:[
+      { text:"Add a second cycle — frog, plant, storm — and hunt for the stage every cycle seems to need." },
+      { text:"Circles versus lines: a life cycle loops, a recipe doesn't. What else in your world loops?" },
+      { text:"Which stage is the chrysalis of your own project — the quiet one where nothing looks like it's happening?" }
+    ] },
+  { lane:"everyday", ladder:"watch",
+    spark:"Recipes are arguments: frost before baking?",
+    body:"A recipe is steps in an order that mostly can't move: frost before baking and you get soup. But some steps secretly can swap. A recipe is a little proof of which order matters.",
+    build:"A reorderable recipe whose outcome card changes with the order — bake-then-frost gets cake; frost-then-bake gets an honest little disaster.",
+    branches:[
+      { text:"Mark each step: locked in place, or swappable? The locked ones are the recipe's skeleton." },
+      { text:"Try it on a real family recipe: which steps does the cook swear are non-negotiable — and are they right?" },
+      { text:"Write the recipe with the fewest steps that still works. What were the deleted steps secretly for?" }
+    ] },
+  { lane:"everyday", ladder:"compare",
+    spark:"Directions to your house, shuffled",
+    body:"Five turns in the right order get a friend to your door. The same five turns shuffled get them lost — and they don't find out until turn two. Bad order fails late, which is what makes it sneaky.",
+    build:"A scrambled-directions page: the reader drags five steps into the order they'd trust, then the page walks the trip and shows where it breaks.",
+    branches:[
+      { text:"Add a landmark to each step and reshuffle: do landmarks make order matter less?" },
+      { text:"Time the discovery: at which step does the walker realize it's wrong? Late failures are the expensive ones." },
+      { text:"Rewrite the directions so any order works. What did you have to add to buy that freedom?" }
+    ] },
+  { lane:"art", ladder:"compare",
+    spark:"A comic's panels in three orders",
+    body:"Four panels, three arrangements, three different stories — same drawings. Comics settle meaning by sequence, and your eye agrees to whatever order the page proposes.",
+    build:"Three arrangements of the same four panels; the reader votes which one is 'the story' before seeing the intended order.",
+    branches:[
+      { text:"Add a wordless version: does order matter more or less without captions?" },
+      { text:"Photograph four moments of your own morning and hand someone the shuffle." },
+      { text:"Which single panel-swap changes the story most? That pair is where the story actually lives." }
+    ] },
+  { lane:"yours", ladder:"week",
+    spark:"Run the sound-off test",
+    body:"Hand your page to someone at home. Say nothing for ten seconds. Their cursor will tell you the truth about your order: where it drifts, where it stalls, what it never finds.",
+    build:"Watch one silent use of your page and write down the stall point. Then reorder so a stranger acts within ten seconds, and test again.",
+    branches:[
+      { text:"Run it before AND after the reorder — the stall point moving (or not) is the whole comparison." },
+      { text:"The words you almost said out loud are missing labels. Add them as labels near the thing, not paragraphs above it." },
+      { text:"A second stranger, same test: do they stall in the same place? One stall is an anecdote; two is a pattern.", tag:"Session 11" }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"Swap the first two things",
+    body:"Whatever a stranger meets first on your page is winning an argument you may never have meant to make. The cheapest reorder there is: swap the first two things and watch what changes.",
+    build:"Predict, in writing, what changes in a stranger's first ten seconds. Swap the first two things a reader meets. Test on one person. Both orders and your prediction go on the page.",
+    branches:[
+      { text:"Swap back and test the other order on a second person — same page, opposite argument." },
+      { text:"The piece that never helps in any position might not belong on the page at all. Deleting is a reorder too." },
+      { text:"Which order does your favorite game's opening use — and would it work for your page?" }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"The instruction you can delete",
+    body:"Instructions are apologies the page makes for its own order. A page arranged right needs fewer of them. How many of yours are load-bearing?",
+    build:"Delete your instructions one at a time, testing after each, until the page stops working without you. The last one standing was the only real one.",
+    branches:[
+      { text:"Replace the survivors with a label on the thing itself — three words on the button beat a sentence above it." },
+      { text:"Zero-instruction as a goal: what would the page need instead? Usually, a better first thing." },
+      { text:"Put the deleted pile on the page as an exhibit: 'this page used to need all of these.'" }
+    ] },
+  { lane:"yours", ladder:"wonder",
+    spark:"Read it bottom-up",
+    body:"Read your page from the bottom to the top, out loud. Somewhere it stops making sense — and that break point tells you what your order was secretly doing while you weren't looking.",
+    build:"Write down where the bottom-up read breaks. That sentence was leaning on everything above it — check whether the lean is one your reader actually gets.",
+    branches:[
+      { text:"Try payoff-first on purpose: spoil your own reveal and honestly write down what it cost — or didn't." },
+      { text:"Does your final next-question work as an opening question? Some pages are secretly upside down." },
+      { text:"Which piece do YOU say first when you present it? Steal your own talk track for the page's order.", tag:"Session 12" }
+    ] }
+];
+/* ========================== END EDIT HERE: CARDS ========================== */
+
+/* ============================ EDIT HERE: BENCH =========================== */
+/* Session 9's Bench is the order bench: the knob is the ORDER of the
+   student's own page. Step 2 is a no-judgment inventory; step 3 picks one
+   piece to move and predicts the first ten seconds. The prompts forbid
+   redesigning — reorder only — and the check is the sound-off test. */
+
+const BENCH = {
+  build: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "The order of my page right now, as honestly as I can describe it:\n" + d.inventory + "\n\n" +
+    "The one piece I am moving: " + d.knob + "\n" +
+    "My call: with that moved, in their first ten seconds a stranger would " + d.predict + " — but I don't actually know.\n\n" +
+    "Do NOT redesign my page, do NOT restyle it, and do NOT rewrite my words. Reorder only: move the piece I named, touch nothing else, then STOP.\n\n" +
+    "Then I run the sound-off test: I hand the page to someone at home, say nothing for ten seconds, and watch where their cursor goes. I keep the new order only if the stranger acts sooner.\n" +
+    d.sayLine,
+
+  talk: d =>
+    "I'm a student with a one-page “paper app” already published on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys). I know something about my page's order is off, but I'm not sure which piece.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "The order right now:\n" + d.inventory + "\n\n" +
+    "Don't reorder anything yet. Interview me: three questions, ONE AT A TIME, about the last time someone used my page while I stayed silent — where they stalled, what they clicked first, what I was tempted to explain out loud.\n\n" +
+    "Then propose two orderings with their costs, two sentences each: an explanation-first version (and what it buries) and a payoff-first version (and what it spoils). Wait for me to pick or remix.\n\n" +
+    "After I pick, give me the reorder as a simple list of moves — no code rewrites, no new features, my words untouched."
+};
+/* ========================= END EDIT HERE: BENCH ========================== */
+
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
+const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
+
+const branchLines = c => c.branches.map(b => "• " + b.text).join("\n");
+
+function tryPrompt(c){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests. Before you write any code, ask me two questions that would make this idea more mine.\n\n" +
+    "Once the small version works, STOP — don't add features on your own. This idea has branches I might explore next:\n" + branchLines(c) + "\n" +
+    "When I pick one, we'll grow the page one small step at a time, and I'll test after every step.";
+}
+
+function branchPrompt(c){
+  return "I'm a student who builds one-page “paper apps” for GitHub Pages: single self-contained index.html files (HTML/CSS/JS only, no build tools, no API keys). I'm not after a one-night build right now — I'm looking for MY version of a question I could keep exploring for weeks.\n\n" +
+    "The question that caught me: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Ways it could branch (from my course's map — I might follow one, or none):\n" + branchLines(c) + "\n\n" +
+    "Don't write any code yet. First interview me: two or three questions, ONE AT A TIME, to figure out which branch actually pulls me — or whether I have a branch of my own this map missed.\n\n" +
+    "Then propose three one-page versions, two sentences each (what the page does, what the reader does): at least one growing from the branch I liked best, and at least one that surprises me. Wait for me to pick or remix.\n\n" +
+    "Only then build, in stages: the smallest working core first" + (c.promptHint ? " (" + c.promptHint + ")" : "") + ", then ONE addition at a time, stopping after each so I can test it and steer. Keep the reader's job clear, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests.";
+}
+
+function copyText(txt, btn, pre, label){
+  pre.textContent = txt;
+  pre.classList.add("open");
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
+  } else { done(false); }
+}
+
+/* --- lane chips --- */
+const chipbar = document.getElementById("laneChips");
+const laneKeys = ["all", ...Object.keys(LANES)];
+let activeLane = "all";
+laneKeys.forEach(k=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (k==="yours" ? " yours-chip" : "");
+  b.textContent = k==="all" ? "All lanes" : LANES[k];
+  b.setAttribute("aria-pressed", k===activeLane ? "true" : "false");
+  b.addEventListener("click", ()=>{
+    activeLane = k;
+    chipbar.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    renderCards();
+  });
+  chipbar.appendChild(b);
+});
+
+/* --- cards --- */
+const grid = document.getElementById("cardGrid");
+function renderCards(){
+  grid.innerHTML = "";
+  CARDS.filter(c => activeLane==="all" || c.lane===activeLane).forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "idea-card" + (c.lane==="yours" ? " yours" : "");
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "eyebrow";
+    eyebrow.innerHTML = "<span>" + LANES[c.lane] + "</span><span class='ladder'>" + LADDER_LABEL[c.ladder] + "</span>";
+    const h = document.createElement("h3"); h.textContent = c.spark;
+    const p = document.createElement("p"); p.textContent = c.body;
+    const build = document.createElement("p"); build.className = "build";
+    build.innerHTML = "<strong>Try it:</strong> " + c.build;
+    const go = document.createElement("div"); go.className = "build go";
+    go.innerHTML = "<strong>Where it could go:</strong>";
+    const ul = document.createElement("ul"); ul.className = "branches";
+    c.branches.forEach(b=>{
+      const li = document.createElement("li"); li.textContent = b.text;
+      if(b.tag){ const t = document.createElement("span"); t.className = "branch-tag"; t.textContent = b.tag; li.append(t); }
+      ul.appendChild(li);
+    });
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy try-it prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy branch prompt";
+    const pre = document.createElement("pre"); pre.className = "prompt-pre";
+    b1.addEventListener("click", ()=>copyText(tryPrompt(c), b1, pre, "Copy try-it prompt"));
+    b2.addEventListener("click", ()=>copyText(branchPrompt(c), b2, pre, "Copy branch prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, go, ul, row, pre);
+    grid.appendChild(el);
+  });
+}
+renderCards();
+
+/* --- the bench --- */
+const knobInputs = Array.from(document.querySelectorAll("[data-knob]"));
+const knobOut  = document.getElementById("knobOut");
+const step3    = document.getElementById("step3");
+const pickSel  = document.getElementById("bPick");
+const benchPre = document.getElementById("benchPre");
+
+function knobs(){
+  return knobInputs.filter(i => i.value.trim())
+                   .map(i => i.dataset.knob + " " + i.value.trim());
+}
+function refreshKnobs(){
+  const list = knobs();
+  knobOut.innerHTML = "";
+  list.forEach(k => {
+    const c = document.createElement("span");
+    c.className = "knob-chip"; c.textContent = k;
+    knobOut.appendChild(c);
+  });
+  const prev = pickSel.value;
+  pickSel.innerHTML = "";
+  list.forEach(k => {
+    const o = document.createElement("option"); o.value = k; o.textContent = k;
+    pickSel.appendChild(o);
+  });
+  if (list.includes(prev)) pickSel.value = prev;
+  step3.hidden = list.length === 0;
+}
+knobInputs.forEach(i => i.addEventListener("input", refreshKnobs));
+refreshKnobs();
+
+function benchData(){
+  const app = document.getElementById("bApp").value.trim();
+  const predict = document.getElementById("bPredict").value.trim();
+  const say = document.getElementById("bSay").value.trim();
+  const inventory = knobs().map(k => "• " + k).join("\n");
+  return {
+    app: app || "(I haven't described it yet — ask me first)",
+    inventory: inventory || "• (I haven't taken inventory yet — ask me what a stranger meets first)",
+    knob: pickSel.value || "(I haven't picked one yet)",
+    predict: predict || "do something I can't predict, which is exactly the problem",
+    sayLine: say ?
+      "\nOne more thing. When I demo this page I always say out loud: “" + say + ".” That sentence is probably a missing piece of my page. Tell me where it belongs in the order — as a short label near the thing itself, not a paragraph." : ""
+  };
+}
+document.getElementById("benchBuildBtn").addEventListener("click", function(){
+  copyText(BENCH.build(benchData()), this, benchPre, "Copy reorder prompt");
+});
+document.getElementById("benchTalkBtn").addEventListener("click", function(){
+  copyText(BENCH.talk(benchData()), this, benchPre, "Copy interview prompt");
+});
+</script>
+</body>
+</html>

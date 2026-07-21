@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailheads · Session 10 — Made by Many Hands</title>
+<script defer src="../studio-nav.js" data-site="trailheads"></script>
+<style>
+  :root {
+    --ink:#22222a; --muted:#6b6b76; --paper:#fdfcf9; --card:#ffffff;
+    --line:#e3e0d8; --accent:#c96b32; --accent-soft:#faeee6;
+    --green:#2f6f5e; --green-soft:#e7f1ee; --blue:#315f91; --blue-soft:#eef3f8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; line-height:1.65; font-size:1.05rem; }
+  main { width:min(72rem,calc(100% - 2rem)); margin:0 auto; padding:2.5rem 0 5rem; }
+  h1 { max-width:18ch; font-size:clamp(2.2rem,5.4vw,4.4rem); line-height:1.04; letter-spacing:-.04em; margin:.2rem 0 .6rem; }
+  h2 { font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.15; margin:0 0 .55rem; }
+  a { color:inherit; }
+  .kicker,.eyebrow,.note,.chipbar,.chip,.ladder,.copy-btn,footer,.prompt-pre,.crumb { font-family:system-ui,sans-serif; }
+  .kicker { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .crumb { font-size:.85rem; margin-bottom:1.2rem; color:var(--muted); }
+  .crumb a { color:var(--accent); font-weight:700; }
+  .byline { max-width:58ch; color:var(--muted); font-size:1.2rem; margin-bottom:1.6rem; }
+  .bridge { max-width:70ch; background:var(--green-soft); border-left:4px solid var(--green); padding:1rem 1.15rem; margin:1.4rem 0 1rem; }
+  .bridge .eyebrow { color:var(--green); font-size:.75rem; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
+  .bridge p { margin:.45rem 0; }
+  .bridge a { color:var(--green); font-weight:700; }
+  .note { font-size:.86rem; color:var(--muted); }
+  section { margin-top:3rem; scroll-margin-top:1rem; }
+  .section-head { display:flex; justify-content:space-between; gap:1rem; align-items:end; margin-bottom:1rem; }
+  .section-head p { max-width:56ch; margin:0; color:var(--muted); }
+  .chipbar { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .chip { padding:.42rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:.85rem; font-weight:750; cursor:pointer; }
+  .chip[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
+  .chip.yours-chip[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); }
+  .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+  .idea-card { display:flex; flex-direction:column; padding:1.1rem 1.15rem; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+  .idea-card.yours { border:1.5px dashed var(--accent); background:var(--accent-soft); }
+  .idea-card .eyebrow { display:flex; align-items:center; gap:.5rem; color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.055em; text-transform:uppercase; }
+  .ladder { margin-left:auto; font-size:.68rem; font-weight:850; letter-spacing:.05em; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.12rem .55rem; }
+  .idea-card h3 { margin:.6rem 0 .4rem; font-size:1.22rem; line-height:1.28; }
+  .idea-card p { margin:0 0 .7rem; color:var(--muted); font-size:.95rem; }
+  .idea-card .build { font-size:.95rem; margin:0 0 .75rem; color:var(--ink); }
+  .idea-card .build strong { color:var(--accent); }
+  .idea-card .build.bigger strong { color:var(--blue); }
+  .btn-row { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:auto; }
+  .copy-btn { border:1px solid var(--accent); color:var(--accent); background:#fff; border-radius:999px; padding:.4rem .85rem; font-size:.83rem; font-weight:800; cursor:pointer; }
+  .copy-btn:hover { background:var(--accent); color:#fff; }
+  .copy-btn.bigger { border-color:var(--blue); color:var(--blue); }
+  .copy-btn.bigger:hover { background:var(--blue); color:#fff; }
+  .idea-card .build.go { margin-bottom:.2rem; }
+  .idea-card .build.go strong { color:var(--blue); }
+  .branches { margin:.15rem 0 .8rem; padding-left:1.15rem; font-size:.92rem; color:var(--ink); }
+  .branches li { margin:.32rem 0; }
+  .branches li::marker { color:var(--blue); }
+  .branch-tag { display:inline-block; font-family:system-ui,sans-serif; font-size:.66rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:.1rem .5rem; margin-left:.35rem; vertical-align:middle; white-space:nowrap; }
+  .prompt-pre { display:none; margin:.8rem 0 0; padding:.7rem .8rem; background:#f6f4ee; border:1px solid var(--line); border-radius:10px; font-size:.78rem; white-space:pre-wrap; line-height:1.5; }
+  .prompt-pre.open { display:block; }
+  .dealer { padding:clamp(1.1rem,3vw,1.8rem); border:1px solid #e0c4ad; border-radius:22px; background:linear-gradient(145deg,#faf0e6 0%,#fdfcf9 62%); }
+  .bench-step { margin:1.5rem 0 0; }
+  .bench-q { display:block; font-family:system-ui,sans-serif; font-weight:800; font-size:.98rem; margin-bottom:.5rem; }
+  .step-n { display:inline-grid; place-items:center; width:1.45rem; height:1.45rem; margin-right:.4rem; border-radius:999px; background:var(--accent); color:#fff; font-size:.8rem; }
+  .bench-in { font-family:system-ui,sans-serif; font-size:.95rem; padding:.5rem .7rem; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); width:100%; }
+  .bench-in:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .bench-in.inline { display:inline-block; width:min(26ch,100%); padding:.2rem .5rem; }
+  .knob-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; }
+  .knob { display:flex; flex-direction:column; gap:.28rem; }
+  .knob span { font-family:system-ui,sans-serif; font-size:.82rem; font-weight:750; color:var(--muted); }
+  .knob-out { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+  .knob-chip { font-family:system-ui,sans-serif; font-size:.8rem; font-weight:750; background:var(--green-soft); color:var(--green); border:1px solid var(--green); border-radius:999px; padding:.25rem .7rem; }
+  .predict-line { margin:.9rem 0 .3rem; font-size:1.05rem; }
+  .stuck-note { max-width:64ch; margin-top:1.6rem; padding-top:.9rem; border-top:1px dashed var(--line); }
+  .honesty { max-width:70ch; background:var(--card); border:1px dashed var(--line); border-radius:12px; padding:1rem 1.15rem; font-size:.92rem; color:var(--muted); }
+  footer { margin-top:3rem; border-top:1px solid var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); }
+  footer a { color:var(--accent); font-weight:700; }
+  @media (max-width:900px) { .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:620px) {
+    main { width:min(100% - 1.2rem,72rem); padding-top:1.5rem; }
+    .card-grid { grid-template-columns:1fr; }
+    .section-head { display:block; } section { margin-top:2.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="../">← Trailheads</a> · Session 10</div>
+  <div class="kicker">Session 10 · AI evaluation and authorship</div>
+  <h1>Made by many hands</h1>
+  <div class="byline">The traveling question: <strong>pick something made by many hands — who gets to claim it, and what would an honest credits page say?</strong></div>
+
+  <div class="bridge">
+    <span class="eyebrow">The bridge from class</span>
+    <p>In this week's <a href="https://buildlittleworlds.github.io/instructor-study/session-10/">Instructor Study page</a>, a glider loops while you answer four claims: who invented the rule, who found the glider, who built the gun, who made this one move on your screen just now? Conway wrote the rule; Richard Guy spotted the glider the way a naturalist spots a beetle; Gosper's team engineered the gun to win a fifty-dollar wager — and the one on screen ran because you pressed the button. The field never crowned one author; it named contributions. Then the note forge turns a build log into an authorship note — and flags the note that apologizes instead of taking responsibility.</p>
+    <p>That's what this page sends into your territory: <strong>authorship is a credits page, not a single name.</strong> Everything you love was made by many hands — and your app was too.</p>
+  </div>
+
+  <section id="trails" aria-labelledby="trails-title">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Pick a lane, or wander</div>
+        <h2 id="trails-title">Trailheads</h2>
+      </div>
+      <p>Every card is a question you could chase. <strong>Try it</strong> is the smallest version — buildable tonight. <strong>Where it could go</strong> is the same question weeks deeper: branches to explore once the small version works (tags name the session that hands you the tool). Two prompts to copy: <strong>try-it</strong> builds the small version now; <strong>branch</strong> has the AI interview you and propose <em>your</em> version before writing any code. Chips mark the ladder: <strong>wonder → watch → compare</strong>. <strong>Your app</strong> is its own lane — those cards do not hand you a curiosity, they send you back into something you already built to go looking for one.</p>
+    </div>
+    <div class="chipbar" id="laneChips" role="group" aria-label="Filter trailheads by lane"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section id="bench" aria-labelledby="bench-title">
+    <div class="dealer">
+      <div class="kicker">The credits bench</div>
+      <h2 id="bench-title">The Bench</h2>
+      <p class="note" style="max-width:64ch">Every card above writes credits for somebody else's thing. This one writes yours. The note you'll ship is built from four honest moments — and from checking your memory against what the chats actually say.</p>
+
+      <div class="bench-step">
+        <label class="bench-q" for="bApp"><span class="step-n">1</span> Which app is going to the showcase? One line is plenty.</label>
+        <input class="bench-in" id="bApp" type="text" placeholder="my rumor-spreading dots page">
+      </div>
+
+      <div class="bench-step">
+        <div class="bench-q"><span class="step-n">2</span> From memory — one honest moment per slot. Fill what you can.</div>
+        <p class="note" style="margin:.1rem 0 .7rem">A note that fills all four slots is a credits page. A note that only fills the first is an apology.</p>
+        <div class="knob-grid">
+          <label class="knob"><span>AI helped me…</span><input class="bench-in" id="bHelped" data-slot="AI helped me…" type="text" placeholder="write the whole grid-drawing part"></label>
+          <label class="knob"><span>I chose…</span><input class="bench-in" id="bChose" data-slot="I chose…" type="text" placeholder="20 dots, orange, and no autoplay"></label>
+          <label class="knob"><span>I tested…</span><input class="bench-in" id="bTested" data-slot="I tested…" type="text" placeholder="my cousin tried it on a phone, no help from me"></label>
+          <label class="knob"><span>I changed or rejected…</span><input class="bench-in" id="bRejected" data-slot="I changed or rejected…" type="text" placeholder="said no to the version that needed a server"></label>
+        </div>
+        <div class="knob-out" id="knobOut"></div>
+      </div>
+
+      <div class="bench-step" id="step3" hidden>
+        <div class="bench-q"><span class="step-n">3</span> Now bet against your own memory.</div>
+        <p class="predict-line">If I scrolled back through my chats and commits, the thing I've probably forgotten is <input class="bench-in inline" id="bPredict" type="text" placeholder="how much of the layout AI decided"> — <strong>but I don't actually know.</strong></p>
+        <p class="note">Tonight's move: actually scroll back. Bring one forgotten moment into the note, dated. Memory keeps the destination and eats the map — the chats remember.</p>
+        <div class="btn-row">
+          <button class="copy-btn" id="benchBuildBtn">Copy note prompt</button>
+          <button class="copy-btn bigger" id="benchTalkBtn">Copy interview prompt</button>
+        </div>
+        <pre class="prompt-pre" id="benchPre"></pre>
+      </div>
+
+      <p class="note stuck-note"><strong>Can't remember rejecting anything?</strong> Write that down too. "I accepted everything this week" is an honest sentence, and a worrying one — it belongs in the note either way.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="honesty">
+      <strong>Honesty note.</strong> Every card on this page was authored by your instructor. Anything you type into the Bench stays in your own browser — it is never saved, never sent, and gone the moment you close the tab; the copy buttons write to your clipboard and nowhere else. Nothing you click is recorded, collected, or sent anywhere. And one rule travels with every analogy here, the same one the course keeps for cellular automata and transformers: <em>analogies find questions, not answers.</em> A garden is not a codebase; a court ruling about a monkey is not a rule about your app. The idea travels; the mechanism doesn't.
+    </div>
+  </section>
+
+  <footer>
+    Trailheads · Session 10 · nothing to turn in ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/session-10/">this week's Instructor Study page</a> ·
+    <a href="https://buildlittleworlds.github.io/instructor-study/anthology/">the Anthology</a> ·
+    <a href="../">all trailheads</a>
+  </footer>
+</main>
+
+<script>
+/* ============================ EDIT HERE: PAGE ============================ */
+const PAGE = {
+  weekLine: "this week is about authorship — AI can help and judge, but responsibility for the shipped page stays human, and credits beat confessions"
+};
+
+/* ============================ EDIT HERE: CARDS =========================== */
+const LANES = {
+  living:   "Living things",
+  games:    "Games & play",
+  music:    "Music & sound",
+  stories:  "Stories & words",
+  art:      "Art & pictures",
+  everyday: "Everyday life",
+  yours:    "Your app"
+};
+
+const CARDS = [
+  { lane:"music", ladder:"compare",
+    spark:"The remix of a cover of your grandmother's song",
+    body:"A remix samples a cover of a folk tune somebody's grandmother used to sing. Four hands minimum — sampler, cover artist, folk singer, and the tradition itself. Who goes first in the credits?",
+    build:"A layered-credit toggler over one track assembled from parts: toggle each layer's sound on and off, and watch its credit line light up while its layer plays.",
+    branches:[
+      { text:"Add the argument mode: drag the credits into the order you'd defend, then compare with a friend's order." },
+      { text:"Find a real song with this shape and trace its actual credit trail as far back as it goes." },
+      { text:"Which layer could vanish with the song surviving? The removable layer still gets credit — for what, exactly?" }
+    ] },
+  { lane:"games", ladder:"wonder",
+    spark:"Nintendo made the editor, you made the level",
+    body:"The company built the blocks, the physics, the tools. You placed every block. When someone loves the level, who did they just compliment?",
+    build:"A credits page for one made thing — a level, a build, a modded skin — with a role line for every hand: made the tools, placed the pieces, found the trick, played it into being good.",
+    branches:[
+      { text:"Add the AI row: where does 'the editor' end and 'the author' begin when the tool suggests moves?" },
+      { text:"Interview the maker of a level you love (or yourself): which single decision are they proudest of?" },
+      { text:"Present the credits out loud in thirty seconds — that's the showcase version.", tag:"Session 12" }
+    ] },
+  { lane:"living", ladder:"compare",
+    spark:"Who authored the garden?",
+    body:"The gardener planted, the seeds grew, the bees crossed the flowers, the rain did the watering. The tomato exists because of all four. 'Who made this?' has a different answer for every hand involved.",
+    build:"A four-claims page in this week's glider pattern: who chose it, who grew it, who moved the pollen, who watered — the reader casts each claim, then the reveal names contributions instead of crowning one author.",
+    branches:[
+      { text:"Swap the garden for a loaf of bread or a group chat's inside joke — does the pattern hold?" },
+      { text:"Add the weed: nobody chose it and it grew anyway. What's the credit line for the uninvited?" },
+      { text:"Write your app's version of the cast: you, the AI, the browser, and the reader who presses run." }
+    ] },
+  { lane:"art", ladder:"compare",
+    spark:"Photographer, camera, sunset",
+    body:"Photography had this fight a century before AI did: the camera made the image, the photographer made the choice, the sunset made the beauty. The credit line people accept has changed over time — which means it's authored too.",
+    build:"Same photo, four credit lines — 'taken by,' 'made by the camera,' 'painted by the light,' 'chosen by' — the reader picks the honest one, then sees how museums and courts actually landed.",
+    branches:[
+      { text:"Run it on a phone photo with every automatic setting on: what did you author besides pointing?" },
+      { text:"Find the credit line under three photos in the news. Who gets named — and who never does?" },
+      { text:"Write the credit line for an AI image honestly, using what photography already settled." }
+    ] },
+  { lane:"art", ladder:"wonder",
+    spark:"The monkey selfie",
+    body:"A macaque pressed the shutter on a photographer's rig, and the courts spent years on who owns the picture. The rig was his; the press was hers. The answer surprised almost everyone.",
+    build:"The case retold in four beats, with the reader voting on the claim after each beat — photographer, monkey, nobody, everyone — before the real outcome is revealed (cited honestly on the page).",
+    branches:[
+      { text:"Where does the analogy to AI-made work hold, and where does it snap? Say both on the page — analogies find questions, not answers." },
+      { text:"Does the camera ever get a credit line? Should the rig?" },
+      { text:"Find the next authorship fight before it happens: what's being made right now that nobody knows how to credit?" }
+    ] },
+  { lane:"everyday", ladder:"watch",
+    spark:"The group project credits, written honestly",
+    body:"Everyone knows the feeling: the credits say four names, the work says otherwise. Percentages start fights. Named roles — who organized, who drew, who fixed, who saved the ending — tell the truth without the fight.",
+    build:"A contribution mapper for one real group thing: named roles, not percentages, each with one line of evidence.",
+    branches:[
+      { text:"Add the invisible-work row: whose contribution shows up nowhere on the surface but mattered?" },
+      { text:"Map the same project from two members' memories and compare — memory is a credit-eater." },
+      { text:"Run the same role-map on your app: you, the AI, and anyone who tested it." }
+    ] },
+  { lane:"stories", ladder:"wonder",
+    spark:"Nobody wrote Cinderella",
+    body:"Cinderella has a thousand tellers and no byline. Every reteller changed something — a slipper, an ending, a name — and the story kept the changes that worked. Who gets credit for a story everyone made?",
+    build:"A retelling-chain page: one tiny tale, four tellers, each changing one thing; the reader traces which changes survived to the final version.",
+    branches:[
+      { text:"Your family's version of a story or a joke: who added the part everyone now thinks is original?" },
+      { text:"Retell it yourself and mark your change. That marked change is what authorship looks like in a chain." },
+      { text:"Present the chain at showcase: 'here is what I added' is a complete talk.", tag:"Session 12" }
+    ] },
+  { lane:"yours", ladder:"week",
+    spark:"File your build log into the four slots",
+    body:"Your app's history sorts into four honest slots: AI helped me… I chose… I tested… I changed or rejected… The note that fills all four is a credits page. The note that only fills the first is an apology.",
+    build:"Write one true moment in each slot for your strongest app, then turn the four into a short authorship note on the page.",
+    branches:[
+      { text:"An empty slot is a finding: no tests logged means the testing starts now.", tag:"Session 11" },
+      { text:"Read the note out loud — it's the spine of your showcase talk.", tag:"Session 12" },
+      { text:"Date it. Notes rot; a dated note is honest about when it was true." }
+    ] },
+  { lane:"yours", ladder:"compare",
+    spark:"What would AI have built without you?",
+    body:"Your first prompt is still in your chat history. Paste it, word for word, into a fresh chat and see what comes back. The distance between that and what you shipped is your authorship, made visible.",
+    build:"Predict how different it will be, in writing. Then run the fresh chat and put the two results side by side on the page: what came back, what you shipped, and three differences you caused.",
+    branches:[
+      { text:"Use the distance as the evidence line in your authorship note: 'without my later decisions, it would have been that.'" },
+      { text:"Which single later prompt of yours moved the build the most? That prompt is a decision wearing a question's clothes." },
+      { text:"Trade first prompts with a classmate and compare distances — whose steering moved their build furthest?" }
+    ] },
+  { lane:"yours", ladder:"wonder",
+    spark:"The rejected-suggestion museum",
+    body:"Somewhere in your chats, AI offered things you turned down — autoplay, a server, a feature too far. The noes don't show on the page, but they shaped it as much as the yeses. A no is a decision with nothing to point at.",
+    build:"List three AI suggestions you rejected, with one line each on why. Put the museum on your page — the most yours thing there might be what isn't there.",
+    branches:[
+      { text:"Was one no a mistake? Re-try it now and judge it fresh." },
+      { text:"The yes you regret belongs in the note too: 'I accepted this without thinking, and I'd undo it.'" },
+      { text:"Give the best rejected idea a one-line memorial: what it wanted to be." }
+    ] },
+  { lane:"yours", ladder:"watch",
+    spark:"The forgotten decision",
+    body:"You remember the app you have now. You don't remember half the choices that got it here — memory keeps the destination and eats the map. The chats remember.",
+    build:"Predict, in writing, what you'll find. Then scroll to your oldest chat about this app and read it. One forgotten moment goes into the authorship note, dated.",
+    branches:[
+      { text:"How far back does your memory actually reach? The date where recall gets fuzzy is worth knowing." },
+      { text:"Screenshot the first version next to today's. The pair belongs at the showcase.", tag:"Session 12" },
+      { text:"Whose idea was the thing you're proudest of? Check the record before the note claims it." }
+    ] }
+];
+/* ========================== END EDIT HERE: CARDS ========================== */
+
+/* ============================ EDIT HERE: BENCH =========================== */
+/* Session 10's Bench is the credits bench: the knob is MEMORY itself. The
+   student fills the forge's four slots from memory, bets on what the record
+   will show, then goes and checks. The note prompt carries the forge's
+   honesty flags as instructions — no page machinery needed. */
+
+const BENCH = {
+  build: d =>
+    "I'm a student with a one-page “paper app” on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys). It's going to the showcase, and this week I'm writing its authorship note.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "From memory — one honest moment per slot:\n" +
+    "• AI helped me… " + d.helped + "\n" +
+    "• I chose… " + d.chose + "\n" +
+    "• I tested… " + d.tested + "\n" +
+    "• I changed or rejected… " + d.rejected + "\n\n" +
+    "My call: if I scrolled back through my chats and commits, the thing I've probably forgotten is " + d.predict + " — but I don't actually know. I'm going to go look tonight and bring back one moment I had forgotten.\n\n" +
+    "Assemble my slots into a short authorship note for my page — responsibility, not confession, in plain words that sound like me. Then be strict:\n" +
+    "• If my slots contain no real test, say so instead of writing around it.\n" +
+    "• If nothing was rejected, ask me whether that's actually true before believing it.\n" +
+    "• If the note says what AI did but not what I decided, flag it.\n" +
+    "• Never put anything in the note I didn't tell you. Ask; don't invent.",
+
+  talk: d =>
+    "I'm a student with a one-page “paper app” on GitHub Pages (a single self-contained index.html — HTML/CSS/JS only, no build tools, no API keys). It's going to the showcase, but I'm not ready to write the authorship note — I think I'm forgetting things.\n\n" +
+    "What I built: " + d.app + "\n\n" +
+    "What I remember so far:\n" +
+    "• AI helped me… " + d.helped + "\n" +
+    "• I chose… " + d.chose + "\n" +
+    "• I tested… " + d.tested + "\n" +
+    "• I changed or rejected… " + d.rejected + "\n\n" +
+    "Interview me about the moments I left out, ONE question at a time: What did I say no to? What did I test, on which device, with which person? Which choice would I defend if someone challenged it? What did AI suggest that I accepted without really reading?\n\n" +
+    "Then show me the note two ways — the apology version and the responsibility version, built from the same facts — and let me see the difference before I pick. Don't invent anything I didn't say."
+};
+/* ========================= END EDIT HERE: BENCH ========================== */
+
+/* ======================= SHARED MACHINERY (edit below only if you want to
+   change how prompts are worded — the content lives in the blocks above) */
+
+const LADDER_LABEL = { wonder:"WONDER", watch:"WATCH", compare:"COMPARE", week:"THIS WEEK" };
+
+const branchLines = c => c.branches.map(b => "• " + b.text).join("\n");
+
+function tryPrompt(c){
+  return "I'm a student making a one-page “paper app” to publish on GitHub Pages: a single self-contained index.html (HTML/CSS/JS only, no build tools, no API keys).\n\n" +
+    "I got curious about this question: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Help me build the smallest working version: " + c.build + (c.promptHint ? " " + c.promptHint : "") + "\n\n" +
+    "Give the reader ONE clear thing to do, add a short “what to notice” note, and keep the page honest about what it really shows versus what it only suggests. Before you write any code, ask me two questions that would make this idea more mine.\n\n" +
+    "Once the small version works, STOP — don't add features on your own. This idea has branches I might explore next:\n" + branchLines(c) + "\n" +
+    "When I pick one, we'll grow the page one small step at a time, and I'll test after every step.";
+}
+
+function branchPrompt(c){
+  return "I'm a student who builds one-page “paper apps” for GitHub Pages: single self-contained index.html files (HTML/CSS/JS only, no build tools, no API keys). I'm not after a one-night build right now — I'm looking for MY version of a question I could keep exploring for weeks.\n\n" +
+    "The question that caught me: “" + c.spark + " — " + c.body + "”\n\n" +
+    "Ways it could branch (from my course's map — I might follow one, or none):\n" + branchLines(c) + "\n\n" +
+    "Don't write any code yet. First interview me: two or three questions, ONE AT A TIME, to figure out which branch actually pulls me — or whether I have a branch of my own this map missed.\n\n" +
+    "Then propose three one-page versions, two sentences each (what the page does, what the reader does): at least one growing from the branch I liked best, and at least one that surprises me. Wait for me to pick or remix.\n\n" +
+    "Only then build, in stages: the smallest working core first" + (c.promptHint ? " (" + c.promptHint + ")" : "") + ", then ONE addition at a time, stopping after each so I can test it and steer. Keep the reader's job clear, add a short “what to notice” note, and keep the page honest about what it shows versus what it only suggests.";
+}
+
+function copyText(txt, btn, pre, label){
+  pre.textContent = txt;
+  pre.classList.add("open");
+  const done = ok => { btn.textContent = ok ? "Copied ✓" : "Copy blocked — select the text below"; setTimeout(()=>{ btn.textContent = label; }, 2600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(()=>done(true), ()=>done(false));
+  } else { done(false); }
+}
+
+/* --- lane chips --- */
+const chipbar = document.getElementById("laneChips");
+const laneKeys = ["all", ...Object.keys(LANES)];
+let activeLane = "all";
+laneKeys.forEach(k=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (k==="yours" ? " yours-chip" : "");
+  b.textContent = k==="all" ? "All lanes" : LANES[k];
+  b.setAttribute("aria-pressed", k===activeLane ? "true" : "false");
+  b.addEventListener("click", ()=>{
+    activeLane = k;
+    chipbar.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    renderCards();
+  });
+  chipbar.appendChild(b);
+});
+
+/* --- cards --- */
+const grid = document.getElementById("cardGrid");
+function renderCards(){
+  grid.innerHTML = "";
+  CARDS.filter(c => activeLane==="all" || c.lane===activeLane).forEach(c=>{
+    const el = document.createElement("article");
+    el.className = "idea-card" + (c.lane==="yours" ? " yours" : "");
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "eyebrow";
+    eyebrow.innerHTML = "<span>" + LANES[c.lane] + "</span><span class='ladder'>" + LADDER_LABEL[c.ladder] + "</span>";
+    const h = document.createElement("h3"); h.textContent = c.spark;
+    const p = document.createElement("p"); p.textContent = c.body;
+    const build = document.createElement("p"); build.className = "build";
+    build.innerHTML = "<strong>Try it:</strong> " + c.build;
+    const go = document.createElement("div"); go.className = "build go";
+    go.innerHTML = "<strong>Where it could go:</strong>";
+    const ul = document.createElement("ul"); ul.className = "branches";
+    c.branches.forEach(b=>{
+      const li = document.createElement("li"); li.textContent = b.text;
+      if(b.tag){ const t = document.createElement("span"); t.className = "branch-tag"; t.textContent = b.tag; li.append(t); }
+      ul.appendChild(li);
+    });
+    const row = document.createElement("div"); row.className = "btn-row";
+    const b1 = document.createElement("button");
+    b1.className = "copy-btn"; b1.textContent = "Copy try-it prompt";
+    const b2 = document.createElement("button");
+    b2.className = "copy-btn bigger"; b2.textContent = "Copy branch prompt";
+    const pre = document.createElement("pre"); pre.className = "prompt-pre";
+    b1.addEventListener("click", ()=>copyText(tryPrompt(c), b1, pre, "Copy try-it prompt"));
+    b2.addEventListener("click", ()=>copyText(branchPrompt(c), b2, pre, "Copy branch prompt"));
+    row.append(b1, b2);
+    el.append(eyebrow, h, p, build, go, ul, row, pre);
+    grid.appendChild(el);
+  });
+}
+renderCards();
+
+/* --- the bench --- */
+const slotInputs = Array.from(document.querySelectorAll("[data-slot]"));
+const knobOut  = document.getElementById("knobOut");
+const step3    = document.getElementById("step3");
+const benchPre = document.getElementById("benchPre");
+
+function refreshSlots(){
+  knobOut.innerHTML = "";
+  slotInputs.filter(i => i.value.trim()).forEach(i => {
+    const c = document.createElement("span");
+    c.className = "knob-chip"; c.textContent = i.dataset.slot + " " + i.value.trim();
+    knobOut.appendChild(c);
+  });
+  step3.hidden = slotInputs.every(i => !i.value.trim());
+}
+slotInputs.forEach(i => i.addEventListener("input", refreshSlots));
+refreshSlots();
+
+function val(id, fallback){
+  const v = document.getElementById(id).value.trim();
+  return v || fallback;
+}
+function benchData(){
+  return {
+    app: val("bApp", "(I haven't named it yet — ask me first)"),
+    helped: val("bHelped", "(blank — ask me what AI actually did)"),
+    chose: val("bChose", "(blank — ask me what I decided)"),
+    tested: val("bTested", "(blank — ask me what I checked, honestly)"),
+    rejected: val("bRejected", "(blank — ask me whether I ever said no)"),
+    predict: val("bPredict", "something — I genuinely can't guess, which is why I'm going to look")
+  };
+}
+document.getElementById("benchBuildBtn").addEventListener("click", function(){
+  copyText(BENCH.build(benchData()), this, benchPre, "Copy note prompt");
+});
+document.getElementById("benchTalkBtn").addEventListener("click", function(){
+  copyText(BENCH.talk(benchData()), this, benchPre, "Copy interview prompt");
+});
+</script>
+</body>
+</html>
